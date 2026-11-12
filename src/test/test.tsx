@@ -2,6 +2,7 @@ import { TrekerRepository } from "@/service/repository";
 import { initdb } from "@/service/model";
 import { Button, View } from "react-native";
 import { useState, useEffect } from "react";
+import { TrekerService } from "@/service/service";
 
 function useInitDb() {
    const [trekerRepository, setTrekerRepository] = useState<TrekerRepository | null>(null);
@@ -21,18 +22,18 @@ function useInitDb() {
 
 export default function TestButton() {
    const { trekerRepository } = useInitDb();
-   return (
-      <View>
-         <Button
-            onPress={async () => {
-               console.log(await trekerRepository?.getAllRowsWorkouts());
-               console.log(await trekerRepository?.getAllRowsExercises());
-               console.log(await trekerRepository?.getAllRowsSets());
-            }}
-            title="Test Button 1"
-            color="#841584"
-            accessibilityLabel="Learn more about this purple button"
-         />
-      </View>
-   );
+   // return (
+   //    <View>
+   //       <Button
+   //          onPress={async () => {
+   //             console.log(await trekerRepository?.getAllRowsWorkouts());
+   //             console.log(await trekerRepository?.getAllRowsExercises());
+   //             console.log(await trekerRepository?.getAllRowsSets());
+   //          }}
+   //          title="Test Button 1"
+   //          color="#841584"
+   //          accessibilityLabel="Learn more about this purple button"
+   //       />
+   //    </View>
+   // );
 }

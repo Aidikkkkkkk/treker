@@ -1,10 +1,10 @@
 import { SafeAreaView } from "react-native-safe-area-context";
-import TestButton from "@/test/test";
+import TestButton2 from "@/test/test2";
 
 export default function Main() {
    return (
       <SafeAreaView>
-         <TestButton />
+         <TestButton2 />
       </SafeAreaView>
    );
 }
