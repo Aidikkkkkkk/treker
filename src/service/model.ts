@@ -3,23 +3,30 @@ import * as SQLite from "expo-sqlite";
 export async function initdb() {
    const db = await SQLite.openDatabaseAsync("test2");
    await db.execAsync(`
+      PRAGMA foreign_keys = ON;
       PRAGMA journal_mode = WAL;
+
       CREATE TABLE IF NOT EXISTS workout (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            dateWorkout TEXT NOT NULL,
-            lightOrHeavy TEXT NOT NULL,
-            exercisesKey TEXT NOT NULL
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          dateWorkout TEXT NOT NULL,
+          intensity TEXT NOT NULL
       );
+
       CREATE TABLE IF NOT EXISTS exercise (
-            id TEXT NOT NULL,
-            nameExercise TEXT NOT NULL,
-            replaceExerciseKey TEXT NOT NULL
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          workout_id INTEGER NOT NULL,
+          nameExercise TEXT NOT NULL,
+          FOREIGN KEY (workout_id) REFERENCES workout(id) ON DELETE CASCADE
       );
-      CREATE TABLE IF NOT EXISTS Set (
-            id TEXT NOT NULL,
-            replace INTEGER,
-            count INTEGER
+
+      CREATE TABLE IF NOT EXISTS "set" (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          exercise_id INTEGER NOT NULL,
+          replace INTEGER,
+          count INTEGER,
+          FOREIGN KEY (exercise_id) REFERENCES exercise(id) ON DELETE CASCADE
       );
+
       `);
    return db;
 }
