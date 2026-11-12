@@ -1,5 +1,5 @@
 import { SafeAreaView } from "react-native-safe-area-context";
-import TestButton from "@/components/test";
+import TestButton from "@/test/test";
 
 export default function Main() {
    return (

@@ -1,19 +1,12 @@
 import * as SQLite from "expo-sqlite";
-import { type IWorkoutResult, type IExerciseResult, type IReplaceResult } from "@/types/types";
-
-interface IDtoWorkout {
-   dateWorkout: string;
-   intensity: "light" | "heavy";
-}
-interface IDtoExercise {
-   workout_id: number;
-   nameExercise: string;
-}
-interface IDtoSet {
-   exercise_id: number;
-   replace: number;
-   count: number;
-}
+import {
+   type IWorkoutResult,
+   type IExerciseResult,
+   type IReplaceResult,
+   type IDtoExercise,
+   type IDtoWorkout,
+   type IDtoSet,
+} from "@/types/index";
 
 export class TrekerRepository {
    private db: SQLite.SQLiteDatabase;
@@ -44,25 +37,6 @@ export class TrekerRepository {
          dto.count,
       ]);
       return result.lastInsertRowId;
-   }
-   async seedInitialData() {
-      const existing = await this.getAllRowsWorkouts();
-      if (existing.length > 0) return;
-
-      const w1Id = await this.insertToWorkout({ dateWorkout: "2026-11-10", intensity: "heavy" });
-
-      const e1Id = await this.insertToExercise({ workout_id: w1Id, nameExercise: "Жим лежа" });
-      await this.insertToSet({ exercise_id: e1Id, replace: 0, count: 10 });
-      await this.insertToSet({ exercise_id: e1Id, replace: 0, count: 8 });
-
-      const e2Id = await this.insertToExercise({ workout_id: w1Id, nameExercise: "Приседания" });
-      await this.insertToSet({ exercise_id: e2Id, replace: 0, count: 12 });
-
-      const w2Id = await this.insertToWorkout({ dateWorkout: "2026-11-12", intensity: "light" });
-
-      const e3Id = await this.insertToExercise({ workout_id: w2Id, nameExercise: "Подтягивания" });
-      await this.insertToSet({ exercise_id: e3Id, replace: 0, count: 8 });
-      await this.insertToSet({ exercise_id: e3Id, replace: 1, count: 6 });
    }
 
    async getAllRowsWorkouts() {

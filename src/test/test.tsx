@@ -9,7 +9,6 @@ function useInitDb() {
       const db = await initdb();
       const trekerRepository = new TrekerRepository(db);
       setTrekerRepository(trekerRepository);
-      await trekerRepository.seedInitialData();
    }
    useEffect(() => {
       handlerInit();
