@@ -1,30 +1,28 @@
 import { useState, useEffect } from "react";
 
-import { initdb } from "@/service/model";
-import { TrekerRepository } from "@/service/repository";
-import { TrekerService } from "@/service/service";
-
+import { useTreker } from "@/context/TrekerContext";
 import { IWorkoutResult } from "@/types";
 
 export function useWorkouts() {
+   const treker = useTreker();
+
    const [workouts, setWorkouts] = useState<IWorkoutResult[]>([]);
 
    async function loadWorkouts() {
+      if (!treker) return;
+
       try {
-         const db = await initdb();
-
-         const repository = new TrekerRepository(db);
-         const service = new TrekerService(repository);
-
-         setWorkouts(await service.getAllWorkouts());
+         setWorkouts(await treker.getAllWorkouts());
       } catch (error) {
          console.error("Ошибка загрузки тренировок:", error);
       }
    }
 
    useEffect(() => {
-      loadWorkouts();
-   }, []);
+      if (treker) {
+         loadWorkouts();
+      }
+   }, [treker]);
 
    return {
       workouts,

@@ -9,14 +9,12 @@ import CreateButton from "@/components/main/CreateButton";
 import CreateWorkoutModal from "@/components/main/CreateWorkoutModal";
 
 export default function Main() {
-   const { workouts, loading, reload } = useWorkouts();
+   const { workouts } = useWorkouts();
 
    const [showCreate, setShowCreate] = useState(false);
 
    async function handlerCreateWeek(intensity: "light" | "heavy") {
       console.log("Выбрана интенсивность:", intensity);
-
-      // Здесь позже подключим создание недели через сервис.
 
       setShowCreate(false);
    }
@@ -26,7 +24,7 @@ export default function Main() {
          <View style={styles.content}>
             <Text style={styles.mainTitle}>Тренировки</Text>
 
-            <WorkoutList workouts={workouts} loading={loading} />
+            <WorkoutList workouts={workouts} />
 
             <View style={styles.buttonContainer}>
                <CreateButton onPress={() => setShowCreate(true)} />
