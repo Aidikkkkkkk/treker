@@ -6,7 +6,7 @@ import {
    type IDtoExercise,
    type IDtoWorkout,
    type IDtoSet,
-} from "@/types/index";
+} from "@/types";
 export class TrekerRepository {
    private db: SQLite.SQLiteDatabase;
 

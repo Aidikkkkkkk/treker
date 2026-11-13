@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import { useTreker } from "@/context/TrekerContext";
+import { useTreker } from "@/TrekerContext";
 import { IWorkoutResult } from "@/types";
 
 export function useWorkouts() {

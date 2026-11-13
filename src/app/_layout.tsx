@@ -1,6 +1,6 @@
 import { Stack } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { TrekerProvider } from "@/context/TrekerContext";
+import { TrekerProvider } from "@/TrekerContext";
 
 export default function RootLayout() {
    return (
