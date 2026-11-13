@@ -8,7 +8,6 @@ import { IWorkoutResult } from "@/types";
 
 export function useWorkouts() {
    const [workouts, setWorkouts] = useState<IWorkoutResult[]>([]);
-   const [loading, setLoading] = useState(true);
 
    async function loadWorkouts() {
       try {
@@ -17,13 +16,9 @@ export function useWorkouts() {
          const repository = new TrekerRepository(db);
          const service = new TrekerService(repository);
 
-         const result = await service.getAllWorkouts();
-
-         setWorkouts(result);
+         setWorkouts(await service.getAllWorkouts());
       } catch (error) {
          console.error("Ошибка загрузки тренировок:", error);
-      } finally {
-         setLoading(false);
       }
    }
 
@@ -33,7 +28,6 @@ export function useWorkouts() {
 
    return {
       workouts,
-      loading,
       reload: loadWorkouts,
    };
 }

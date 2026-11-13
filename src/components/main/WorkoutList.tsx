@@ -6,12 +6,9 @@ import WorkoutCard from "./ WorkoutCard";
 
 interface WorkoutListProps {
    workouts: IWorkoutResult[];
-   loading: boolean;
 }
 
-export default function WorkoutList({ workouts, loading }: WorkoutListProps) {
-   if (loading) return null;
-
+export default function WorkoutList({ workouts }: WorkoutListProps) {
    return (
       <FlatList
          data={workouts}
