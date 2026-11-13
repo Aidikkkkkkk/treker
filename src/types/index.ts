@@ -1,16 +1,16 @@
 export interface IWorkoutResult {
    id: number;
    dateWorkout: string;
-   lightOrHeavy: string;
-   exercisesKey: string;
+   intensity: "light" | "heavy";
 }
 export interface IExerciseResult {
    id: string;
+   workout_id: number;
    nameExercise: string;
-   replaceExerciseKey: string;
 }
-export interface IReplaceResult {
+export interface ISetResult {
    id: string;
+   exercise_id: number;
    replace: number;
    count: number;
 }

@@ -2,12 +2,11 @@ import * as SQLite from "expo-sqlite";
 import {
    type IWorkoutResult,
    type IExerciseResult,
-   type IReplaceResult,
+   type ISetResult,
    type IDtoExercise,
    type IDtoWorkout,
    type IDtoSet,
 } from "@/types/index";
-
 export class TrekerRepository {
    private db: SQLite.SQLiteDatabase;
 
@@ -52,6 +51,6 @@ export class TrekerRepository {
    async getAllRowsSets() {
       return (await this.db.getAllAsync(
          'SELECT * FROM "set" as s LEFT OUTER JOIN exercise as e ON s.exercise_id = e.id',
-      )) as IReplaceResult[];
+      )) as ISetResult[];
    }
 }
