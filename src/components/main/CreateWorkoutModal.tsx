@@ -16,7 +16,7 @@ export default function CreateWorkoutModal({ visible, onClose, onCreate }: Creat
    const [pickerMode, setPickerMode] = useState<"date" | "time" | null>(null);
 
    function handleValueChange(_event: DateTimePickerChangeEvent, selected: Date) {
-      // будущее время не разрешаем: если выбрали позже, чем сейчас, ставим «сейчас»
+      // будущее время не разрешаем: если выб��али позже, чем сейчас, ставим «сейчас»
       setCustomDate(selected > new Date() ? new Date() : selected);
       if (Platform.OS === "android") setPickerMode(null);
    }
@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
       backgroundColor: COLORS.heavySoft,
    },
    lightActive: {
-      backgroundColor: COLORS.turquoiseSoft,
+      backgroundColor: COLORS.lightSoft,
    },
    dateActive: {
       backgroundColor: COLORS.accentSoft,
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
       color: COLORS.heavy,
    },
    lightText: {
-      color: COLORS.turquoise,
+      color: COLORS.light,
    },
    dateText: {
       color: COLORS.accent,
@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
       borderColor: "transparent",
    },
    dateTimeCellActive: {
-      borderColor: COLORS.turquoise,
+      borderColor: COLORS.accent,
    },
    dateRowText: {
       color: COLORS.textPrimary,

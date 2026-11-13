@@ -145,6 +145,8 @@ const styles = StyleSheet.create({
       backgroundColor: COLORS.surface,
       borderColor: COLORS.border,
       borderWidth: 1,
+      borderLeftWidth: 4,
+      borderLeftColor: COLORS.accent,
       paddingHorizontal: 20,
       paddingVertical: 17,
       borderRadius: 26,
@@ -190,7 +192,7 @@ const styles = StyleSheet.create({
       backgroundColor: COLORS.heavySoft,
    },
    lightBadge: {
-      backgroundColor: COLORS.turquoiseSoft,
+      backgroundColor: COLORS.lightSoft,
    },
    badgeText: {
       fontSize: 14,
@@ -200,6 +202,6 @@ const styles = StyleSheet.create({
       color: COLORS.heavy,
    },
    lightText: {
-      color: COLORS.turquoise,
+      color: COLORS.light,
    },
 });
