@@ -91,5 +91,8 @@ export class TrekerService {
    async getAllSets() {
       return this.trekerRepository.getAllRowsSets();
    }
-   async deleteWorkout(id: number) {}
+   async deleteWorkout(id: number) {
+      const validatedId = this.validateNumber(id);
+      return this.trekerRepository.deleteWorkout(validatedId);
+   }
 }

@@ -1,10 +1,42 @@
-import { View, Text, FlatList, StyleSheet } from "react-native";
+import { View, Text, FlatList, StyleSheet, Pressable, Alert } from "react-native";
 
 import { useWorkouts } from "@/hooks/useWorkouts";
 import { IWorkoutResult } from "@/types";
 
+function TrashIcon({ active }: { active: boolean }) {
+   const color = active ? "#ff8a8a" : "#6f6a80";
+
+   return (
+      <View style={trash.wrap}>
+         {/* крышка + ручка: при нажатии приоткрывается */}
+         <View
+            style={[
+               trash.lidGroup,
+               active && { transform: [{ translateX: -2 }, { translateY: -2 }, { rotate: "-16deg" }] },
+            ]}
+         >
+            <View style={[trash.handle, { borderColor: color }]} />
+            <View style={[trash.lid, { backgroundColor: color }]} />
+         </View>
+
+         {/* корпус с двумя полосками */}
+         <View style={[trash.body, { borderColor: color }]}>
+            <View style={[trash.line, { backgroundColor: color }]} />
+            <View style={[trash.line, { backgroundColor: color }]} />
+         </View>
+      </View>
+   );
+}
+
 export default function ListWorkouts() {
-   const { workouts } = useWorkouts();
+   const { workouts, deleteWorkout } = useWorkouts();
+
+   function confirmDelete(item: IWorkoutResult, weekNumber: number) {
+      Alert.alert("Удалить неделю?", `Неделя ${weekNumber} будет удалена без возможности восстановления.`, [
+         { text: "Отмена", style: "cancel" },
+         { text: "Удалить", style: "destructive", onPress: () => deleteWorkout(item.id) },
+      ]);
+   }
 
    function renderWorkout({ item, index }: { item: IWorkoutResult; index: number }) {
       const weekNumber = workouts.length - index;
@@ -22,7 +54,17 @@ export default function ListWorkouts() {
                </View>
             </View>
 
-            <Text style={styles.date}>{new Date(item.dateWorkout).toLocaleDateString()}</Text>
+            <View style={styles.footer}>
+               <Text style={styles.date}>{new Date(item.dateWorkout).toLocaleDateString()}</Text>
+
+               <Pressable
+                  onPress={() => confirmDelete(item, weekNumber)}
+                  hitSlop={10}
+                  style={({ pressed }) => [styles.deleteBtn, pressed && styles.deleteBtnPressed]}
+               >
+                  {({ pressed }) => <TrashIcon active={pressed} />}
+               </Pressable>
+            </View>
          </View>
       );
    }
@@ -37,6 +79,48 @@ export default function ListWorkouts() {
       />
    );
 }
+
+const trash = StyleSheet.create({
+   wrap: {
+      width: 14,
+      height: 16,
+      alignItems: "center",
+   },
+   lidGroup: {
+      alignItems: "center",
+   },
+   handle: {
+      width: 6,
+      height: 3,
+      borderWidth: 1.5,
+      borderBottomWidth: 0,
+      borderTopLeftRadius: 2,
+      borderTopRightRadius: 2,
+   },
+   lid: {
+      width: 14,
+      height: 1.5,
+      borderRadius: 1,
+   },
+   body: {
+      width: 11,
+      height: 10,
+      marginTop: 1.5,
+      borderWidth: 1.5,
+      borderTopWidth: 0,
+      borderBottomLeftRadius: 3,
+      borderBottomRightRadius: 3,
+      flexDirection: "row",
+      justifyContent: "space-evenly",
+      alignItems: "center",
+      paddingBottom: 1,
+   },
+   line: {
+      width: 1.2,
+      height: 5,
+      borderRadius: 1,
+   },
+});
 
 const styles = StyleSheet.create({
    list: {
@@ -61,6 +145,11 @@ const styles = StyleSheet.create({
       alignItems: "center",
       marginBottom: 7,
    },
+   footer: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+   },
    title: {
       color: "#ece8f4",
       fontSize: 20,
@@ -69,6 +158,17 @@ const styles = StyleSheet.create({
    date: {
       color: "#a59fb5",
       fontSize: 15,
+   },
+   deleteBtn: {
+      width: 30,
+      height: 30,
+      borderRadius: 15,
+      backgroundColor: "#23202e",
+      alignItems: "center",
+      justifyContent: "center",
+   },
+   deleteBtnPressed: {
+      backgroundColor: "#3a2229",
    },
    badge: {
       paddingHorizontal: 15,

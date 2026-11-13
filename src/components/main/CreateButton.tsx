@@ -1,17 +1,24 @@
 import { View, Pressable, Text, StyleSheet } from "react-native";
 import { useState } from "react";
-
+import { useTreker } from "@/TrekerContext";
 import CreateWorkoutModal from "./CreateWorkoutModal";
 
 export default function CreateButton() {
+   const treker = useTreker();
    const [showCreate, setShowCreate] = useState(false);
 
    async function handlerCreateWeek(intensity: "light" | "heavy") {
-      console.log("Выбрана интенсивность:", intensity);
-
-      // сюда добавится запись в БД
-
       setShowCreate(false);
+      console.log("treker:", treker ? "есть" : "НЕТ (нет Provider над кнопкой)");
+      try {
+         const res = await treker?.createWorkout({
+            dateWorkout: new Date().toISOString(),
+            intensity,
+         });
+         console.log("createWorkout результат:", res);
+      } catch (e) {
+         console.error("createWorkout упал:", e);
+      }
    }
 
    return (
