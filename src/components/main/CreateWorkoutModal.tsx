@@ -1,6 +1,7 @@
 import { View, Text, Pressable, Modal, StyleSheet, Platform } from "react-native";
 import { useState } from "react";
 import DateTimePicker, { DateTimePickerChangeEvent } from "@react-native-community/datetimepicker";
+import { COLORS } from "@/styles";
 
 interface CreateWorkoutModalProps {
    visible: boolean;
@@ -116,7 +117,7 @@ export default function CreateWorkoutModal({ visible, onClose, onCreate }: Creat
                      mode={pickerMode}
                      is24Hour
                      display={Platform.OS === "ios" ? "spinner" : "default"}
-                     themeVariant="dark"
+                     themeVariant="light"
                      onValueChange={handleValueChange}
                      onDismiss={handleDismiss}
                   />
@@ -135,12 +136,12 @@ const styles = StyleSheet.create({
    overlay: {
       flex: 1,
       justifyContent: "flex-end",
-      backgroundColor: "rgba(0, 0, 0, 0.6)",
+      backgroundColor: COLORS.overlay,
    },
    modal: {
-      backgroundColor: "#17151f",
+      backgroundColor: COLORS.surface,
       borderWidth: 1,
-      borderColor: "#302c40",
+      borderColor: COLORS.border,
       borderTopLeftRadius: 32,
       borderTopRightRadius: 32,
       paddingHorizontal: 24,
@@ -155,23 +156,23 @@ const styles = StyleSheet.create({
       width: 52,
       height: 6,
       borderRadius: 10,
-      backgroundColor: "#393448",
+      backgroundColor: COLORS.handle,
    },
    title: {
-      color: "#ece8f4",
+      color: COLORS.textPrimary,
       fontSize: 22,
       fontWeight: "700",
       marginBottom: 16,
    },
    label: {
-      color: "#a59fb5",
+      color: COLORS.textSecondary,
       fontSize: 14,
       marginBottom: 8,
       marginLeft: 4,
    },
    segment: {
       flexDirection: "row",
-      backgroundColor: "#1b1924",
+      backgroundColor: COLORS.surfaceMuted,
       borderRadius: 22,
       padding: 6,
       marginBottom: 18,
@@ -184,29 +185,29 @@ const styles = StyleSheet.create({
       borderRadius: 17,
    },
    heavyActive: {
-      backgroundColor: "#382519",
+      backgroundColor: COLORS.heavySoft,
    },
    lightActive: {
-      backgroundColor: "#2c214d",
+      backgroundColor: COLORS.turquoiseSoft,
    },
    dateActive: {
-      backgroundColor: "#2a2638",
+      backgroundColor: COLORS.accentSoft,
    },
    optionText: {
       fontSize: 16,
       fontWeight: "700",
    },
    inactiveText: {
-      color: "#a59fb5",
+      color: COLORS.textSecondary,
    },
    heavyText: {
-      color: "#efb18d",
+      color: COLORS.heavy,
    },
    lightText: {
-      color: "#c5b3ff",
+      color: COLORS.turquoise,
    },
    dateText: {
-      color: "#ece8f4",
+      color: COLORS.accent,
    },
    dateTimeRow: {
       flexDirection: "row",
@@ -219,15 +220,15 @@ const styles = StyleSheet.create({
       alignItems: "center",
       paddingVertical: 12,
       borderRadius: 17,
-      backgroundColor: "#1b1924",
+      backgroundColor: COLORS.surface,
       borderWidth: 1,
       borderColor: "transparent",
    },
    dateTimeCellActive: {
-      borderColor: "#a78bfa",
+      borderColor: COLORS.turquoise,
    },
    dateRowText: {
-      color: "#ece8f4",
+      color: COLORS.textPrimary,
       fontSize: 16,
       fontWeight: "600",
    },
@@ -235,12 +236,12 @@ const styles = StyleSheet.create({
       height: 56,
       width: "100%",
       borderRadius: 40,
-      backgroundColor: "#a78bfa",
+      backgroundColor: COLORS.accent,
       justifyContent: "center",
       alignItems: "center",
    },
    createButtonText: {
-      color: "#171020",
+      color: COLORS.textOnAccent,
       fontSize: 17,
       fontWeight: "700",
    },

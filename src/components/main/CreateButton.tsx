@@ -2,6 +2,7 @@ import { View, Pressable, Text, StyleSheet } from "react-native";
 import { useState } from "react";
 import { useTreker } from "@/TrekerContext";
 import CreateWorkoutModal from "./CreateWorkoutModal";
+import { COLORS } from "@/styles";
 
 export default function CreateButton() {
    const treker = useTreker();
@@ -37,18 +38,18 @@ const styles = StyleSheet.create({
       paddingTop: 32,
       paddingBottom: 24,
       marginTop: 10,
-      backgroundColor: "#110f17",
+      backgroundColor: COLORS.background,
    },
    button: {
       height: 66,
       width: "100%",
       borderRadius: 40,
-      backgroundColor: "#a78bfa",
+      backgroundColor: COLORS.accent,
       justifyContent: "center",
       alignItems: "center",
    },
    buttonText: {
-      color: "#171020",
+      color: COLORS.textOnAccent,
       fontSize: 18,
       fontWeight: "700",
    },

@@ -3,6 +3,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import ListWorkouts from "@/components/main/ListWorkouts";
 import CreateButton from "@/components/main/CreateButton";
+import { COLORS } from "@/styles";
 
 export default function Main() {
    return (
@@ -19,7 +20,7 @@ export default function Main() {
 const styles = StyleSheet.create({
    container: {
       flex: 1,
-      backgroundColor: "#110f17",
+      backgroundColor: COLORS.background,
    },
    content: {
       flex: 1,
@@ -27,7 +28,7 @@ const styles = StyleSheet.create({
       paddingTop: 22,
    },
    mainTitle: {
-      color: "#ece8f4",
+      color: COLORS.textPrimary,
       fontSize: 34,
       fontWeight: "800",
    },
