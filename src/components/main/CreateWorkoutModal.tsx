@@ -15,7 +15,6 @@ export default function CreateWorkoutModal({ visible, onClose, onCreate }: Creat
    const [pickerMode, setPickerMode] = useState<"date" | "time" | null>(null);
 
    function handleValueChange(_event: DateTimePickerChangeEvent, selected: Date) {
-      // будущее время не разрешаем: если выбрали позже, чем сейчас, ставим «сейчас»
       setCustomDate(selected > new Date() ? new Date() : selected);
       if (Platform.OS === "android") setPickerMode(null);
    }
