@@ -11,17 +11,22 @@ export const COLORS = {
    textSecondary: "#77727F",
    textOnAccent: "#FFFFFF",
 
-   accent: "#6548C8",
-   accentPressed: "#5539B4",
-   accentSoft: "#F0ECFA",
-   turquoise: "#087F83",
-   turquoiseSoft: "#E5F5F3",
+   // Turquoise is the primary action and navigation accent.
+   accent: "#087F83",
+   accentPressed: "#06666A",
+   accentSoft: "#E5F5F3",
 
-   heavy: "#A85A18",
-   heavySoft: "#FFF2E5",
+   // Purple distinguishes light and heavy workout weeks.
+   purple: "#6D28D9",
+   purpleSoft: "#F0E9FF",
+
+   heavy: "#FFFFFF",
+   heavySoft: "#6D28D9",
+   light: "#6D28D9",
+   lightSoft: "#F0E9FF",
+
    danger: "#C94352",
    dangerSoft: "#FCEBED",
-
    iconMuted: "#9A94A3",
    handle: "#D8D3DF",
    overlay: "rgba(36, 31, 43, 0.48)",

@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
       backgroundColor: COLORS.heavySoft,
    },
    lightActive: {
-      backgroundColor: COLORS.turquoiseSoft,
+      backgroundColor: COLORS.lightSoft,
    },
    dateActive: {
       backgroundColor: COLORS.accentSoft,
@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
       color: COLORS.heavy,
    },
    lightText: {
-      color: COLORS.turquoise,
+      color: COLORS.light,
    },
    dateText: {
       color: COLORS.accent,
@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
       borderColor: "transparent",
    },
    dateTimeCellActive: {
-      borderColor: COLORS.turquoise,
+      borderColor: COLORS.accent,
    },
    dateRowText: {
       color: COLORS.textPrimary,
