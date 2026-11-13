@@ -2,9 +2,10 @@ import { View, Text, FlatList, StyleSheet, Pressable, Alert } from "react-native
 
 import { useWorkouts } from "@/hooks/useWorkouts";
 import { IWorkoutResult } from "@/types";
+import { COLORS } from "@/styles";
 
 function TrashIcon({ active }: { active: boolean }) {
-   const color = active ? "#ff8a8a" : "#6f6a80";
+   const color = active ? COLORS.danger : COLORS.iconMuted;
 
    return (
       <View style={trash.wrap}>
@@ -141,8 +142,8 @@ const styles = StyleSheet.create({
    },
    card: {
       width: "100%",
-      backgroundColor: "#1b1924",
-      borderColor: "#302c40",
+      backgroundColor: COLORS.surface,
+      borderColor: COLORS.border,
       borderWidth: 1,
       paddingHorizontal: 20,
       paddingVertical: 17,
@@ -161,24 +162,24 @@ const styles = StyleSheet.create({
       alignItems: "center",
    },
    title: {
-      color: "#ece8f4",
+      color: COLORS.textPrimary,
       fontSize: 20,
       fontWeight: "700",
    },
    date: {
-      color: "#a59fb5",
+      color: COLORS.textSecondary,
       fontSize: 15,
    },
    deleteBtn: {
       width: 30,
       height: 30,
       borderRadius: 15,
-      backgroundColor: "#23202e",
+      backgroundColor: COLORS.surfaceMuted,
       alignItems: "center",
       justifyContent: "center",
    },
    deleteBtnPressed: {
-      backgroundColor: "#3a2229",
+      backgroundColor: COLORS.dangerSoft,
    },
    badge: {
       paddingHorizontal: 15,
@@ -186,19 +187,19 @@ const styles = StyleSheet.create({
       borderRadius: 30,
    },
    heavyBadge: {
-      backgroundColor: "#382519",
+      backgroundColor: COLORS.heavySoft,
    },
    lightBadge: {
-      backgroundColor: "#2c214d",
+      backgroundColor: COLORS.turquoiseSoft,
    },
    badgeText: {
       fontSize: 14,
       fontWeight: "700",
    },
    heavyText: {
-      color: "#efb18d",
+      color: COLORS.heavy,
    },
    lightText: {
-      color: "#c5b3ff",
+      color: COLORS.turquoise,
    },
 });
