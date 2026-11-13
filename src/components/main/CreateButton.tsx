@@ -1,18 +1,39 @@
-import { Pressable, Text, StyleSheet } from "react-native";
+import { View, Pressable, Text, StyleSheet } from "react-native";
+import { useState } from "react";
 
-interface CreateButtonProps {
-   onPress: () => void;
-}
+import CreateWorkoutModal from "./CreateWorkoutModal";
 
-export default function CreateButton({ onPress }: CreateButtonProps) {
+export default function CreateButton() {
+   const [showCreate, setShowCreate] = useState(false);
+
+   async function handlerCreateWeek(intensity: "light" | "heavy") {
+      console.log("Выбрана интенсивность:", intensity);
+
+      // сюда добавится запись в БД
+
+      setShowCreate(false);
+   }
+
    return (
-      <Pressable style={styles.button} onPress={onPress}>
-         <Text style={styles.buttonText}>+ Новая неделя</Text>
-      </Pressable>
+      <>
+         <View style={styles.container}>
+            <Pressable style={styles.button} onPress={() => setShowCreate(true)}>
+               <Text style={styles.buttonText}>+ Новая неделя</Text>
+            </Pressable>
+         </View>
+
+         <CreateWorkoutModal visible={showCreate} onClose={() => setShowCreate(false)} onCreate={handlerCreateWeek} />
+      </>
    );
 }
 
 const styles = StyleSheet.create({
+   container: {
+      paddingTop: 32,
+      paddingBottom: 24,
+      marginTop: 10,
+      backgroundColor: "#110f17",
+   },
    button: {
       height: 66,
       width: "100%",
