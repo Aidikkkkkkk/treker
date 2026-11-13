@@ -3,6 +3,7 @@ import { View, Text, FlatList, StyleSheet, Pressable, Alert } from "react-native
 import { useWorkouts } from "@/hooks/useWorkouts";
 import { IWorkoutResult } from "@/types";
 import { COLORS } from "@/styles";
+import { Link } from "expo-router";
 
 function TrashIcon({ active }: { active: boolean }) {
    const color = active ? COLORS.danger : COLORS.iconMuted;
@@ -54,29 +55,31 @@ export default function ListWorkouts() {
       const isHeavy = item.intensity === "heavy";
 
       return (
-         <View style={styles.card}>
-            <View style={styles.header}>
-               <Text style={styles.title}>Неделя {weekNumber}</Text>
+         <Link href="./second">
+            <View style={styles.card}>
+               <View style={styles.header}>
+                  <Text style={styles.title}>Неделя {weekNumber}</Text>
 
-               <View style={[styles.badge, isHeavy ? styles.heavyBadge : styles.lightBadge]}>
-                  <Text style={[styles.badgeText, isHeavy ? styles.heavyText : styles.lightText]}>
-                     {isHeavy ? "Тяжёлая" : "Лёгкая"}
-                  </Text>
+                  <View style={[styles.badge, isHeavy ? styles.heavyBadge : styles.lightBadge]}>
+                     <Text style={[styles.badgeText, isHeavy ? styles.heavyText : styles.lightText]}>
+                        {isHeavy ? "Тяжёлая" : "Лёгкая"}
+                     </Text>
+                  </View>
+               </View>
+
+               <View style={styles.footer}>
+                  <Text style={styles.date}>{formatWorkoutDate(item.dateWorkout)}</Text>
+
+                  <Pressable
+                     onPress={() => confirmDelete(item, weekNumber)}
+                     hitSlop={10}
+                     style={({ pressed }) => [styles.deleteBtn, pressed && styles.deleteBtnPressed]}
+                  >
+                     {({ pressed }) => <TrashIcon active={pressed} />}
+                  </Pressable>
                </View>
             </View>
-
-            <View style={styles.footer}>
-               <Text style={styles.date}>{formatWorkoutDate(item.dateWorkout)}</Text>
-
-               <Pressable
-                  onPress={() => confirmDelete(item, weekNumber)}
-                  hitSlop={10}
-                  style={({ pressed }) => [styles.deleteBtn, pressed && styles.deleteBtnPressed]}
-               >
-                  {({ pressed }) => <TrashIcon active={pressed} />}
-               </Pressable>
-            </View>
-         </View>
+         </Link>
       );
    }
 

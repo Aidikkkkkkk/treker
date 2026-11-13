@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
+import { Link } from "expo-router";
 import ListWorkouts from "@/components/main/ListWorkouts";
 import CreateButton from "@/components/main/CreateButton";
 import { COLORS } from "@/styles";
@@ -10,6 +10,7 @@ export default function Main() {
       <SafeAreaView style={styles.container}>
          <View style={styles.content}>
             <Text style={styles.mainTitle}>Тренировки</Text>
+
             <ListWorkouts />
             <CreateButton />
          </View>
