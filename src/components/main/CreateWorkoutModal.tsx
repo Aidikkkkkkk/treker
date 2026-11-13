@@ -1,14 +1,34 @@
-import { View, Text, Pressable, Modal, StyleSheet } from "react-native";
+import { View, Text, Pressable, Modal, StyleSheet, Platform } from "react-native";
 import { useState } from "react";
+import DateTimePicker, { DateTimePickerChangeEvent } from "@react-native-community/datetimepicker";
 
 interface CreateWorkoutModalProps {
    visible: boolean;
    onClose: () => void;
-   onCreate: (intensity: "light" | "heavy") => void;
+   onCreate: (intensity: "light" | "heavy", date: Date) => void;
 }
 
 export default function CreateWorkoutModal({ visible, onClose, onCreate }: CreateWorkoutModalProps) {
    const [intensity, setIntensity] = useState<"light" | "heavy">("light");
+   const [dateMode, setDateMode] = useState<"now" | "custom">("now");
+   const [customDate, setCustomDate] = useState(new Date());
+   const [pickerMode, setPickerMode] = useState<"date" | "time" | null>(null);
+
+   function handleValueChange(_event: DateTimePickerChangeEvent, selected: Date) {
+      // будущее время не разрешаем: если выбрали позже, чем сейчас, ставим «сейчас»
+      setCustomDate(selected > new Date() ? new Date() : selected);
+      if (Platform.OS === "android") setPickerMode(null);
+   }
+
+   function handleDismiss() {
+      setPickerMode(null);
+   }
+
+   function handleCreate() {
+      onCreate(intensity, dateMode === "now" ? new Date() : customDate);
+      setDateMode("now");
+      setPickerMode(null);
+   }
 
    return (
       <Modal visible={visible} transparent animationType="slide" statusBarTranslucent onRequestClose={onClose}>
@@ -22,16 +42,7 @@ export default function CreateWorkoutModal({ visible, onClose, onCreate }: Creat
 
                <Text style={styles.title}>Новая неделя</Text>
 
-               <View style={styles.intensityContainer}>
-                  <Pressable
-                     onPress={() => setIntensity("heavy")}
-                     style={[styles.option, intensity === "heavy" && styles.heavyActive]}
-                  >
-                     <Text style={[styles.optionText, intensity === "heavy" ? styles.heavyText : styles.inactiveText]}>
-                        Тяжёлая
-                     </Text>
-                  </Pressable>
-
+               <View style={styles.segment}>
                   <Pressable
                      onPress={() => setIntensity("light")}
                      style={[styles.option, intensity === "light" && styles.lightActive]}
@@ -40,9 +51,78 @@ export default function CreateWorkoutModal({ visible, onClose, onCreate }: Creat
                         Лёгкая
                      </Text>
                   </Pressable>
+
+                  <Pressable
+                     onPress={() => setIntensity("heavy")}
+                     style={[styles.option, intensity === "heavy" && styles.heavyActive]}
+                  >
+                     <Text style={[styles.optionText, intensity === "heavy" ? styles.heavyText : styles.inactiveText]}>
+                        Тяжёлая
+                     </Text>
+                  </Pressable>
                </View>
 
-               <Pressable style={styles.createButton} onPress={() => onCreate(intensity)}>
+               <Text style={styles.label}>Дата</Text>
+
+               <View style={styles.segment}>
+                  <Pressable
+                     onPress={() => {
+                        setDateMode("now");
+                        setPickerMode(null);
+                     }}
+                     style={[styles.option, dateMode === "now" && styles.dateActive]}
+                  >
+                     <Text style={[styles.optionText, dateMode === "now" ? styles.dateText : styles.inactiveText]}>
+                        Сейчас
+                     </Text>
+                  </Pressable>
+
+                  <Pressable
+                     onPress={() => {
+                        setDateMode("custom");
+                        setPickerMode("date");
+                     }}
+                     style={[styles.option, dateMode === "custom" && styles.dateActive]}
+                  >
+                     <Text style={[styles.optionText, dateMode === "custom" ? styles.dateText : styles.inactiveText]}>
+                        Другая дата
+                     </Text>
+                  </Pressable>
+               </View>
+
+               {dateMode === "custom" && (
+                  <View style={styles.dateTimeRow}>
+                     <Pressable
+                        style={[styles.dateTimeCell, pickerMode === "date" && styles.dateTimeCellActive]}
+                        onPress={() => setPickerMode("date")}
+                     >
+                        <Text style={styles.dateRowText}>{customDate.toLocaleDateString()}</Text>
+                     </Pressable>
+
+                     <Pressable
+                        style={[styles.dateTimeCell, pickerMode === "time" && styles.dateTimeCellActive]}
+                        onPress={() => setPickerMode("time")}
+                     >
+                        <Text style={styles.dateRowText}>
+                           {customDate.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                        </Text>
+                     </Pressable>
+                  </View>
+               )}
+
+               {dateMode === "custom" && pickerMode && (
+                  <DateTimePicker
+                     value={customDate}
+                     mode={pickerMode}
+                     is24Hour
+                     display={Platform.OS === "ios" ? "spinner" : "default"}
+                     themeVariant="dark"
+                     onValueChange={handleValueChange}
+                     onDismiss={handleDismiss}
+                  />
+               )}
+
+               <Pressable style={styles.createButton} onPress={handleCreate}>
                   <Text style={styles.createButtonText}>Создать неделю</Text>
                </Pressable>
             </View>
@@ -83,7 +163,13 @@ const styles = StyleSheet.create({
       fontWeight: "700",
       marginBottom: 16,
    },
-   intensityContainer: {
+   label: {
+      color: "#a59fb5",
+      fontSize: 14,
+      marginBottom: 8,
+      marginLeft: 4,
+   },
+   segment: {
       flexDirection: "row",
       backgroundColor: "#1b1924",
       borderRadius: 22,
@@ -103,6 +189,9 @@ const styles = StyleSheet.create({
    lightActive: {
       backgroundColor: "#2c214d",
    },
+   dateActive: {
+      backgroundColor: "#2a2638",
+   },
    optionText: {
       fontSize: 16,
       fontWeight: "700",
@@ -115,6 +204,32 @@ const styles = StyleSheet.create({
    },
    lightText: {
       color: "#c5b3ff",
+   },
+   dateText: {
+      color: "#ece8f4",
+   },
+   dateTimeRow: {
+      flexDirection: "row",
+      gap: 10,
+      marginTop: -6,
+      marginBottom: 14,
+   },
+   dateTimeCell: {
+      flex: 1,
+      alignItems: "center",
+      paddingVertical: 12,
+      borderRadius: 17,
+      backgroundColor: "#1b1924",
+      borderWidth: 1,
+      borderColor: "transparent",
+   },
+   dateTimeCellActive: {
+      borderColor: "#a78bfa",
+   },
+   dateRowText: {
+      color: "#ece8f4",
+      fontSize: 16,
+      fontWeight: "600",
    },
    createButton: {
       height: 56,

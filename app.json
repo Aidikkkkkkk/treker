@@ -1,27 +1,28 @@
 {
-   "expo": {
-      "name": "treker",
-      "slug": "treker",
-      "version": "1.0.0",
-      "orientation": "portrait",
-      "scheme": "treker",
-      "userInterfaceStyle": "automatic",
-      "experiments": {
-         "typedRoutes": true,
-         "reactCompiler": true
-      },
-      "plugins": [
-         [
-            "expo-sqlite",
-            {
-               "enableFTS": true,
-               "useSQLCipher": true,
-               "android": {
-                  "enableFTS": false,
-                  "useSQLCipher": false
-               }
-            }
-         ]
-      ]
-   }
+  "expo": {
+    "name": "treker",
+    "slug": "treker",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "treker",
+    "userInterfaceStyle": "automatic",
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    },
+    "plugins": [
+      [
+        "expo-sqlite",
+        {
+          "enableFTS": true,
+          "useSQLCipher": true,
+          "android": {
+            "enableFTS": false,
+            "useSQLCipher": false
+          }
+        }
+      ],
+      "@react-native-community/datetimepicker"
+    ]
+  }
 }

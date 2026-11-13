@@ -7,15 +7,13 @@ export default function CreateButton() {
    const treker = useTreker();
    const [showCreate, setShowCreate] = useState(false);
 
-   async function handlerCreateWeek(intensity: "light" | "heavy") {
+   async function handlerCreateWeek(intensity: "light" | "heavy", date: Date) {
       setShowCreate(false);
-      console.log("treker:", treker ? "есть" : "НЕТ (нет Provider над кнопкой)");
       try {
-         const res = await treker?.createWorkout({
-            dateWorkout: new Date().toISOString(),
+         await treker?.createWorkout({
+            dateWorkout: date.toISOString(),
             intensity,
          });
-         console.log("createWorkout результат:", res);
       } catch (e) {
          console.error("createWorkout упал:", e);
       }

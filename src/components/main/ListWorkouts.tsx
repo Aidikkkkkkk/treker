@@ -8,7 +8,6 @@ function TrashIcon({ active }: { active: boolean }) {
 
    return (
       <View style={trash.wrap}>
-         {/* крышка + ручка: при нажатии приоткрывается */}
          <View
             style={[
                trash.lidGroup,
@@ -18,14 +17,25 @@ function TrashIcon({ active }: { active: boolean }) {
             <View style={[trash.handle, { borderColor: color }]} />
             <View style={[trash.lid, { backgroundColor: color }]} />
          </View>
-
-         {/* корпус с двумя полосками */}
          <View style={[trash.body, { borderColor: color }]}>
             <View style={[trash.line, { backgroundColor: color }]} />
             <View style={[trash.line, { backgroundColor: color }]} />
          </View>
       </View>
    );
+}
+function formatWorkoutDate(iso: string) {
+   const d = new Date(iso);
+   const sameYear = d.getFullYear() === new Date().getFullYear();
+
+   const date = d.toLocaleDateString("ru-RU", {
+      day: "numeric",
+      month: "long",
+      ...(sameYear ? {} : { year: "numeric" }),
+   });
+   const time = d.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" });
+
+   return `${date}, ${time}`;
 }
 
 export default function ListWorkouts() {
@@ -55,7 +65,7 @@ export default function ListWorkouts() {
             </View>
 
             <View style={styles.footer}>
-               <Text style={styles.date}>{new Date(item.dateWorkout).toLocaleDateString()}</Text>
+               <Text style={styles.date}>{formatWorkoutDate(item.dateWorkout)}</Text>
 
                <Pressable
                   onPress={() => confirmDelete(item, weekNumber)}
