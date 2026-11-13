@@ -13,9 +13,22 @@ export class TrekerService {
       }
       return date.toISOString();
    }
-   private validateNumber(value: number): boolean {
-      return typeof value === "number" && Number.isFinite(value) && value > 0;
+   private validateNumber(value: unknown): number {
+      const num = Number(value);
+      if (
+         value === null ||
+         value === undefined ||
+         (typeof value === "string" && value.trim() === "") ||
+         typeof value === "boolean" ||
+         !Number.isFinite(num) ||
+         num <= 0
+      ) {
+         throw new Error(`Invalid number: ${value}`);
+      }
+
+      return num;
    }
+
    async createWorkout(dto: IDtoWorkout) {
       const validatedDate = this.validateDate(dto.dateWorkout);
       const validatedIntensity = (dto.intensity === "light" ? "light" : "heavy") as "light" | "heavy";
@@ -23,6 +36,7 @@ export class TrekerService {
          dateWorkout: validatedDate,
          intensity: validatedIntensity,
       };
+
       try {
          return await this.trekerRepository.insertToWorkout(validatedDto);
       } catch (error) {
@@ -30,31 +44,37 @@ export class TrekerService {
          throw new Error("Не удалось создать тренировку");
       }
    }
+
    async createExercise(dto: IDtoExercise) {
-      if (!this.validateNumber(dto.workout_id)) throw new Error("Данной тренировки не существует");
-      const validateNameExercise = String(dto.nameExercise);
+      const workout_id = this.validateNumber(dto.workout_id);
+      const validateNameExercise = String(dto.nameExercise).trim();
+
+      if (!validateNameExercise) {
+         throw new Error("Название упражнения не может быть пустым");
+      }
+
       const validatedDto = {
-         workout_id: dto.workout_id,
+         workout_id,
          nameExercise: validateNameExercise,
       };
+
       try {
          return await this.trekerRepository.insertToExercise(validatedDto);
       } catch (error) {
-         console.error("Не удалось создать тренировку");
-         throw new Error("Не удалось создать тренировку");
+         console.error("Не удалось создать упражнение", error);
+         throw new Error("Не удалось создать упражнение");
       }
    }
+
    async createSet(dto: IDtoSet) {
-      if (
-         !this.validateNumber(dto.exercise_id) ||
-         !this.validateNumber(dto.replace) ||
-         !this.validateNumber(dto.count)
-      ) {
-         throw new Error("Некорректное число");
-      }
+      const validatedDto = {
+         exercise_id: this.validateNumber(dto.exercise_id),
+         replace: this.validateNumber(dto.replace),
+         count: this.validateNumber(dto.count),
+      };
 
       try {
-         return await this.trekerRepository.insertToSet(dto);
+         return await this.trekerRepository.insertToSet(validatedDto);
       } catch (error) {
          console.error("Не удалось создать подход", error);
          throw new Error("Не удалось создать подход");
@@ -71,4 +91,5 @@ export class TrekerService {
    async getAllSets() {
       return this.trekerRepository.getAllRowsSets();
    }
+   async deleteWorkout(id: number) {}
 }

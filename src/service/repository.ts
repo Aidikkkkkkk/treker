@@ -53,4 +53,7 @@ export class TrekerRepository {
          'SELECT * FROM "set" as s LEFT OUTER JOIN exercise as e ON s.exercise_id = e.id',
       )) as ISetResult[];
    }
+   async deleteWorkout(id: number) {
+      return await this.db.runAsync("DELETE FROM workout WHERE id = ?", [id]);
+   }
 }

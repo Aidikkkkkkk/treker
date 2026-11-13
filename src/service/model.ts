@@ -1,7 +1,7 @@
 import * as SQLite from "expo-sqlite";
 
 export async function initdb() {
-   const db = await SQLite.openDatabaseAsync("test2");
+   const db = await SQLite.openDatabaseAsync("test3");
    await db.execAsync(`
       PRAGMA foreign_keys = ON;
       PRAGMA journal_mode = WAL;
