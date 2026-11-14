@@ -1,13 +1,26 @@
-import { View, Text, Button } from "react-native";
-import { useRouter } from "expo-router";
+import { useEffect } from "react";
+import { View, Text } from "react-native";
+import { useLocalSearchParams } from "expo-router";
+import { useExercise } from "@/hooks/useExercise";
 
 export default function SecondScreen() {
-   const router = useRouter();
+   const { workoutId } = useLocalSearchParams<{ workoutId: string }>();
+   const { exercises, loadExercises } = useExercise();
+
+   useEffect(() => {
+      if (workoutId) {
+         loadExercises(Number(workoutId));
+      }
+   }, [workoutId]);
 
    return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-         <Text>Вы на втором экране!</Text>
-         <Button title="Назад" onPress={() => router.back()} />
+      <View style={{ flex: 1, padding: 20 }}>
+         <Text>Упражнения для тренировки #{workoutId}</Text>
+         {exercises.map((exercise) => (
+            <View>
+               <Text>{exercise.nameExercise}</Text>
+            </View>
+         ))}
       </View>
    );
 }

@@ -1,7 +1,10 @@
+export interface IWeekResult {
+   id: number;
+   intensity: "light" | "heavy";
+}
 export interface IWorkoutResult {
    id: number;
    dateWorkout: string;
-   intensity: "light" | "heavy";
 }
 export interface IExerciseResult {
    id: string;
@@ -14,9 +17,13 @@ export interface ISetResult {
    replace: number;
    count: number;
 }
+
+export interface IDtoWeek {
+   intensity: "light" | "heavy";
+}
 export interface IDtoWorkout {
    dateWorkout: string;
-   intensity: "light" | "heavy";
+   week_id: number;
 }
 export interface IDtoExercise {
    workout_id: number;

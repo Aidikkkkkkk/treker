@@ -1,18 +1,17 @@
 import { View, Pressable, Text, StyleSheet } from "react-native";
 import { useState } from "react";
 import { useTreker } from "@/TrekerContext";
-import CreateWorkoutModal from "./CreateWorkoutModal";
+import CreateWorkoutModal from "./CreateWeekModal";
 import { COLORS } from "@/styles";
 
 export default function CreateButton() {
    const treker = useTreker();
    const [showCreate, setShowCreate] = useState(false);
 
-   async function handlerCreateWeek(intensity: "light" | "heavy", date: Date) {
+   async function handlerCreateWeek(intensity: "light" | "heavy") {
       setShowCreate(false);
       try {
-         await treker?.createWorkout({
-            dateWorkout: date.toISOString(),
+         await treker?.createWeek({
             intensity,
          });
       } catch (e) {

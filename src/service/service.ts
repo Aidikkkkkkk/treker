@@ -1,5 +1,5 @@
 import { TrekerRepository } from "./repository";
-import { IDtoWorkout, IDtoExercise, IDtoSet } from "@/types";
+import { IDtoWorkout, IDtoExercise, IDtoSet, IDtoWeek } from "@/types";
 
 export class TrekerService {
    private trekerRepository: TrekerRepository;
@@ -28,15 +28,23 @@ export class TrekerService {
 
       return num;
    }
-
-   async createWorkout(dto: IDtoWorkout) {
-      const validatedDate = this.validateDate(dto.dateWorkout);
+   async createWeek(dto: IDtoWeek) {
       const validatedIntensity = (dto.intensity === "light" ? "light" : "heavy") as "light" | "heavy";
       const validatedDto = {
-         dateWorkout: validatedDate,
          intensity: validatedIntensity,
       };
-
+      try {
+         return await this.trekerRepository.insertToWeek(validatedDto);
+      } catch (error) {
+         console.error("Не удалось создать неделю", error);
+         throw new Error("Не удалось создать неделю");
+      }
+   }
+   async createWorkout(dto: IDtoWorkout) {
+      const validatedDto = {
+         dateWorkout: this.validateDate(dto.dateWorkout),
+         week_id: this.validateNumber(dto.week_id),
+      };
       try {
          return await this.trekerRepository.insertToWorkout(validatedDto);
       } catch (error) {
@@ -46,15 +54,13 @@ export class TrekerService {
    }
 
    async createExercise(dto: IDtoExercise) {
-      const workout_id = this.validateNumber(dto.workout_id);
       const validateNameExercise = String(dto.nameExercise).trim();
-
       if (!validateNameExercise) {
          throw new Error("Название упражнения не может быть пустым");
       }
 
       const validatedDto = {
-         workout_id,
+         workout_id: this.validateNumber(dto.workout_id),
          nameExercise: validateNameExercise,
       };
 
@@ -80,12 +86,16 @@ export class TrekerService {
          throw new Error("Не удалось создать подход");
       }
    }
+   async getAllWeeks() {
+      return this.trekerRepository.getAllRowsWeeks();
+   }
    async getAllWorkouts() {
       return this.trekerRepository.getAllRowsWorkouts();
    }
 
-   async getAllExercises() {
-      return this.trekerRepository.getAllRowsExercises();
+   async getAllExercises(workout_id: number) {
+      const validateId = this.validateNumber(workout_id);
+      return this.trekerRepository.getAllRowsExercises(validateId);
    }
 
    async getAllSets() {
@@ -94,5 +104,9 @@ export class TrekerService {
    async deleteWorkout(id: number) {
       const validatedId = this.validateNumber(id);
       return this.trekerRepository.deleteWorkout(validatedId);
+   }
+   async deleteWeek(id: number) {
+      const validatedId = this.validateNumber(id);
+      return this.trekerRepository.deleteWeek(validatedId);
    }
 }

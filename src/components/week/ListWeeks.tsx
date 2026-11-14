@@ -1,9 +1,9 @@
 import { View, Text, FlatList, StyleSheet, Pressable, Alert } from "react-native";
-
-import { useWorkouts } from "@/hooks/useWorkouts";
-import { IWorkoutResult } from "@/types";
-import { COLORS } from "@/styles";
 import { Link } from "expo-router";
+
+import { useWeeks } from "@/hooks/useWeeks";
+import { IWeekResult } from "@/types";
+import { COLORS } from "@/styles";
 
 function TrashIcon({ active }: { active: boolean }) {
    const color = active ? COLORS.danger : COLORS.iconMuted;
@@ -26,37 +26,44 @@ function TrashIcon({ active }: { active: boolean }) {
       </View>
    );
 }
-function formatWorkoutDate(iso: string) {
-   const d = new Date(iso);
-   const sameYear = d.getFullYear() === new Date().getFullYear();
 
-   const date = d.toLocaleDateString("ru-RU", {
-      day: "numeric",
-      month: "long",
-      ...(sameYear ? {} : { year: "numeric" }),
-   });
-   const time = d.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" });
+// function formatWeekDate(iso: string) {
+//    const d = new Date(iso);
+//    const sameYear = d.getFullYear() === new Date().getFullYear();
 
-   return `${date}, ${time}`;
-}
+//    const date = d.toLocaleDateString("ru-RU", {
+//       day: "numeric",
+//       month: "long",
+//       ...(sameYear ? {} : { year: "numeric" }),
+//    });
+//    const time = d.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" });
 
-export default function ListWorkouts() {
-   const { workouts, deleteWorkout } = useWorkouts();
+//    return `${date}, ${time}`;
+// }
 
-   function confirmDelete(item: IWorkoutResult, weekNumber: number) {
+export default function ListWeeks() {
+   const { weeks, deleteWeek } = useWeeks();
+
+   function confirmDelete(item: IWeekResult, weekNumber: number) {
       Alert.alert("Удалить неделю?", `Неделя ${weekNumber} будет удалена без возможности восстановления.`, [
          { text: "Отмена", style: "cancel" },
-         { text: "Удалить", style: "destructive", onPress: () => deleteWorkout(item.id) },
+         { text: "Удалить", style: "destructive", onPress: () => deleteWeek(item.id) },
       ]);
    }
 
-   function renderWorkout({ item, index }: { item: IWorkoutResult; index: number }) {
-      const weekNumber = workouts.length - index;
+   function renderWorkout({ item, index }: { item: IWeekResult; index: number }) {
+      const weekNumber = weeks.length - index;
       const isHeavy = item.intensity === "heavy";
 
       return (
-         <Link href="./second">
-            <View style={styles.card}>
+         <Link
+            href={{
+               pathname: "/second",
+               params: { workoutId: item.id },
+            }}
+            asChild
+         >
+            <Pressable style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}>
                <View style={styles.header}>
                   <Text style={styles.title}>Неделя {weekNumber}</Text>
 
@@ -68,24 +75,25 @@ export default function ListWorkouts() {
                </View>
 
                <View style={styles.footer}>
-                  <Text style={styles.date}>{formatWorkoutDate(item.dateWorkout)}</Text>
-
                   <Pressable
-                     onPress={() => confirmDelete(item, weekNumber)}
+                     onPress={(e) => {
+                        e.stopPropagation();
+                        confirmDelete(item, weekNumber);
+                     }}
                      hitSlop={10}
                      style={({ pressed }) => [styles.deleteBtn, pressed && styles.deleteBtnPressed]}
                   >
                      {({ pressed }) => <TrashIcon active={pressed} />}
                   </Pressable>
                </View>
-            </View>
+            </Pressable>
          </Link>
       );
    }
 
    return (
       <FlatList
-         data={workouts}
+         data={weeks}
          keyExtractor={(item) => item.id.toString()}
          contentContainerStyle={styles.list}
          showsVerticalScrollIndicator={false}
@@ -154,6 +162,9 @@ const styles = StyleSheet.create({
       paddingVertical: 17,
       borderRadius: 26,
       marginBottom: 14,
+   },
+   cardPressed: {
+      opacity: 0.85,
    },
    header: {
       flexDirection: "row",

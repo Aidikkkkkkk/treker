@@ -3,13 +3,13 @@ import { useState } from "react";
 import DateTimePicker, { DateTimePickerChangeEvent } from "@react-native-community/datetimepicker";
 import { COLORS } from "@/styles";
 
-interface CreateWorkoutModalProps {
+interface CreateWeekModalProps {
    visible: boolean;
    onClose: () => void;
    onCreate: (intensity: "light" | "heavy", date: Date) => void;
 }
 
-export default function CreateWorkoutModal({ visible, onClose, onCreate }: CreateWorkoutModalProps) {
+export default function CreateWeekModal({ visible, onClose, onCreate }: CreateWeekModalProps) {
    const [intensity, setIntensity] = useState<"light" | "heavy">("light");
    const [dateMode, setDateMode] = useState<"now" | "custom">("now");
    const [customDate, setCustomDate] = useState(new Date());
