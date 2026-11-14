@@ -1,11 +1,11 @@
 import * as SQLite from "expo-sqlite";
 import {
-   type IWorkoutResult,
-   type IExerciseResult,
-   type ISetResult,
-   type IDtoExercise,
-   type IDtoWorkout,
-   type IDtoSet,
+   IWorkoutResult,
+   IExerciseResult,
+   ISetResult,
+   IDtoExercise,
+   IDtoWorkout,
+   IDtoSet,
    IDtoWeek,
    IWeekResult,
 } from "@/types";

@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useTreker } from "@/TrekerContext";
 import CreateWorkoutModal from "./CreateWeekModal";
 import { COLORS } from "@/styles";
+import CreateButtonDisign from "../global/CreateButton";
 
 export default function CreateButton() {
    const treker = useTreker();
@@ -22,11 +23,8 @@ export default function CreateButton() {
    return (
       <>
          <View style={styles.container}>
-            <Pressable style={styles.button} onPress={() => setShowCreate(true)}>
-               <Text style={styles.buttonText}>+ Новая неделя</Text>
-            </Pressable>
+            <CreateButtonDisign title="Новая неделя" onPress={() => setShowCreate(true)}></CreateButtonDisign>
          </View>
-
          <CreateWorkoutModal visible={showCreate} onClose={() => setShowCreate(false)} onCreate={handlerCreateWeek} />
       </>
    );
