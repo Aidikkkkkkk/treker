@@ -6,6 +6,7 @@ import { IWeekResult } from "@/types";
 export function useWeeks() {
    const treker = useTreker();
    const [weeks, setWeeks] = useState<IWeekResult[]>([]);
+   const [showCreate, setShowCreate] = useState(false);
 
    async function deleteWeek(id: number) {
       if (!treker) return;
@@ -24,6 +25,16 @@ export function useWeeks() {
          console.error("Ошибка загрузки тренировок:", error);
       }
    }
+   async function createWeek(intensity: "light" | "heavy") {
+      setShowCreate(false);
+      try {
+         await treker?.createWeek({
+            intensity,
+         });
+      } catch (e) {
+         console.error("createWeek упал:", e);
+      }
+   }
 
    useEffect(() => {
       if (treker) {
@@ -34,5 +45,8 @@ export function useWeeks() {
    return {
       weeks,
       deleteWeek,
+      createWeek,
+      showCreate,
+      setShowCreate,
    };
 }

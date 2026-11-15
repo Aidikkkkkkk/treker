@@ -1,40 +1,16 @@
-import { View, StyleSheet } from "react-native";
-import { useState } from "react";
-import { useTreker } from "@/TrekerContext";
-import CreateWorkoutModal from "./CreateWeekModal";
-import { COLORS } from "@/styles";
+import { View } from "react-native";
 import CreateButtonDisign from "../global/CreateButton";
+import CreateWeekModal from "./CreateWeekModal";
+import { useWeeks } from "@/hooks/useWeeks";
 
 export default function CreateButton() {
-   const treker = useTreker();
-   const [showCreate, setShowCreate] = useState(false);
-
-   async function handlerCreateWeek(intensity: "light" | "heavy") {
-      setShowCreate(false);
-      try {
-         await treker?.createWeek({
-            intensity,
-         });
-      } catch (e) {
-         console.error("createWeek упал:", e);
-      }
-   }
-
+   const { showCreate, setShowCreate, createWeek } = useWeeks();
    return (
       <>
-         <View style={styles.container}>
+         <View>
             <CreateButtonDisign title="Новая неделя" onPress={() => setShowCreate(true)}></CreateButtonDisign>
          </View>
-         <CreateWorkoutModal visible={showCreate} onClose={() => setShowCreate(false)} onCreate={handlerCreateWeek} />
+         <CreateWeekModal visible={showCreate} onClose={() => setShowCreate(false)} onCreate={createWeek} />
       </>
    );
 }
-
-const styles = StyleSheet.create({
-   container: {
-      paddingTop: 32,
-      paddingBottom: 24,
-      marginTop: 10,
-      backgroundColor: COLORS.background,
-   },
-});

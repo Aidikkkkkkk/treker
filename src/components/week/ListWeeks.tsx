@@ -1,32 +1,12 @@
 import { View, Text, StyleSheet, Alert } from "react-native";
 import { router } from "expo-router";
-
 import List from "../global/List";
 import { useWeeks } from "@/hooks/useWeeks";
 import { IWeekResult } from "@/types";
 import { COLORS } from "@/styles";
 
-// function formatWeekDate(iso: string) {
-//    const d = new Date(iso);
-//    const sameYear = d.getFullYear() === new Date().getFullYear();
-
-//    const date = d.toLocaleDateString("ru-RU", {
-//       day: "numeric",
-//       month: "long",
-//       ...(sameYear ? {} : { year: "numeric" }),
-//    });
-
-//    const time = d.toLocaleTimeString("ru-RU", {
-//       hour: "2-digit",
-//       minute: "2-digit",
-//    });
-
-//    return `${date}, ${time}`;
-// }
-
 export default function ListWeeks() {
    const { weeks, deleteWeek } = useWeeks();
-
    function confirmDelete(item: IWeekResult) {
       const index = weeks.findIndex((week) => week.id === item.id);
       const weekNumber = weeks.length - index;
@@ -41,14 +21,12 @@ export default function ListWeeks() {
       ]);
    }
 
-   function renderWorkout({ item, index }: { item: IWeekResult; index: number }) {
-      const weekNumber = weeks.length - index;
+   function renderWorkout({ item }: { item: IWeekResult; index: number }) {
       const isHeavy = item.intensity === "heavy";
-
       return (
          <View style={styles.header}>
             <View>
-               <Text style={styles.title}>Неделя {weekNumber}</Text>
+               <Text style={styles.title}>Неделя {item.id}</Text>
             </View>
 
             <View style={[styles.badge, isHeavy ? styles.heavyBadge : styles.lightBadge]}>

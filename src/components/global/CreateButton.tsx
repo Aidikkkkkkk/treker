@@ -11,7 +11,7 @@ export default function CreateButtonDisign({ title, onPress }: CreateButtonDisig
       <>
          <View style={styles.container}>
             <Pressable style={styles.button} onPress={onPress}>
-               <Text style={styles.buttonText}>+ {title}</Text>
+               <Text style={styles.buttonText}>{title}</Text>
             </Pressable>
          </View>
       </>
@@ -23,7 +23,6 @@ const styles = StyleSheet.create({
       paddingTop: 32,
       paddingBottom: 24,
       marginTop: 10,
-      backgroundColor: COLORS.background,
    },
    button: {
       height: 66,
