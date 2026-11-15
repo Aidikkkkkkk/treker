@@ -1,5 +1,4 @@
 import { View, FlatList, StyleSheet, Pressable, ListRenderItem } from "react-native";
-
 import { COLORS } from "@/styles";
 
 type ListProps<T> = {
@@ -36,7 +35,7 @@ function TrashIcon({ active }: { active: boolean }) {
    );
 }
 
-export default function List<T>({
+export default function CustomList<T>({
    data,
    renderItem,
    keyExtractor,

@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, Alert } from "react-native";
 import { router } from "expo-router";
 
-import List from "../global/List";
+import List from "../global/CustomList";
 import { COLORS } from "@/styles";
 import { useWorkouts } from "@/hooks/useWorkout";
 import { IWorkoutResult } from "@/types";

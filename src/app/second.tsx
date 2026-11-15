@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { View, Text } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { useExercise } from "@/hooks/useExercise";
-import CreateButtonDisign from "@/components/global/CreateButton";
+import CreateButtonDisign from "@/components/global/CustomCreateButton";
 import ListWorkouts from "@/components/workout/ListWorkouts";
 export default function SecondScreen() {
    const { workoutId } = useLocalSearchParams<{ workoutId: string }>();

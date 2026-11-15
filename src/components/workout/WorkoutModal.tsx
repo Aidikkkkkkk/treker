@@ -1,17 +1,16 @@
 import { useState } from "react";
 import { View, Text, Pressable, Modal, StyleSheet, Platform } from "react-native";
-
 import DateTimePicker, { DateTimePickerChangeEvent } from "@react-native-community/datetimepicker";
 
 import { COLORS } from "@/styles";
 
-interface CreateWorkoutModalProps {
+interface WorkoutModalProps {
    visible: boolean;
    onClose: () => void;
    onCreate: (date: Date) => void;
 }
 
-export default function CreateWorkoutModal({ visible, onClose, onCreate }: CreateWorkoutModalProps) {
+export default function CreateWorkoutModal({ visible, onClose, onCreate }: WorkoutModalProps) {
    const [date, setDate] = useState(new Date());
    const [pickerMode, setPickerMode] = useState<"date" | "time" | null>(null);
 

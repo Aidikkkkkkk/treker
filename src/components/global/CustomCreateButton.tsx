@@ -6,15 +6,13 @@ type CreateButtonDisignProps = {
    onPress: () => void;
 };
 
-export default function CreateButtonDisign({ title, onPress }: CreateButtonDisignProps) {
+export default function CustomCreateButton({ title, onPress }: CreateButtonDisignProps) {
    return (
-      <>
-         <View style={styles.container}>
-            <Pressable style={styles.button} onPress={onPress}>
-               <Text style={styles.buttonText}>{title}</Text>
-            </Pressable>
-         </View>
-      </>
+      <View style={styles.container}>
+         <Pressable style={styles.button} onPress={onPress}>
+            <Text style={styles.buttonText}>{title}</Text>
+         </Pressable>
+      </View>
    );
 }
 

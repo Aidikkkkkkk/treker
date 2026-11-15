@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, Alert } from "react-native";
 import { router } from "expo-router";
-import List from "../global/List";
+import List from "../global/CustomList";
 import { useWeeks } from "@/hooks/useWeeks";
 import { IWeekResult } from "@/types";
 import { COLORS } from "@/styles";
@@ -8,10 +8,7 @@ import { COLORS } from "@/styles";
 export default function ListWeeks() {
    const { weeks, deleteWeek } = useWeeks();
    function confirmDelete(item: IWeekResult) {
-      const index = weeks.findIndex((week) => week.id === item.id);
-      const weekNumber = weeks.length - index;
-
-      Alert.alert("Удалить неделю?", `Неделя ${weekNumber} будет удалена без возможности восстановления.`, [
+      Alert.alert("Удалить неделю?", `Неделя ${item.id} будет удалена без возможности восстановления.`, [
          { text: "Отмена", style: "cancel" },
          {
             text: "Удалить",

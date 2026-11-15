@@ -3,15 +3,14 @@ import { useState } from "react";
 import CustomModal from "../global/CustomModal";
 import { COLORS } from "@/styles";
 
-interface CreateWeekModalProps {
+interface WeekModalProps {
    visible: boolean;
    onClose: () => void;
    onCreate: (intensity: "light" | "heavy") => void;
 }
 
-export default function CreateWeekModal({ visible, onClose, onCreate }: CreateWeekModalProps) {
+export default function CreateWeekModal({ visible, onClose, onCreate }: WeekModalProps) {
    const [intensity, setIntensity] = useState<"light" | "heavy">("light");
-
    function handleCreate() {
       onCreate(intensity);
       onClose();
