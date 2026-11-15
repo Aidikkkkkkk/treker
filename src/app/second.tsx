@@ -11,6 +11,7 @@ export default function SecondScreen() {
    useEffect(() => {
       if (workoutId) {
          loadExercises(Number(workoutId));
+         console.log(`workoutId = ${workoutId}`);
       }
    }, [workoutId]);
 

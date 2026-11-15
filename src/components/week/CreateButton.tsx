@@ -1,4 +1,4 @@
-import { View, Pressable, Text, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { useState } from "react";
 import { useTreker } from "@/TrekerContext";
 import CreateWorkoutModal from "./CreateWeekModal";
@@ -16,7 +16,7 @@ export default function CreateButton() {
             intensity,
          });
       } catch (e) {
-         console.error("createWorkout упал:", e);
+         console.error("createWeek упал:", e);
       }
    }
 
@@ -36,18 +36,5 @@ const styles = StyleSheet.create({
       paddingBottom: 24,
       marginTop: 10,
       backgroundColor: COLORS.background,
-   },
-   button: {
-      height: 66,
-      width: "100%",
-      borderRadius: 40,
-      backgroundColor: COLORS.accent,
-      justifyContent: "center",
-      alignItems: "center",
-   },
-   buttonText: {
-      color: COLORS.textOnAccent,
-      fontSize: 18,
-      fontWeight: "700",
    },
 });
