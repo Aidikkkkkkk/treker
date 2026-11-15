@@ -92,8 +92,9 @@ export class TrekerService {
       const validateId = this.validateNumber(workout_id);
       return this.trekerRepository.getAllRowsExercises(validateId);
    }
-   async getAllSets() {
-      return this.trekerRepository.getAllRowsSets();
+   async getAllSets(exercise_id: number) {
+      const validatedId = this.validateNumber(exercise_id);
+      return this.trekerRepository.getAllRowsSets(validatedId);
    }
    async deleteWorkout(id: number) {
       const validatedId = this.validateNumber(id);
@@ -106,5 +107,9 @@ export class TrekerService {
    async deleteExercise(id: number) {
       const validatedId = this.validateNumber(id);
       return this.trekerRepository.deleteExercise(validatedId);
+   }
+   async deleteSet(id: number) {
+      const validatedId = this.validateNumber(id);
+      return this.trekerRepository.deleteSet(validatedId);
    }
 }

@@ -12,7 +12,7 @@ export interface IExerciseResult {
    nameExercise: string;
 }
 export interface ISetResult {
-   id: string;
+   id: number;
    exercise_id: number;
    replace: number;
    count: number;

@@ -39,8 +39,7 @@ export async function initdb() {
             exercise_id INTEGER NOT NULL,
             "replace" INTEGER,
             count INTEGER,
-            FOREIGN KEY (exercise_id)
-               REFERENCES exercise(id) ON DELETE CASCADE
+            FOREIGN KEY (exercise_id) REFERENCES exercise(id) ON DELETE CASCADE
          );
       `);
 

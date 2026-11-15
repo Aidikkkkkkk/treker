@@ -52,10 +52,8 @@ export class TrekerRepository {
          workout_id,
       ])) as IExerciseResult[];
    }
-   async getAllRowsSets() {
-      return (await this.db.getAllAsync(
-         'SELECT * FROM "set" as s LEFT OUTER JOIN exercise as e ON s.exercise_id = e.id',
-      )) as ISetResult[];
+   async getAllRowsSets(exercise_id: number) {
+      return (await this.db.getAllAsync('SELECT * FROM "set" WHERE exercise_id = ?', [exercise_id])) as ISetResult[];
    }
    async deleteWeek(id: number) {
       return await this.db.runAsync("DELETE FROM week WHERE id = ?", [id]);
@@ -67,6 +65,6 @@ export class TrekerRepository {
       return await this.db.runAsync("DELETE FROM exercise WHERE id = ?", [id]);
    }
    async deleteSet(id: number) {
-      return await this.db.runAsync("DELETE FROM set WHERE id = ?", [id]);
+      return await this.db.runAsync('DELETE FROM "set" WHERE id = ?', [id]);
    }
 }
