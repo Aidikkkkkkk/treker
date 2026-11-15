@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS } from "@/styles";
 import Week from "@/components/week/Week";
+import { COLORS } from "@/styles";
 
 export default function Main() {
    return (

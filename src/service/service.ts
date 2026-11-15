@@ -89,8 +89,9 @@ export class TrekerService {
    async getAllWeeks() {
       return this.trekerRepository.getAllRowsWeeks();
    }
-   async getAllWorkouts() {
-      return this.trekerRepository.getAllRowsWorkouts();
+   async getAllWorkouts(week_id: number) {
+      const validatedId = this.validateNumber(week_id);
+      return this.trekerRepository.getAllRowsWorkouts(validatedId);
    }
 
    async getAllExercises(workout_id: number) {

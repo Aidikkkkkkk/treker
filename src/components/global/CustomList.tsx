@@ -5,14 +5,13 @@ type ListProps<T> = {
    data: T[];
    renderItem: ListRenderItem<T>;
    keyExtractor: (item: T) => string;
-   onDelete?: (item: T) => void;
-   onPress?: (item: T) => void;
+   onDelete: (item: T) => void;
+   onPress: (item: T) => void;
    contentContainerStyle?: object;
 };
 
 function TrashIcon({ active }: { active: boolean }) {
    const color = active ? COLORS.danger : COLORS.iconMuted;
-
    return (
       <View style={trash.wrap}>
          <View
@@ -44,27 +43,25 @@ export default function CustomList<T>({
    contentContainerStyle,
 }: ListProps<T>) {
    return (
-      <FlatList
+      <FlatList<T>
          data={data}
          keyExtractor={keyExtractor}
          contentContainerStyle={[styles.list, contentContainerStyle]}
          showsVerticalScrollIndicator={false}
-         renderItem={({ item, index }) => (
+         renderItem={(info) => (
             <Pressable
-               onPress={() => onPress?.(item)}
+               onPress={() => onPress(info.item)}
                style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
             >
-               <View style={styles.content}>{renderItem({ item, index, separators: {} as any })}</View>
+               <View style={styles.content}>{renderItem(info)}</View>
 
-               {onDelete && (
-                  <Pressable
-                     onPress={() => onDelete(item)}
-                     hitSlop={10}
-                     style={({ pressed }) => [styles.deleteBtn, pressed && styles.deleteBtnPressed]}
-                  >
-                     {({ pressed }) => <TrashIcon active={pressed} />}
-                  </Pressable>
-               )}
+               <Pressable
+                  onPress={() => onDelete(info.item)}
+                  hitSlop={10}
+                  style={({ pressed }) => [styles.deleteBtn, pressed && styles.deleteBtnPressed]}
+               >
+                  {({ pressed }) => <TrashIcon active={pressed} />}
+               </Pressable>
             </Pressable>
          )}
       />
@@ -112,7 +109,6 @@ const trash = StyleSheet.create({
       borderRadius: 1,
    },
 });
-
 const styles = StyleSheet.create({
    list: {
       flexGrow: 1,

@@ -9,13 +9,12 @@ interface WeekModalProps {
    onCreate: (intensity: "light" | "heavy") => void;
 }
 
-export default function CreateWeekModal({ visible, onClose, onCreate }: WeekModalProps) {
+export default function WeekModal({ visible, onClose, onCreate }: WeekModalProps) {
    const [intensity, setIntensity] = useState<"light" | "heavy">("light");
    function handleCreate() {
       onCreate(intensity);
       onClose();
    }
-
    return (
       <CustomModal visible={visible} title="Новая неделя" onClose={onClose}>
          <View style={styles.segment}>
@@ -27,7 +26,6 @@ export default function CreateWeekModal({ visible, onClose, onCreate }: WeekModa
                   Лёгкая
                </Text>
             </Pressable>
-
             <Pressable
                onPress={() => setIntensity("heavy")}
                style={[styles.option, intensity === "heavy" && styles.heavyActive]}
@@ -37,7 +35,6 @@ export default function CreateWeekModal({ visible, onClose, onCreate }: WeekModa
                </Text>
             </Pressable>
          </View>
-
          <Pressable style={styles.createButton} onPress={handleCreate}>
             <Text style={styles.createButtonText}>Создать</Text>
          </Pressable>

@@ -7,21 +7,17 @@ interface BaseModalProps {
    onClose: () => void;
    children: React.ReactNode;
 }
-
 export default function CustomModal({ visible, title, onClose, children }: BaseModalProps) {
    return (
       <Modal visible={visible} transparent animationType="slide" statusBarTranslucent onRequestClose={onClose}>
          <View style={styles.overlay}>
             <Pressable style={StyleSheet.absoluteFill} onPress={onClose} />
-
             <View style={styles.modal}>
                <View style={styles.indicatorContainer}>
                   <View style={styles.indicator} />
                </View>
-
                <View style={styles.header}>
                   <Text style={styles.title}>{title}</Text>
-
                   <Pressable
                      onPress={onClose}
                      hitSlop={12}
@@ -30,7 +26,6 @@ export default function CustomModal({ visible, title, onClose, children }: BaseM
                      <Text style={styles.closeText}>×</Text>
                   </Pressable>
                </View>
-
                {children}
             </View>
          </View>

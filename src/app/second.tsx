@@ -1,24 +1,12 @@
-import { useEffect } from "react";
-import { View, Text } from "react-native";
+import { View } from "react-native";
+import Workout from "@/components/workout/Workout";
 import { useLocalSearchParams } from "expo-router";
-import { useExercise } from "@/hooks/useExercise";
-import CreateButtonDisign from "@/components/global/CustomCreateButton";
-import ListWorkouts from "@/components/workout/ListWorkouts";
+
 export default function SecondScreen() {
-   const { workoutId } = useLocalSearchParams<{ workoutId: string }>();
-
-   // useEffect(() => {
-   //    if (workoutId) {
-   //       loadExercises(Number(workoutId));
-   //       console.log(`workoutId = ${workoutId}`);
-   //    }
-   // }, [workoutId]);
-
+   const { week_id } = useLocalSearchParams<{ week_id: string }>();
    return (
       <View style={{ flex: 1, padding: 20 }}>
-         <Text>Упражнения для тренировки #{workoutId}</Text>
-         <ListWorkouts />
-         <CreateButtonDisign title="Новая тренировка" onPress={() => console.log("Нажатие")} />
+         <Workout week_id={Number(week_id)} />
       </View>
    );
 }

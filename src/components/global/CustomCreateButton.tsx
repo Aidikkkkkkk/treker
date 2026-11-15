@@ -1,12 +1,11 @@
 import { View, Pressable, Text, StyleSheet } from "react-native";
 import { COLORS } from "@/styles";
 
-type CreateButtonDisignProps = {
+type CustomCreateButtonProps = {
    title: string;
    onPress: () => void;
 };
-
-export default function CustomCreateButton({ title, onPress }: CreateButtonDisignProps) {
+export default function CustomCreateButton({ title, onPress }: CustomCreateButtonProps) {
    return (
       <View style={styles.container}>
          <Pressable style={styles.button} onPress={onPress}>

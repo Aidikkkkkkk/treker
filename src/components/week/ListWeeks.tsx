@@ -17,7 +17,6 @@ export default function ListWeeks() {
          },
       ]);
    }
-
    function renderWorkout({ item }: { item: IWeekResult; index: number }) {
       const isHeavy = item.intensity === "heavy";
       return (
@@ -25,7 +24,6 @@ export default function ListWeeks() {
             <View>
                <Text style={styles.title}>Неделя {item.id}</Text>
             </View>
-
             <View style={[styles.badge, isHeavy ? styles.heavyBadge : styles.lightBadge]}>
                <Text style={[styles.badgeText, isHeavy ? styles.heavyText : styles.lightText]}>
                   {isHeavy ? "Тяжёлая" : "Лёгкая"}
@@ -34,7 +32,6 @@ export default function ListWeeks() {
          </View>
       );
    }
-
    return (
       <List<IWeekResult>
          data={weeks}
@@ -44,7 +41,7 @@ export default function ListWeeks() {
          onPress={(item) =>
             router.push({
                pathname: "/second",
-               params: { workoutId: item.id },
+               params: { week_id: item.id },
             })
          }
       />

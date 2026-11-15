@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet } from "react-native";
-import CreateWeekModal from "./WeekModal";
+import WeekModal from "./WeekModal";
 import { useWeeks } from "@/hooks/useWeeks";
 import CustomCreateButton from "../global/CustomCreateButton";
 import ListWeeks from "@/components/week/ListWeeks";
@@ -9,10 +9,10 @@ export default function Week() {
    const { showCreate, setShowCreate, createWeek } = useWeeks();
    return (
       <View style={styles.content}>
-         <Text style={styles.mainTitle}>Тренировки</Text>
+         <Text style={styles.mainTitle}>Недели</Text>
          <ListWeeks />
          <CustomCreateButton title="Новая неделя" onPress={() => setShowCreate(true)}></CustomCreateButton>
-         <CreateWeekModal visible={showCreate} onClose={() => setShowCreate(false)} onCreate={createWeek} />
+         <WeekModal visible={showCreate} onClose={() => setShowCreate(false)} onCreate={createWeek} />
       </View>
    );
 }

@@ -1,38 +1,33 @@
 import { useState } from "react";
 import { View, Text, Pressable, Modal, StyleSheet, Platform } from "react-native";
 import DateTimePicker, { DateTimePickerChangeEvent } from "@react-native-community/datetimepicker";
-
 import { COLORS } from "@/styles";
 
 interface WorkoutModalProps {
    visible: boolean;
    onClose: () => void;
-   onCreate: (date: Date) => void;
+   onCreate: (week_id: number, date: string) => void;
+   week_id: number;
 }
 
-export default function CreateWorkoutModal({ visible, onClose, onCreate }: WorkoutModalProps) {
+export default function WorkoutModal({ visible, onClose, onCreate, week_id }: WorkoutModalProps) {
    const [date, setDate] = useState(new Date());
    const [pickerMode, setPickerMode] = useState<"date" | "time" | null>(null);
-
    function handleValueChange(_event: DateTimePickerChangeEvent, selected: Date) {
       setDate(selected > new Date() ? new Date() : selected);
-
       if (Platform.OS === "android") {
          setPickerMode(null);
       }
    }
-
    function handleCreate() {
-      onCreate(date);
+      onCreate(week_id, String(date));
       setPickerMode(null);
       onClose();
    }
-
    function handleClose() {
       setPickerMode(null);
       onClose();
    }
-
    return (
       <Modal visible={visible} transparent animationType="slide" onRequestClose={handleClose}>
          <View style={styles.overlay}>
@@ -40,9 +35,7 @@ export default function CreateWorkoutModal({ visible, onClose, onCreate }: Worko
                <View style={styles.indicatorContainer}>
                   <View style={styles.indicator} />
                </View>
-
                <Text style={styles.title}>Дата и время</Text>
-
                <View style={styles.dateTimeRow}>
                   <Pressable
                      style={[styles.dateTimeCell, pickerMode === "date" && styles.dateTimeCellActive]}
@@ -51,7 +44,6 @@ export default function CreateWorkoutModal({ visible, onClose, onCreate }: Worko
                      <Text style={styles.cellLabel}>Дата</Text>
                      <Text style={styles.dateRowText}>{date.toLocaleDateString("ru-RU")}</Text>
                   </Pressable>
-
                   <Pressable
                      style={[styles.dateTimeCell, pickerMode === "time" && styles.dateTimeCellActive]}
                      onPress={() => setPickerMode("time")}
@@ -65,7 +57,6 @@ export default function CreateWorkoutModal({ visible, onClose, onCreate }: Worko
                      </Text>
                   </Pressable>
                </View>
-
                {pickerMode && (
                   <DateTimePicker
                      value={date}
@@ -78,9 +69,8 @@ export default function CreateWorkoutModal({ visible, onClose, onCreate }: Worko
                      onDismiss={() => setPickerMode(null)}
                   />
                )}
-
                <Pressable style={styles.createButton} onPress={handleCreate}>
-                  <Text style={styles.createButtonText}>Создать неделю</Text>
+                  <Text style={styles.createButtonText}>Создать тренировку</Text>
                </Pressable>
             </View>
          </View>

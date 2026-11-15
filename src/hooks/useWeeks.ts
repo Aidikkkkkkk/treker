@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-
 import { useTreker } from "@/TrekerContext";
 import { IWeekResult } from "@/types";
 
@@ -17,7 +16,7 @@ export function useWeeks() {
          console.error("Ошибка удаления тренировки:", error);
       }
    }
-   async function loadWorkouts() {
+   async function loadWeeks() {
       if (!treker) return;
       try {
          setWeeks(await treker.getAllWeeks());
@@ -38,7 +37,7 @@ export function useWeeks() {
 
    useEffect(() => {
       if (treker) {
-         loadWorkouts();
+         loadWeeks();
       }
    }, [treker]);
 

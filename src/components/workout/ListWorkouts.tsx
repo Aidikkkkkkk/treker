@@ -1,21 +1,22 @@
 import { View, Text, StyleSheet, Alert } from "react-native";
 import { router } from "expo-router";
-
-import List from "../global/CustomList";
 import { COLORS } from "@/styles";
 import { useWorkouts } from "@/hooks/useWorkout";
 import { IWorkoutResult } from "@/types";
+import List from "../global/CustomList";
+
+type Props = {
+   week_id: number;
+};
 
 function formatworkoutDate(iso: string) {
    const d = new Date(iso);
    const sameYear = d.getFullYear() === new Date().getFullYear();
-
    const date = d.toLocaleDateString("ru-RU", {
       day: "numeric",
       month: "long",
       ...(sameYear ? {} : { year: "numeric" }),
    });
-
    const time = d.toLocaleTimeString("ru-RU", {
       hour: "2-digit",
       minute: "2-digit",
@@ -24,14 +25,10 @@ function formatworkoutDate(iso: string) {
    return `${date}, ${time}`;
 }
 
-export default function ListWorkouts() {
-   const { workouts, deleteWorkout } = useWorkouts();
-
+export default function ListWorkouts({ week_id }: Props) {
+   const { workouts, deleteWorkout } = useWorkouts(week_id);
    function confirmDelete(item: IWorkoutResult) {
-      const index = workouts.findIndex((workout) => workout.id === item.id);
-      const workoutNumber = workouts.length - index;
-
-      Alert.alert("Удалить неделю?", `Неделя ${workoutNumber} будет удалена без возможности восстановления.`, [
+      Alert.alert("Удалить тренировку?", `Тренировка ${item.id} будет удалена без возможности восстановления.`, [
          { text: "Отмена", style: "cancel" },
          {
             text: "Удалить",
@@ -41,22 +38,15 @@ export default function ListWorkouts() {
       ]);
    }
 
-   function renderWorkout({ item, index }: { item: IWorkoutResult; index: number }) {
-      const workoutNumber = workouts.length - index;
-
+   function renderWorkout({ item }: { item: IWorkoutResult; index: number }) {
       return (
          <View style={styles.header}>
-            <View>
-               <Text style={styles.title}>Неделя {workoutNumber}</Text>
-            </View>
+            <Text style={styles.title}>Тренировка №{item.id}</Text>
 
-            <View>
-               <Text style={styles.badgeText}>{formatworkoutDate(item.dateWorkout)}</Text>
-            </View>
+            <Text style={styles.badgeText}>{formatworkoutDate(item.dateWorkout)}</Text>
          </View>
       );
    }
-
    return (
       <List<IWorkoutResult>
          data={workouts}
@@ -65,8 +55,8 @@ export default function ListWorkouts() {
          onDelete={confirmDelete}
          onPress={(item) =>
             router.push({
-               pathname: "/second",
-               params: { workoutId: item.id },
+               pathname: "/",
+               // params: { workoutId: item.id },
             })
          }
       />
@@ -75,9 +65,9 @@ export default function ListWorkouts() {
 
 const styles = StyleSheet.create({
    header: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: "center",
+      flexDirection: "column",
+      alignItems: "flex-start",
+      gap: 6,
       paddingRight: 38,
    },
    title: {

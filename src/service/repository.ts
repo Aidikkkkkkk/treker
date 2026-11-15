@@ -20,7 +20,10 @@ export class TrekerRepository {
       return result.lastInsertRowId;
    }
    async insertToWorkout(dto: IDtoWorkout) {
-      const result = await this.db.runAsync(`INSERT INTO workout (dateWorkout) VALUES (?)`, [dto.dateWorkout]);
+      const result = await this.db.runAsync(`INSERT INTO workout (dateWorkout,week_id) VALUES (?,?)`, [
+         dto.dateWorkout,
+         dto.week_id,
+      ]);
       return result.lastInsertRowId;
    }
    async insertToExercise(dto: IDtoExercise) {
@@ -41,10 +44,8 @@ export class TrekerRepository {
    async getAllRowsWeeks() {
       return (await this.db.getAllAsync("SELECT * FROM week")) as IWeekResult[];
    }
-   async getAllRowsWorkouts() {
-      return (await this.db.getAllAsync(
-         "SELECT * FROM workout as w LEFT OUTER JOIN week ON week.id = w.week_id WHERE week.id = ?",
-      )) as IWorkoutResult[];
+   async getAllRowsWorkouts(week_id: number) {
+      return (await this.db.getAllAsync(`SELECT * FROM workout WHERE week_id = ?`, [week_id])) as IWorkoutResult[];
    }
 
    async getAllRowsExercises(workout_id: number): Promise<IExerciseResult[]> {
