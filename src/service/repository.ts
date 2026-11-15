@@ -45,14 +45,12 @@ export class TrekerRepository {
       return (await this.db.getAllAsync("SELECT * FROM week")) as IWeekResult[];
    }
    async getAllRowsWorkouts(week_id: number) {
-      return (await this.db.getAllAsync(`SELECT * FROM workout WHERE week_id = ?`, [week_id])) as IWorkoutResult[];
+      return (await this.db.getAllAsync("SELECT * FROM workout WHERE week_id = ?", [week_id])) as IWorkoutResult[];
    }
-
    async getAllRowsExercises(workout_id: number): Promise<IExerciseResult[]> {
-      return (await this.db.getAllAsync(
-         "SELECT * FROM exercise as e LEFT OUTER JOIN workout as w ON e.workout_id = w.id WHERE e.workout_id = ?",
-         [workout_id],
-      )) as IExerciseResult[];
+      return (await this.db.getAllAsync("SELECT * FROM exercise WHERE workout_id = ?", [
+         workout_id,
+      ])) as IExerciseResult[];
    }
    async getAllRowsSets() {
       return (await this.db.getAllAsync(

@@ -7,7 +7,7 @@ export interface IWorkoutResult {
    dateWorkout: string;
 }
 export interface IExerciseResult {
-   id: string;
+   id: number;
    workout_id: number;
    nameExercise: string;
 }

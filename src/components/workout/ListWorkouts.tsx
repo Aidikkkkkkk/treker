@@ -55,8 +55,8 @@ export default function ListWorkouts({ week_id }: Props) {
          onDelete={confirmDelete}
          onPress={(item) =>
             router.push({
-               pathname: "/",
-               // params: { workoutId: item.id },
+               pathname: "./third",
+               params: { workout_id: item.id },
             })
          }
       />

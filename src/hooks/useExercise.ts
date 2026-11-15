@@ -1,32 +1,48 @@
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
 import { useTreker } from "@/TrekerContext";
 import { IExerciseResult } from "@/types";
 
-export function useExercise() {
+export function useExercise(workout_id: number) {
    const treker = useTreker();
    const [exercises, setExercises] = useState<IExerciseResult[]>([]);
+   const [showCreate, setShowCreate] = useState(false);
 
-   // async function deleteWorkout(id: number) {
-   //    if (!treker) return;
-   //    try {
-   //       await treker.deleteWorkout(id);
-   //       setWorkouts((prev) => prev.filter((item) => item.id !== id));
-   //    } catch (error) {
-   //       console.error("Ошибка удаления тренировки:", error);
-   //    }
-   // }
+   async function deleteExercise(id: number) {
+      if (!treker) return;
+      try {
+         await treker.deleteExercise(id);
+         setExercises((prev) => prev.filter((item) => item.id !== id));
+      } catch (error) {
+         console.error("Ошибка удаления упражнения:", error);
+      }
+   }
    async function loadExercises(id: number) {
       if (!treker) return;
       try {
          setExercises(await treker.getAllExercises(id));
       } catch (error) {
-         console.error("Ошибка загрузки тренировок:", error);
+         console.error("Ошибка загрузки упражнения:", error);
       }
    }
+   async function createExercise(workout_id: number, nameExercise: string) {
+      setShowCreate(false);
+      try {
+         await treker?.createExercise({ workout_id, nameExercise });
+      } catch (e) {
+         console.error("Ошибка при создании упражнения:", e);
+      }
+   }
+   useEffect(() => {
+      if (!treker || !workout_id) return;
+      loadExercises(workout_id);
+   }, [treker, workout_id]);
 
    return {
       exercises,
+      deleteExercise,
+      createExercise,
+      setShowCreate,
+      showCreate,
       loadExercises,
    };
 }
