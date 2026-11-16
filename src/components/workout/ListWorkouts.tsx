@@ -1,27 +1,19 @@
-import { View, Text, StyleSheet, Alert } from "react-native";
+import { View, Text, Alert } from "react-native";
 import { router } from "expo-router";
-import { COLORS } from "@/styles";
+import { LIST_ITEM_STYLES } from "@/styles";
 import { useWorkouts } from "@/hooks/useWorkout";
 import { IWorkoutResult } from "@/types";
 import List from "../global/CustomList";
 
-type Props = {
-   week_id: number;
-};
+type Props = { week_id: number };
 
-function formatworkoutDate(iso: string) {
+function formatWorkoutDate(iso: string) {
    const d = new Date(iso);
    const sameYear = d.getFullYear() === new Date().getFullYear();
    const date = d.toLocaleDateString("ru-RU", {
-      day: "numeric",
-      month: "long",
-      ...(sameYear ? {} : { year: "numeric" }),
+      day: "numeric", month: "long", ...(sameYear ? {} : { year: "numeric" }),
    });
-   const time = d.toLocaleTimeString("ru-RU", {
-      hour: "2-digit",
-      minute: "2-digit",
-   });
-
+   const time = d.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" });
    return `${date}, ${time}`;
 }
 
@@ -30,20 +22,14 @@ export default function ListWorkouts({ week_id }: Props) {
    function confirmDelete(item: IWorkoutResult) {
       Alert.alert("Удалить тренировку?", `Тренировка ${item.id} будет удалена без возможности восстановления.`, [
          { text: "Отмена", style: "cancel" },
-         {
-            text: "Удалить",
-            style: "destructive",
-            onPress: () => deleteWorkout(item.id),
-         },
+         { text: "Удалить", style: "destructive", onPress: () => deleteWorkout(item.id) },
       ]);
    }
-
    function renderWorkout({ item }: { item: IWorkoutResult; index: number }) {
       return (
-         <View style={styles.header}>
-            <Text style={styles.title}>Тренировка №{item.id}</Text>
-
-            <Text style={styles.badgeText}>{formatworkoutDate(item.dateWorkout)}</Text>
+         <View style={LIST_ITEM_STYLES.row}>
+            <Text style={LIST_ITEM_STYLES.title}>Тренировка №{item.id}</Text>
+            <Text style={LIST_ITEM_STYLES.secondary}>{formatWorkoutDate(item.dateWorkout)}</Text>
          </View>
       );
    }
@@ -53,52 +39,7 @@ export default function ListWorkouts({ week_id }: Props) {
          keyExtractor={(item) => item.id.toString()}
          renderItem={renderWorkout}
          onDelete={confirmDelete}
-         onPress={(item) =>
-            router.push({
-               pathname: "./third",
-               params: { workout_id: item.id },
-            })
-         }
+         onPress={(item) => router.push({ pathname: "./third", params: { workout_id: item.id } })}
       />
    );
 }
-
-const styles = StyleSheet.create({
-   header: {
-      flexDirection: "column",
-      alignItems: "flex-start",
-      gap: 6,
-      paddingRight: 38,
-   },
-   title: {
-      color: COLORS.textPrimary,
-      fontSize: 20,
-      fontWeight: "700",
-   },
-   date: {
-      color: COLORS.textSecondary,
-      fontSize: 15,
-      marginTop: 5,
-   },
-   badge: {
-      paddingHorizontal: 15,
-      paddingVertical: 7,
-      borderRadius: 30,
-   },
-   heavyBadge: {
-      backgroundColor: COLORS.heavySoft,
-   },
-   lightBadge: {
-      backgroundColor: COLORS.lightSoft,
-   },
-   badgeText: {
-      fontSize: 14,
-      fontWeight: "700",
-   },
-   heavyText: {
-      color: COLORS.heavy,
-   },
-   lightText: {
-      color: COLORS.light,
-   },
-});

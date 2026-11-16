@@ -1,38 +1,35 @@
 import { useRouter, usePathname } from "expo-router";
-import { TouchableOpacity, Text, StyleSheet } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Pressable, Text, StyleSheet } from "react-native";
+import { COLORS } from "@/styles";
 
 export default function CustomBackButton() {
    const router = useRouter();
    const pathname = usePathname();
-   const insets = useSafeAreaInsets(); // Учитываем челку / статус-бар
-
-   // Не показываем кнопку на главном экране
-   if (pathname === "/") {
-      return null;
-   }
+   if (pathname === "/") return null;
 
    return (
-      <TouchableOpacity
+      <Pressable
          onPress={() => (router.canGoBack() ? router.back() : router.replace("/"))}
-         style={[styles.button, { top: insets.top + 10 }]}
+         style={({ pressed }) => [styles.button, pressed && styles.pressed]}
+         accessibilityRole="button"
+         accessibilityLabel="Назад"
       >
-         <Text style={styles.text}>← Назад</Text>
-      </TouchableOpacity>
+         <Text style={styles.text}>←</Text>
+      </Pressable>
    );
 }
 
 const styles = StyleSheet.create({
    button: {
-      position: "absolute",
-      left: 16,
-      zIndex: 10, // Чтобы кнопка была поверх контента экранов
-      padding: 8,
-      backgroundColor: "#eee",
-      borderRadius: 8,
+      width: 42,
+      height: 42,
+      borderRadius: 21,
+      backgroundColor: COLORS.surface,
+      borderWidth: 1,
+      borderColor: COLORS.border,
+      alignItems: "center",
+      justifyContent: "center",
    },
-   text: {
-      fontSize: 16,
-      fontWeight: "600",
-   },
+   pressed: { opacity: 0.65 },
+   text: { color: COLORS.textPrimary, fontSize: 23, fontWeight: "600" },
 });

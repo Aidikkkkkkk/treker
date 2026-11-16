@@ -3,29 +3,23 @@ import { router } from "expo-router";
 import List from "../global/CustomList";
 import { useWeeks } from "@/hooks/useWeeks";
 import { IWeekResult } from "@/types";
-import { COLORS } from "@/styles";
+import { COLORS, LIST_ITEM_STYLES } from "@/styles";
 
 export default function ListWeeks() {
    const { weeks, deleteWeek } = useWeeks();
    function confirmDelete(item: IWeekResult) {
       Alert.alert("Удалить неделю?", `Неделя ${item.id} будет удалена без возможности восстановления.`, [
          { text: "Отмена", style: "cancel" },
-         {
-            text: "Удалить",
-            style: "destructive",
-            onPress: () => deleteWeek(item.id),
-         },
+         { text: "Удалить", style: "destructive", onPress: () => deleteWeek(item.id) },
       ]);
    }
-   function renderWorkout({ item }: { item: IWeekResult; index: number }) {
+   function renderWeek({ item }: { item: IWeekResult; index: number }) {
       const isHeavy = item.intensity === "heavy";
       return (
          <View style={styles.header}>
-            <View>
-               <Text style={styles.title}>Неделя {item.id}</Text>
-            </View>
-            <View style={[styles.badge, isHeavy ? styles.heavyBadge : styles.lightBadge]}>
-               <Text style={[styles.badgeText, isHeavy ? styles.heavyText : styles.lightText]}>
+            <Text style={LIST_ITEM_STYLES.title}>Неделя {item.id}</Text>
+            <View style={[LIST_ITEM_STYLES.badge, isHeavy ? LIST_ITEM_STYLES.heavyBadge : LIST_ITEM_STYLES.lightBadge]}>
+               <Text style={[LIST_ITEM_STYLES.badgeText, isHeavy ? LIST_ITEM_STYLES.heavyText : LIST_ITEM_STYLES.lightText]}>
                   {isHeavy ? "Тяжёлая" : "Лёгкая"}
                </Text>
             </View>
@@ -36,54 +30,13 @@ export default function ListWeeks() {
       <List<IWeekResult>
          data={weeks}
          keyExtractor={(item) => item.id.toString()}
-         renderItem={renderWorkout}
+         renderItem={renderWeek}
          onDelete={confirmDelete}
-         onPress={(item) =>
-            router.push({
-               pathname: "/second",
-               params: { week_id: item.id },
-            })
-         }
+         onPress={(item) => router.push({ pathname: "/second", params: { week_id: item.id } })}
       />
    );
 }
 
 const styles = StyleSheet.create({
-   header: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: "center",
-      paddingRight: 38,
-   },
-   title: {
-      color: COLORS.textPrimary,
-      fontSize: 20,
-      fontWeight: "700",
-   },
-   date: {
-      color: COLORS.textSecondary,
-      fontSize: 15,
-      marginTop: 5,
-   },
-   badge: {
-      paddingHorizontal: 15,
-      paddingVertical: 7,
-      borderRadius: 30,
-   },
-   heavyBadge: {
-      backgroundColor: COLORS.heavySoft,
-   },
-   lightBadge: {
-      backgroundColor: COLORS.lightSoft,
-   },
-   badgeText: {
-      fontSize: 14,
-      fontWeight: "700",
-   },
-   heavyText: {
-      color: COLORS.heavy,
-   },
-   lightText: {
-      color: COLORS.light,
-   },
+   header: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingRight: 38 },
 });

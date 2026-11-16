@@ -1,12 +1,12 @@
-import { View } from "react-native";
 import { useLocalSearchParams } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 import Exercise from "@/components/exercise/Exercise";
 
-export default function SecondScreen() {
+export default function ExerciseScreen() {
    const { workout_id } = useLocalSearchParams<{ workout_id: string }>();
    return (
-      <View style={{ flex: 1, padding: 20 }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: "#F7F7FA" }}>
          <Exercise workout_id={Number(workout_id)} />
-      </View>
+      </SafeAreaView>
    );
 }

@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { View, Text, Pressable, Modal, StyleSheet, Platform } from "react-native";
+import { View, Text, Pressable, Modal, Platform } from "react-native";
 import DateTimePicker, { DateTimePickerChangeEvent } from "@react-native-community/datetimepicker";
-import { COLORS } from "@/styles";
+import { COLORS, MODAL_STYLES } from "@/styles";
 import { IDtoWorkout } from "@/types";
 
 interface WorkoutModalProps {
@@ -79,77 +79,15 @@ export default function WorkoutModal({ visible, onClose, onCreate, week_id }: Wo
    );
 }
 
-const styles = StyleSheet.create({
-   overlay: {
-      flex: 1,
-      justifyContent: "flex-end",
-      backgroundColor: "transparent",
-   },
-   modal: {
-      backgroundColor: COLORS.surface,
-      borderWidth: 1,
-      borderColor: COLORS.border,
-      borderTopLeftRadius: 32,
-      borderTopRightRadius: 32,
-      paddingHorizontal: 24,
-      paddingTop: 12,
-      paddingBottom: 24,
-   },
-   indicatorContainer: {
-      alignItems: "center",
-      marginBottom: 16,
-   },
-   indicator: {
-      width: 52,
-      height: 6,
-      borderRadius: 10,
-      backgroundColor: COLORS.handle,
-   },
-   title: {
-      color: COLORS.textPrimary,
-      fontSize: 22,
-      fontWeight: "700",
-      marginBottom: 16,
-   },
-   dateTimeRow: {
-      flexDirection: "row",
-      gap: 12,
-      marginBottom: 18,
-   },
+const styles = {
+   ...MODAL_STYLES,
+   dateTimeRow: { flexDirection: "row" as const, gap: 12, marginBottom: 18 },
    dateTimeCell: {
-      flex: 1,
-      alignItems: "center",
-      justifyContent: "center",
-      paddingVertical: 15,
-      borderRadius: 17,
-      backgroundColor: COLORS.surfaceMuted,
-      borderWidth: 1,
-      borderColor: "transparent",
+      flex: 1, alignItems: "center" as const, justifyContent: "center" as const,
+      paddingVertical: 15, borderRadius: 17, backgroundColor: COLORS.surfaceMuted,
+      borderWidth: 1, borderColor: "transparent",
    },
-   dateTimeCellActive: {
-      borderColor: COLORS.accent,
-   },
-   cellLabel: {
-      color: COLORS.textSecondary,
-      fontSize: 13,
-      marginBottom: 5,
-   },
-   dateRowText: {
-      color: COLORS.textPrimary,
-      fontSize: 16,
-      fontWeight: "600",
-   },
-   createButton: {
-      height: 56,
-      width: "100%",
-      borderRadius: 40,
-      backgroundColor: COLORS.accent,
-      justifyContent: "center",
-      alignItems: "center",
-   },
-   createButtonText: {
-      color: COLORS.textOnAccent,
-      fontSize: 17,
-      fontWeight: "700",
-   },
-});
+   dateTimeCellActive: { borderColor: COLORS.accent },
+   cellLabel: { color: COLORS.textSecondary, fontSize: 13, marginBottom: 5 },
+   dateRowText: { color: COLORS.textPrimary, fontSize: 16, fontWeight: "600" as const },
+};

@@ -1,12 +1,12 @@
-import { View } from "react-native";
 import { useLocalSearchParams } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 import Set from "@/components/set/Set";
 
-export default function SecondScreen() {
+export default function SetScreen() {
    const { exercise_id } = useLocalSearchParams<{ exercise_id: string }>();
    return (
-      <View style={{ flex: 1, padding: 20 }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: "#F7F7FA" }}>
          <Set exercise_id={Number(exercise_id)} />
-      </View>
+      </SafeAreaView>
    );
 }

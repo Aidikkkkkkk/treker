@@ -1,15 +1,16 @@
 import { View, Pressable, Text, StyleSheet } from "react-native";
-import { COLORS } from "@/styles";
+import { MODAL_STYLES } from "@/styles";
 
 type CustomCreateButtonProps = {
    title: string;
    onPress: () => void;
 };
+
 export default function CustomCreateButton({ title, onPress }: CustomCreateButtonProps) {
    return (
       <View style={styles.container}>
-         <Pressable style={styles.button} onPress={onPress}>
-            <Text style={styles.buttonText}>{title}</Text>
+         <Pressable style={MODAL_STYLES.createButton} onPress={onPress}>
+            <Text style={MODAL_STYLES.createButtonText}>{title}</Text>
          </Pressable>
       </View>
    );
@@ -17,21 +18,8 @@ export default function CustomCreateButton({ title, onPress }: CustomCreateButto
 
 const styles = StyleSheet.create({
    container: {
-      paddingTop: 32,
+      paddingTop: 24,
       paddingBottom: 24,
-      marginTop: 10,
-   },
-   button: {
-      height: 66,
-      width: "100%",
-      borderRadius: 40,
-      backgroundColor: COLORS.accent,
-      justifyContent: "center",
-      alignItems: "center",
-   },
-   buttonText: {
-      color: COLORS.textOnAccent,
-      fontSize: 18,
-      fontWeight: "700",
+      marginTop: 8,
    },
 });

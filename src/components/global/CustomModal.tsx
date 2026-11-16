@@ -1,5 +1,5 @@
 import { View, Text, Pressable, Modal, StyleSheet } from "react-native";
-import { COLORS } from "@/styles";
+import { COLORS, MODAL_STYLES } from "@/styles";
 
 interface BaseModalProps {
    visible: boolean;
@@ -34,41 +34,12 @@ export default function CustomModal({ visible, title, onClose, children }: BaseM
 }
 
 const styles = StyleSheet.create({
-   overlay: {
-      flex: 1,
-      justifyContent: "flex-end",
-      backgroundColor: "transparent",
-   },
-   modal: {
-      backgroundColor: COLORS.surface,
-      borderWidth: 1,
-      borderColor: COLORS.border,
-      borderTopLeftRadius: 32,
-      borderTopRightRadius: 32,
-      paddingHorizontal: 24,
-      paddingTop: 12,
-      paddingBottom: 24,
-   },
-   indicatorContainer: {
-      alignItems: "center",
-      marginBottom: 16,
-   },
-   indicator: {
-      width: 52,
-      height: 6,
-      borderRadius: 10,
-      backgroundColor: COLORS.handle,
-   },
+   ...MODAL_STYLES,
    header: {
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "center",
       marginBottom: 16,
-   },
-   title: {
-      color: COLORS.textPrimary,
-      fontSize: 22,
-      fontWeight: "700",
    },
    closeButton: {
       width: 32,
@@ -78,9 +49,7 @@ const styles = StyleSheet.create({
       justifyContent: "center",
       alignItems: "center",
    },
-   closeButtonPressed: {
-      opacity: 0.6,
-   },
+   closeButtonPressed: { opacity: 0.6 },
    closeText: {
       color: COLORS.textSecondary,
       fontSize: 25,

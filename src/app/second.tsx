@@ -1,12 +1,12 @@
-import { View } from "react-native";
-import Workout from "@/components/workout/Workout";
 import { useLocalSearchParams } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
+import Workout from "@/components/workout/Workout";
 
-export default function SecondScreen() {
+export default function WorkoutScreen() {
    const { week_id } = useLocalSearchParams<{ week_id: string }>();
    return (
-      <View style={{ flex: 1, padding: 20 }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: "#F7F7FA" }}>
          <Workout week_id={Number(week_id)} />
-      </View>
+      </SafeAreaView>
    );
 }

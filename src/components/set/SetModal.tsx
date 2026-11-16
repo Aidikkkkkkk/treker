@@ -10,7 +10,7 @@ import {
    KeyboardAvoidingView,
    Platform,
 } from "react-native";
-import { COLORS } from "@/styles";
+import { COLORS, MODAL_STYLES } from "@/styles";
 import { IDtoSet } from "@/types";
 
 interface SetDraft {
@@ -160,37 +160,12 @@ export default function SetModal({ visible, onClose, onCreate, exercise_id }: Se
 }
 
 const styles = StyleSheet.create({
-   overlay: {
-      flex: 1,
-      justifyContent: "flex-end",
-      backgroundColor: "transparent",
-   },
-   modal: {
-      backgroundColor: COLORS.surface,
-      borderWidth: 1,
-      borderColor: COLORS.border,
-      borderTopLeftRadius: 32,
-      borderTopRightRadius: 32,
-      paddingHorizontal: 24,
-      paddingTop: 12,
-      paddingBottom: 24,
-   },
-   indicatorContainer: {
-      alignItems: "center",
-      marginBottom: 16,
-   },
-   indicator: {
-      width: 52,
-      height: 6,
-      borderRadius: 10,
-      backgroundColor: COLORS.handle,
-   },
-   title: {
-      color: COLORS.textPrimary,
-      fontSize: 22,
-      fontWeight: "700",
-      marginBottom: 16,
-   },
+   ...MODAL_STYLES,
+
+
+
+
+
    countRow: {
       flexDirection: "row",
       alignItems: "center",
@@ -286,20 +261,7 @@ const styles = StyleSheet.create({
       fontSize: 16,
       textAlign: "center",
    },
-   createButton: {
-      height: 56,
-      width: "100%",
-      borderRadius: 40,
-      backgroundColor: COLORS.accent,
-      justifyContent: "center",
-      alignItems: "center",
-   },
-   createButtonDisabled: {
-      opacity: 0.5,
-   },
-   createButtonText: {
-      color: COLORS.textOnAccent,
-      fontSize: 17,
-      fontWeight: "700",
-   },
+
+
+
 });
