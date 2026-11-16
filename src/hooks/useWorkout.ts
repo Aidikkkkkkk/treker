@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useTreker } from "@/TrekerContext";
-import { IWorkoutResult } from "@/types";
+import { IWorkoutResult, IDtoWorkout } from "@/types";
 
 export function useWorkouts(week_id: number) {
    const treker = useTreker();
@@ -30,14 +30,11 @@ export function useWorkouts(week_id: number) {
       }
    }
 
-   async function createWorkout(week_id: number, dateWorkout: string) {
+   async function createWorkout(dto: IDtoWorkout) {
       if (!treker) return;
 
       try {
-         await treker.createWorkout({
-            week_id,
-            dateWorkout,
-         });
+         await treker.createWorkout(dto);
 
          await loadWorkouts(week_id);
          setShowCreate(false);

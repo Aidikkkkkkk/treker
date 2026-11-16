@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useTreker } from "@/TrekerContext";
-import { IWeekResult } from "@/types";
+import { IWeekResult, IDtoWeek } from "@/types";
 
 export function useWeeks() {
    const treker = useTreker();
@@ -24,12 +24,10 @@ export function useWeeks() {
          console.error("Ошибка загрузки тренировок:", error);
       }
    }
-   async function createWeek(intensity: "light" | "heavy") {
+   async function createWeek(dto: IDtoWeek) {
       setShowCreate(false);
       try {
-         await treker?.createWeek({
-            intensity,
-         });
+         await treker?.createWeek(dto);
       } catch (e) {
          console.error("createWeek упал:", e);
       }

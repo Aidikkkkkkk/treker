@@ -1,7 +1,6 @@
 import { View, Text, StyleSheet } from "react-native";
 import CustomCreateButton from "../global/CustomCreateButton";
 import { COLORS } from "@/styles";
-import { useExercise } from "@/hooks/useExercise";
 import ListSet from "./ListSet";
 import SetModal from "./SetModal";
 import { useSet } from "@/hooks/useSet";

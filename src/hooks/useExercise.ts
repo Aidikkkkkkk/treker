@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useTreker } from "@/TrekerContext";
-import { IExerciseResult } from "@/types";
+import { IDtoExercise, IExerciseResult } from "@/types";
 
 export function useExercise(workout_id: number) {
    const treker = useTreker();
@@ -24,10 +24,10 @@ export function useExercise(workout_id: number) {
          console.error("Ошибка загрузки упражнения:", error);
       }
    }
-   async function createExercise(workout_id: number, nameExercise: string) {
+   async function createExercise(dto: IDtoExercise) {
       setShowCreate(false);
       try {
-         await treker?.createExercise({ workout_id, nameExercise });
+         await treker?.createExercise(dto);
       } catch (e) {
          console.error("Ошибка при создании упражнения:", e);
       }

@@ -2,17 +2,18 @@ import { View, Text, Pressable, StyleSheet } from "react-native";
 import { useState } from "react";
 import CustomModal from "../global/CustomModal";
 import { COLORS } from "@/styles";
+import { IDtoWeek } from "@/types";
 
 interface WeekModalProps {
    visible: boolean;
    onClose: () => void;
-   onCreate: (intensity: "light" | "heavy") => void;
+   onCreate: (dto: IDtoWeek) => void;
 }
 
 export default function WeekModal({ visible, onClose, onCreate }: WeekModalProps) {
    const [intensity, setIntensity] = useState<"light" | "heavy">("light");
    function handleCreate() {
-      onCreate(intensity);
+      onCreate({ intensity: intensity });
       onClose();
    }
    return (

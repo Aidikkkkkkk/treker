@@ -2,11 +2,12 @@ import { useState } from "react";
 import { View, Text, Pressable, Modal, StyleSheet, Platform } from "react-native";
 import DateTimePicker, { DateTimePickerChangeEvent } from "@react-native-community/datetimepicker";
 import { COLORS } from "@/styles";
+import { IDtoWorkout } from "@/types";
 
 interface WorkoutModalProps {
    visible: boolean;
    onClose: () => void;
-   onCreate: (week_id: number, date: string) => void;
+   onCreate: (dto: IDtoWorkout) => void;
    week_id: number;
 }
 
@@ -20,7 +21,7 @@ export default function WorkoutModal({ visible, onClose, onCreate, week_id }: Wo
       }
    }
    function handleCreate() {
-      onCreate(week_id, String(date));
+      onCreate({ week_id: week_id, dateWorkout: String(date) });
       setPickerMode(null);
       onClose();
    }

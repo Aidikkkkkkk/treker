@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { View, Text, Pressable, Modal, StyleSheet, TextInput } from "react-native";
 import { COLORS } from "@/styles";
+import { IDtoExercise } from "@/types";
 
 interface ExerciseModalProps {
    visible: boolean;
    onClose: () => void;
-   onCreate: (workout_id: number, text: string) => void;
+   onCreate: (dto: IDtoExercise) => void;
    workout_id: number;
 }
 
@@ -13,7 +14,7 @@ export default function ExerciseModal({ visible, onClose, onCreate, workout_id }
    const [text, setText] = useState("");
    function handleCreate() {
       if (!text.trim()) return;
-      onCreate(workout_id, text.trim());
+      onCreate({ workout_id: workout_id, nameExercise: text.trim() });
       setText("");
       onClose();
    }
