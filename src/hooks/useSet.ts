@@ -28,6 +28,7 @@ export function useSet(exercise_id: number) {
       setShowCreate(false);
       try {
          await treker?.createSet(dto);
+         await loadSet(exercise_id);
       } catch (e) {
          console.error("Ошибка при создании упражнения:", e);
       }

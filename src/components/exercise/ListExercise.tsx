@@ -2,13 +2,14 @@ import { View, Text, Alert } from "react-native";
 import { router } from "expo-router";
 import { LIST_ITEM_STYLES } from "@/styles";
 import List from "../global/CustomList";
-import { useExercise } from "@/hooks/useExercise";
 import { IExerciseResult } from "@/types";
 
-type Props = { workout_id: number };
+type ListExerciseProps = {
+   exercises: IExerciseResult[];
+   deleteExercise: (id: number) => void;
+};
 
-export default function ListExercise({ workout_id }: Props) {
-   const { exercises, deleteExercise } = useExercise(workout_id);
+export default function ListExercise({ exercises, deleteExercise }: ListExerciseProps) {
    function confirmDelete(item: IExerciseResult) {
       Alert.alert("Удалить упражнение?", `«${item.nameExercise}» будет удалено без возможности восстановления.`, [
          { text: "Отмена", style: "cancel" },

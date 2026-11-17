@@ -1,24 +1,27 @@
 import { View, Text, Alert } from "react-native";
 import { router } from "expo-router";
 import { LIST_ITEM_STYLES } from "@/styles";
-import { useWorkouts } from "@/hooks/useWorkout";
 import { IWorkoutResult } from "@/types";
 import List from "../global/CustomList";
 
-type Props = { week_id: number };
+type Props = {
+   workouts: IWorkoutResult[];
+   deleteWorkout: (id: number) => void;
+};
 
 function formatWorkoutDate(iso: string) {
    const d = new Date(iso);
    const sameYear = d.getFullYear() === new Date().getFullYear();
    const date = d.toLocaleDateString("ru-RU", {
-      day: "numeric", month: "long", ...(sameYear ? {} : { year: "numeric" }),
+      day: "numeric",
+      month: "long",
+      ...(sameYear ? {} : { year: "numeric" }),
    });
    const time = d.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" });
    return `${date}, ${time}`;
 }
 
-export default function ListWorkouts({ week_id }: Props) {
-   const { workouts, deleteWorkout } = useWorkouts(week_id);
+export default function ListWorkouts({ workouts, deleteWorkout }: Props) {
    function confirmDelete(item: IWorkoutResult) {
       Alert.alert("Удалить тренировку?", `Тренировка ${item.id} будет удалена без возможности восстановления.`, [
          { text: "Отмена", style: "cancel" },

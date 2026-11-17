@@ -4,13 +4,11 @@ import { IWorkoutResult, IDtoWorkout } from "@/types";
 
 export function useWorkouts(week_id: number) {
    const treker = useTreker();
-
    const [workouts, setWorkouts] = useState<IWorkoutResult[]>([]);
    const [showCreate, setShowCreate] = useState(false);
 
    async function deleteWorkout(id: number) {
       if (!treker) return;
-
       try {
          await treker.deleteWorkout(id);
          setWorkouts((prev) => prev.filter((item) => item.id !== id));
@@ -21,10 +19,9 @@ export function useWorkouts(week_id: number) {
 
    async function loadWorkouts(id: number) {
       if (!treker) return;
-
       try {
-         const result = await treker.getAllWorkouts(id);
-         setWorkouts(result);
+         setWorkouts(await treker.getAllWorkouts(id));
+         await loadWorkouts(week_id);
       } catch (error) {
          console.error("Ошибка загрузки тренировок:", error);
       }
@@ -32,10 +29,8 @@ export function useWorkouts(week_id: number) {
 
    async function createWorkout(dto: IDtoWorkout) {
       if (!treker) return;
-
       try {
          await treker.createWorkout(dto);
-
          await loadWorkouts(week_id);
          setShowCreate(false);
       } catch (error) {

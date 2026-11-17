@@ -25,9 +25,11 @@ export function useWeeks() {
       }
    }
    async function createWeek(dto: IDtoWeek) {
-      setShowCreate(false);
+      if (!treker) return;
       try {
-         await treker?.createWeek(dto);
+         await treker.createWeek(dto);
+         await loadWeeks();
+         setShowCreate(false);
       } catch (e) {
          console.error("createWeek упал:", e);
       }

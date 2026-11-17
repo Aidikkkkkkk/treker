@@ -6,7 +6,6 @@ export function useExercise(workout_id: number) {
    const treker = useTreker();
    const [exercises, setExercises] = useState<IExerciseResult[]>([]);
    const [showCreate, setShowCreate] = useState(false);
-
    async function deleteExercise(id: number) {
       if (!treker) return;
       try {
@@ -25,15 +24,16 @@ export function useExercise(workout_id: number) {
       }
    }
    async function createExercise(dto: IDtoExercise) {
-      setShowCreate(false);
       try {
          await treker?.createExercise(dto);
+         await loadExercises(workout_id);
+         setShowCreate(false);
       } catch (e) {
          console.error("Ошибка при создании упражнения:", e);
       }
    }
    useEffect(() => {
-      if (!treker || !workout_id) return;
+      if (!treker) return;
       loadExercises(workout_id);
    }, [treker, workout_id]);
 

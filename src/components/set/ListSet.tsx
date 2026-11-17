@@ -2,13 +2,14 @@ import { View, Text, Alert } from "react-native";
 import { router } from "expo-router";
 import { LIST_ITEM_STYLES } from "@/styles";
 import List from "../global/CustomList";
-import { useSet } from "@/hooks/useSet";
 import { ISetResult } from "@/types";
 
-type Props = { exercise_id: number };
+interface ListSetProps {
+   sets: ISetResult[];
+   deleteSet: (id: number) => void;
+}
 
-export default function ListSet({ exercise_id }: Props) {
-   const { sets, deleteSet } = useSet(exercise_id);
+export default function ListSet({ sets, deleteSet }: ListSetProps) {
    function confirmDelete(item: ISetResult) {
       Alert.alert("Удалить подход?", `Подход №${item.id} будет удалён без возможности восстановления.`, [
          { text: "Отмена", style: "cancel" },
@@ -19,7 +20,9 @@ export default function ListSet({ exercise_id }: Props) {
       return (
          <View style={LIST_ITEM_STYLES.row}>
             <Text style={LIST_ITEM_STYLES.title}>Подход {item.id}</Text>
-            <Text style={LIST_ITEM_STYLES.secondary}>{item.count} повторений · {item.replace} кг</Text>
+            <Text style={LIST_ITEM_STYLES.secondary}>
+               {item.count} повторений · {item.replace} кг
+            </Text>
          </View>
       );
    }
