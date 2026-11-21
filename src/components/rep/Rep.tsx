@@ -1,29 +1,29 @@
 import { View, Text } from "react-native";
 import CustomCreateButton from "../global/CustomCreateButton";
-import ListSet from "./ListSet";
-import SetModal from "./SetModal";
-import { useSet } from "@/hooks/useSet";
+import Listrep from "./ListRep";
+import RepModal from "./RepModal";
+import { useRep } from "@/hooks/useRep";
 import CustomBackButton from "../global/CustomBackButton";
 import { SCREEN_STYLES } from "@/styles";
 
-interface SetProps {
+interface repProps {
    exercise_id: number;
 }
 
-export default function Set({ exercise_id }: SetProps) {
-   const { showCreate, setShowCreate, createSet, sets, deleteSet } = useSet(exercise_id);
+export default function Rep({ exercise_id }: repProps) {
+   const { showCreate, setShowCreate, createRep, reps, deleteRep } = useRep(exercise_id);
    return (
       <View style={SCREEN_STYLES.content}>
          <View style={SCREEN_STYLES.header}>
             <CustomBackButton />
             <Text style={SCREEN_STYLES.title}>Подходы</Text>
          </View>
-         <ListSet sets={sets} deleteSet={deleteSet} />
+         <Listrep reps={reps} deleteRep={deleteRep} />
          <CustomCreateButton title="Новые подходы" onPress={() => setShowCreate(true)} />
-         <SetModal
+         <RepModal
             visible={showCreate}
             onClose={() => setShowCreate(false)}
-            onCreate={createSet}
+            onCreate={createRep}
             exercise_id={exercise_id}
          />
       </View>

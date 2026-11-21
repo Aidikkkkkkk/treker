@@ -28,12 +28,16 @@ export async function initdb() {
                REFERENCES workout(id) ON DELETE CASCADE
          );
 
-         CREATE TABLE IF NOT EXISTS "set" (
+         CREATE TABLE IF NOT EXISTS rep (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             exercise_id INTEGER NOT NULL,
-            "replace" INTEGER,
-            count INTEGER,
+            reps INTEGER,
+            weight REAL,
             FOREIGN KEY (exercise_id) REFERENCES exercise(id) ON DELETE CASCADE
+         );
+         CREATE TABLE IF NOT EXISTS exercise_catalog (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nameExercise TEXT NOT NULL UNIQUE COLLATE NOCASE
          );
       `);
 

@@ -2,12 +2,14 @@ import * as SQLite from "expo-sqlite";
 import {
    IWorkoutResult,
    IExerciseResult,
-   ISetResult,
+   IDtoRep,
    IDtoExercise,
    IDtoWorkout,
-   IDtoSet,
+   IDtoExerciseCatalog,
+   IRepResult,
    IDtoWeek,
    IWeekResult,
+   IExerciseCatalogResult,
 } from "@/types";
 export class TrekerRepository {
    private db: SQLite.SQLiteDatabase;
@@ -27,17 +29,23 @@ export class TrekerRepository {
       return result.lastInsertRowId;
    }
    async insertToExercise(dto: IDtoExercise) {
-      const result = await this.db.runAsync(`INSERT INTO exercise (workout_id, nameExercise) VALUES (?, ?)`, [
+      const result = await this.db.runAsync(`INSERT INTO exercise (workout_id,nameExercise) VALUES (?, ?)`, [
          dto.workout_id,
          dto.nameExercise,
       ]);
       return result.lastInsertRowId;
    }
-   async insertToSet(dto: IDtoSet) {
-      const result = await this.db.runAsync(`INSERT INTO "set" (exercise_id, replace, count) VALUES (?, ?, ?)`, [
+   async insertToRep(dto: IDtoRep) {
+      const result = await this.db.runAsync(`INSERT INTO rep (exercise_id, reps, weight) VALUES (?, ?, ?)`, [
          dto.exercise_id,
-         dto.replace,
-         dto.count,
+         dto.reps,
+         dto.weight,
+      ]);
+      return result.lastInsertRowId;
+   }
+   async insertToExerciseCatalog(dto: IDtoExerciseCatalog) {
+      const result = await this.db.runAsync(`INSERT INTO exercise_catalog (nameExercise) VALUES (?)`, [
+         dto.nameExercise,
       ]);
       return result.lastInsertRowId;
    }
@@ -52,8 +60,16 @@ export class TrekerRepository {
          workout_id,
       ])) as IExerciseResult[];
    }
-   async getAllRowsSets(exercise_id: number) {
-      return (await this.db.getAllAsync('SELECT * FROM "set" WHERE exercise_id = ?', [exercise_id])) as ISetResult[];
+   async getAllRowsReps(exercise_id: number) {
+      return (await this.db.getAllAsync("SELECT * FROM rep WHERE exercise_id = ?", [exercise_id])) as IRepResult[];
+   }
+   async getAllRowsExerciseCatalog() {
+      return (await this.db.getAllAsync("SELECT * FROM exercise_catalog")) as IExerciseCatalogResult[];
+   }
+   async getRowExerciseCatalogByName(nameExercise: string) {
+      return (await this.db.getFirstAsync("SELECT * FROM exercise_catalog WHERE nameExercise = ? COLLATE NOCASE", [
+         nameExercise,
+      ])) as IExerciseCatalogResult | null;
    }
    async deleteWeek(id: number) {
       return await this.db.runAsync("DELETE FROM week WHERE id = ?", [id]);
@@ -64,7 +80,10 @@ export class TrekerRepository {
    async deleteExercise(id: number) {
       return await this.db.runAsync("DELETE FROM exercise WHERE id = ?", [id]);
    }
-   async deleteSet(id: number) {
-      return await this.db.runAsync('DELETE FROM "set" WHERE id = ?', [id]);
+   async deleteRep(id: number) {
+      return await this.db.runAsync("DELETE FROM rep WHERE id = ?", [id]);
+   }
+   async deleteExerciseCatalog(id: number) {
+      return await this.db.runAsync("DELETE FROM exercise_catalog WHERE id = ?", [id]);
    }
 }

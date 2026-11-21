@@ -1,0 +1,27 @@
+import { View, Text } from "react-native";
+import CustomCreateButton from "../global/CustomCreateButton";
+import { useExerciseCatalog } from "@/hooks/useExerciseCatalog";
+import ListExerciseCatalog from "./ListExerciseCatalog";
+import ExerciseCatalogModal from "./ExerciseCatalogModal";
+import CustomBackButton from "../global/CustomBackButton";
+import { SCREEN_STYLES } from "@/styles";
+
+export default function ExerciseCatalog() {
+   const { showCreate, setShowCreate, createExerciseCatalog, exerciseCatalog, deleteExerciseCatalog } =
+      useExerciseCatalog();
+   return (
+      <View style={SCREEN_STYLES.content}>
+         <View style={SCREEN_STYLES.header}>
+            <CustomBackButton />
+            <Text style={SCREEN_STYLES.title}>Каталог упражнений</Text>
+         </View>
+         <ListExerciseCatalog exerciseCatalog={exerciseCatalog} deleteExerciseCatalog={deleteExerciseCatalog} />
+         <CustomCreateButton title="Новое в каталоге" onPress={() => setShowCreate(true)} />
+         <ExerciseCatalogModal
+            visible={showCreate}
+            onClose={() => setShowCreate(false)}
+            onCreate={createExerciseCatalog}
+         />
+      </View>
+   );
+}

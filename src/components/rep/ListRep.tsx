@@ -2,21 +2,21 @@ import { View, Text, Alert } from "react-native";
 import { router } from "expo-router";
 import { LIST_ITEM_STYLES } from "@/styles";
 import List from "../global/CustomList";
-import { ISetResult } from "@/types";
+import { IRepResult } from "@/types";
 
 interface ListSetProps {
-   sets: ISetResult[];
-   deleteSet: (id: number) => void;
+   reps: IRepResult[];
+   deleteRep: (id: number) => void;
 }
 
-export default function ListSet({ sets, deleteSet }: ListSetProps) {
-   function confirmDelete(item: ISetResult) {
+export default function ListRep({ reps, deleteRep }: ListSetProps) {
+   function confirmDelete(item: IRepResult) {
       Alert.alert("Удалить подход?", `Подход №${item.id} будет удалён без возможности восстановления.`, [
          { text: "Отмена", style: "cancel" },
-         { text: "Удалить", style: "destructive", onPress: () => deleteSet(item.id) },
+         { text: "Удалить", style: "destructive", onPress: () => deleteRep(item.id) },
       ]);
    }
-   function renderSet({ item }: { item: ISetResult }) {
+   function renderRep({ item }: { item: IRepResult }) {
       return (
          <View style={LIST_ITEM_STYLES.row}>
             <Text style={LIST_ITEM_STYLES.title}>Подход {item.id}</Text>
@@ -27,10 +27,10 @@ export default function ListSet({ sets, deleteSet }: ListSetProps) {
       );
    }
    return (
-      <List<ISetResult>
-         data={sets}
+      <List<IRepResult>
+         data={reps}
          keyExtractor={(item) => item.id.toString()}
-         renderItem={renderSet}
+         renderItem={renderRep}
          onDelete={confirmDelete}
          onPress={() => router.push("/")}
       />

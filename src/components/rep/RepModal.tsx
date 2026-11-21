@@ -11,32 +11,32 @@ import {
    Platform,
 } from "react-native";
 import { COLORS, MODAL_STYLES } from "@/styles";
-import { IDtoSet } from "@/types";
+import { IDtoRep } from "@/types";
 
-interface SetDraft {
+interface RepDraft {
    weight: string;
    reps: string;
 }
 
-interface SetModalProps {
+interface RepModalProps {
    visible: boolean;
    onClose: () => void;
-   onCreate: (dto: IDtoSet) => Promise<void>;
+   onCreate: (dto: IDtoRep) => Promise<void>;
    exercise_id: number;
 }
 
-const MAX_SETS = 20;
+const MAX_REPS = 20;
 
-export default function SetModal({ visible, onClose, onCreate, exercise_id }: SetModalProps) {
+export default function RepModal({ visible, onClose, onCreate, exercise_id }: RepModalProps) {
    const [countText, setCountText] = useState("");
-   const [sets, setSets] = useState<SetDraft[]>([]);
+   const [reps, setReps] = useState<RepDraft[]>([]);
 
    function handleCountChange(value: string) {
       const digits = value.replace(/[^0-9]/g, "");
       setCountText(digits);
 
-      const count = Math.min(Number(digits) || 0, MAX_SETS);
-      setSets((prev) => {
+      const count = Math.min(Number(digits) || 0, MAX_REPS);
+      setReps((prev) => {
          if (count <= prev.length) return prev.slice(0, count);
          const last = prev[prev.length - 1] ?? { weight: "", reps: "" };
          const added = Array.from({ length: count - prev.length }, () => ({ ...last }));
@@ -44,23 +44,23 @@ export default function SetModal({ visible, onClose, onCreate, exercise_id }: Se
       });
    }
 
-   function updateSet(index: number, patch: Partial<SetDraft>) {
-      setSets((prev) => prev.map((s, i) => (i === index ? { ...s, ...patch } : s)));
+   function updateRep(index: number, patch: Partial<RepDraft>) {
+      setReps((prev) => prev.map((r, i) => (i === index ? { ...r, ...patch } : r)));
    }
 
    function reset() {
       setCountText("");
-      setSets([]);
+      setReps([]);
    }
 
    async function handleCreate() {
-      if (sets.length === 0) return;
+      if (reps.length === 0) return;
 
-      for (const set of sets) {
+      for (const rep of reps) {
          await onCreate({
             exercise_id,
-            replace: Number(set.weight.replace(",", ".")) || 0,
-            count: Number(set.reps) || 0,
+            weight: Number(rep.weight.replace(",", ".")) || 0,
+            reps: Number(rep.reps) || 0,
          });
       }
 
@@ -96,7 +96,7 @@ export default function SetModal({ visible, onClose, onCreate, exercise_id }: Se
                   />
                </View>
 
-               {sets.length > 0 && (
+               {reps.length > 0 && (
                   <>
                      <View style={styles.headerRow}>
                         <Text style={[styles.headerText, styles.indexCol]}>№</Text>
@@ -110,7 +110,7 @@ export default function SetModal({ visible, onClose, onCreate, exercise_id }: Se
                         keyboardShouldPersistTaps="handled"
                         showsVerticalScrollIndicator={false}
                      >
-                        {sets.map((set, index) => (
+                        {reps.map((rep, index) => (
                            <View key={index} style={styles.setRow}>
                               <View style={styles.indexBadge}>
                                  <Text style={styles.indexText}>{index + 1}</Text>
@@ -121,8 +121,8 @@ export default function SetModal({ visible, onClose, onCreate, exercise_id }: Se
                                     style={styles.fieldInput}
                                     placeholder="0"
                                     placeholderTextColor={COLORS.textSecondary}
-                                    value={set.weight}
-                                    onChangeText={(v) => updateSet(index, { weight: v.replace(/[^0-9.,]/g, "") })}
+                                    value={rep.weight}
+                                    onChangeText={(v) => updateRep(index, { weight: v.replace(/[^0-9.,]/g, "") })}
                                     keyboardType="decimal-pad"
                                  />
                                  <Text style={styles.unit}>кг</Text>
@@ -135,8 +135,8 @@ export default function SetModal({ visible, onClose, onCreate, exercise_id }: Se
                                     style={styles.fieldInput}
                                     placeholder="0"
                                     placeholderTextColor={COLORS.textSecondary}
-                                    value={set.reps}
-                                    onChangeText={(v) => updateSet(index, { reps: v.replace(/[^0-9]/g, "") })}
+                                    value={rep.reps}
+                                    onChangeText={(v) => updateRep(index, { reps: v.replace(/[^0-9]/g, "") })}
                                     keyboardType="number-pad"
                                  />
                               </View>
@@ -147,9 +147,9 @@ export default function SetModal({ visible, onClose, onCreate, exercise_id }: Se
                )}
 
                <Pressable
-                  style={[styles.createButton, sets.length === 0 && styles.createButtonDisabled]}
+                  style={[styles.createButton, reps.length === 0 && styles.createButtonDisabled]}
                   onPress={handleCreate}
-                  disabled={sets.length === 0}
+                  disabled={reps.length === 0}
                >
                   <Text style={styles.createButtonText}>Создать </Text>
                </Pressable>
@@ -161,10 +161,6 @@ export default function SetModal({ visible, onClose, onCreate, exercise_id }: Se
 
 const styles = StyleSheet.create({
    ...MODAL_STYLES,
-
-
-
-
 
    countRow: {
       flexDirection: "row",
@@ -261,7 +257,4 @@ const styles = StyleSheet.create({
       fontSize: 16,
       textAlign: "center",
    },
-
-
-
 });

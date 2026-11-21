@@ -1,5 +1,5 @@
 import { TrekerRepository } from "./repository";
-import { IDtoWorkout, IDtoExercise, IDtoSet, IDtoWeek } from "@/types";
+import { IDtoWorkout, IDtoExercise, IDtoSet, IDtoWeek, IDtoExerciseCatalog } from "@/types";
 
 export class TrekerService {
    private trekerRepository: TrekerRepository;
@@ -68,17 +68,36 @@ export class TrekerService {
          throw new Error("Не удалось создать упражнение");
       }
    }
-   async createSet(dto: IDtoSet) {
+   async createRep(dto: IDtoSet) {
       const validatedDto = {
          exercise_id: this.validateNumber(dto.exercise_id),
-         replace: this.validateNumber(dto.replace),
-         count: this.validateNumber(dto.count),
+         reps: this.validateNumber(dto.reps),
+         weight: this.validateNumber(dto.weight),
       };
       try {
-         return await this.trekerRepository.insertToSet(validatedDto);
+         return await this.trekerRepository.insertToRep(validatedDto);
       } catch (error) {
          console.error("Не удалось создать подход", error);
          throw new Error("Не удалось создать подход");
+      }
+   }
+   async createExerciseCatalog(dto: IDtoExerciseCatalog) {
+      const validateNameExercise = String(dto.nameExercise).trim();
+      if (!validateNameExercise) {
+         throw new Error("Название упражнения не может быть пустым");
+      }
+      const validatedDto = {
+         nameExercise: validateNameExercise,
+      };
+      const existing = await this.trekerRepository.getRowExerciseCatalogByName(validatedDto.nameExercise);
+      if (existing) {
+         throw new Error("Упражнение с таким названием уже есть в каталоге");
+      }
+      try {
+         return await this.trekerRepository.insertToExerciseCatalog(validatedDto);
+      } catch (error) {
+         console.error("Не удалось добавить упражнение в каталог", error);
+         throw new Error("Не удалось добавить упражнение в каталог");
       }
    }
    async getAllWeeks() {
@@ -92,9 +111,12 @@ export class TrekerService {
       const validateId = this.validateNumber(workout_id);
       return this.trekerRepository.getAllRowsExercises(validateId);
    }
-   async getAllSets(exercise_id: number) {
+   async getAllReps(exercise_id: number) {
       const validatedId = this.validateNumber(exercise_id);
-      return this.trekerRepository.getAllRowsSets(validatedId);
+      return this.trekerRepository.getAllRowsReps(validatedId);
+   }
+   async getAllExerciseCatalog() {
+      return this.trekerRepository.getAllRowsExerciseCatalog();
    }
    async deleteWorkout(id: number) {
       const validatedId = this.validateNumber(id);
@@ -108,8 +130,12 @@ export class TrekerService {
       const validatedId = this.validateNumber(id);
       return this.trekerRepository.deleteExercise(validatedId);
    }
-   async deleteSet(id: number) {
+   async deleteRep(id: number) {
       const validatedId = this.validateNumber(id);
-      return this.trekerRepository.deleteSet(validatedId);
+      return this.trekerRepository.deleteRep(validatedId);
+   }
+   async deleteExerciseCatalog(id: number) {
+      const validatedId = this.validateNumber(id);
+      return this.trekerRepository.deleteExerciseCatalog(validatedId);
    }
 }
