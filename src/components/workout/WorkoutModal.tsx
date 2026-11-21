@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { View, Text, Pressable, Modal, Platform } from "react-native";
+import { Text, Pressable, Platform, View } from "react-native";
 import DateTimePicker, { DateTimePickerChangeEvent } from "@react-native-community/datetimepicker";
 import { COLORS, MODAL_STYLES } from "@/styles";
 import { IDtoWorkout } from "@/types";
+import CustomModal from "../global/CustomModal";
 
 interface WorkoutModalProps {
    visible: boolean;
@@ -30,52 +31,44 @@ export default function WorkoutModal({ visible, onClose, onCreate, week_id }: Wo
       onClose();
    }
    return (
-      <Modal visible={visible} transparent animationType="slide" onRequestClose={handleClose}>
-         <View style={styles.overlay}>
-            <View style={styles.modal}>
-               <View style={styles.indicatorContainer}>
-                  <View style={styles.indicator} />
-               </View>
-               <Text style={styles.title}>Дата и время</Text>
-               <View style={styles.dateTimeRow}>
-                  <Pressable
-                     style={[styles.dateTimeCell, pickerMode === "date" && styles.dateTimeCellActive]}
-                     onPress={() => setPickerMode("date")}
-                  >
-                     <Text style={styles.cellLabel}>Дата</Text>
-                     <Text style={styles.dateRowText}>{date.toLocaleDateString("ru-RU")}</Text>
-                  </Pressable>
-                  <Pressable
-                     style={[styles.dateTimeCell, pickerMode === "time" && styles.dateTimeCellActive]}
-                     onPress={() => setPickerMode("time")}
-                  >
-                     <Text style={styles.cellLabel}>Время</Text>
-                     <Text style={styles.dateRowText}>
-                        {date.toLocaleTimeString("ru-RU", {
-                           hour: "2-digit",
-                           minute: "2-digit",
-                        })}
-                     </Text>
-                  </Pressable>
-               </View>
-               {pickerMode && (
-                  <DateTimePicker
-                     value={date}
-                     mode={pickerMode}
-                     is24Hour
-                     display={Platform.OS === "ios" ? "spinner" : "default"}
-                     themeVariant="light"
-                     maximumDate={new Date()}
-                     onValueChange={handleValueChange}
-                     onDismiss={() => setPickerMode(null)}
-                  />
-               )}
-               <Pressable style={styles.createButton} onPress={handleCreate}>
-                  <Text style={styles.createButtonText}>Создать тренировку</Text>
-               </Pressable>
-            </View>
+      <CustomModal visible={visible} onClose={handleClose} title="Дата и время">
+         <View style={styles.dateTimeRow}>
+            <Pressable
+               style={[styles.dateTimeCell, pickerMode === "date" && styles.dateTimeCellActive]}
+               onPress={() => setPickerMode("date")}
+            >
+               <Text style={styles.cellLabel}>Дата</Text>
+               <Text style={styles.dateRowText}>{date.toLocaleDateString("ru-RU")}</Text>
+            </Pressable>
+            <Pressable
+               style={[styles.dateTimeCell, pickerMode === "time" && styles.dateTimeCellActive]}
+               onPress={() => setPickerMode("time")}
+            >
+               <Text style={styles.cellLabel}>Время</Text>
+               <Text style={styles.dateRowText}>
+                  {date.toLocaleTimeString("ru-RU", {
+                     hour: "2-digit",
+                     minute: "2-digit",
+                  })}
+               </Text>
+            </Pressable>
          </View>
-      </Modal>
+         {pickerMode && (
+            <DateTimePicker
+               value={date}
+               mode={pickerMode}
+               is24Hour
+               display={Platform.OS === "ios" ? "spinner" : "default"}
+               themeVariant="light"
+               maximumDate={new Date()}
+               onValueChange={handleValueChange}
+               onDismiss={() => setPickerMode(null)}
+            />
+         )}
+         <Pressable style={styles.createButton} onPress={handleCreate}>
+            <Text style={styles.createButtonText}>Создать тренировку</Text>
+         </Pressable>
+      </CustomModal>
    );
 }
 
@@ -83,9 +76,14 @@ const styles = {
    ...MODAL_STYLES,
    dateTimeRow: { flexDirection: "row" as const, gap: 12, marginBottom: 18 },
    dateTimeCell: {
-      flex: 1, alignItems: "center" as const, justifyContent: "center" as const,
-      paddingVertical: 15, borderRadius: 17, backgroundColor: COLORS.surfaceMuted,
-      borderWidth: 1, borderColor: "transparent",
+      flex: 1,
+      alignItems: "center" as const,
+      justifyContent: "center" as const,
+      paddingVertical: 15,
+      borderRadius: 17,
+      backgroundColor: COLORS.surfaceMuted,
+      borderWidth: 1,
+      borderColor: "transparent",
    },
    dateTimeCellActive: { borderColor: COLORS.accent },
    cellLabel: { color: COLORS.textSecondary, fontSize: 13, marginBottom: 5 },

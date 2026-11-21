@@ -31,7 +31,7 @@ export default function ExerciseCatalogModal({ visible, onClose, onCreate }: Exe
                   <View style={styles.indicator} />
                </View>
 
-               <Text style={styles.title}>Новое в каталоге</Text>
+               <Text style={styles.title}>Добавить упражнение</Text>
 
                <TextInput
                   style={styles.input}

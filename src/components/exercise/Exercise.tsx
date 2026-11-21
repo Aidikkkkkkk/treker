@@ -30,7 +30,7 @@ export default function Exercise({ workout_id }: ExerciseProps) {
          <ListExercise exercises={exercises} deleteExercise={deleteExercise} />
          <CustomBottomBar
             secondary={{ title: "Каталог", onPress: () => router.push("/catalog") }}
-            primary={{ title: "Новое упражнение", onPress: openCreate }}
+            primary={{ title: "Выбрать упражнение", onPress: openCreate }}
          />
          <ExerciseModal
             visible={showCreate}

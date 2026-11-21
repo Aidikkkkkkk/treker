@@ -1,5 +1,5 @@
 import { TrekerRepository } from "./repository";
-import { IDtoWorkout, IDtoExercise, IDtoSet, IDtoWeek, IDtoExerciseCatalog } from "@/types";
+import { IDtoWorkout, IDtoExercise, IDtoWeek, IDtoExerciseCatalog, IDtoRep } from "@/types";
 
 export class TrekerService {
    private trekerRepository: TrekerRepository;
@@ -68,7 +68,7 @@ export class TrekerService {
          throw new Error("Не удалось создать упражнение");
       }
    }
-   async createRep(dto: IDtoSet) {
+   async createRep(dto: IDtoRep) {
       const validatedDto = {
          exercise_id: this.validateNumber(dto.exercise_id),
          reps: this.validateNumber(dto.reps),

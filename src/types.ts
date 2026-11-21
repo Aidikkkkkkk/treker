@@ -9,6 +9,7 @@ export interface IWorkoutResult {
 export interface IExerciseResult {
    id: number;
    workout_id: number;
+   nameExercise: string;
 }
 export interface IRepResult {
    id: number;

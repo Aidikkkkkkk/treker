@@ -16,7 +16,7 @@ export default function ExerciseCatalog() {
             <Text style={SCREEN_STYLES.title}>Каталог упражнений</Text>
          </View>
          <ListExerciseCatalog exerciseCatalog={exerciseCatalog} deleteExerciseCatalog={deleteExerciseCatalog} />
-         <CustomCreateButton title="Новое в каталоге" onPress={() => setShowCreate(true)} />
+         <CustomCreateButton title="Добавить" onPress={() => setShowCreate(true)} />
          <ExerciseCatalogModal
             visible={showCreate}
             onClose={() => setShowCreate(false)}
