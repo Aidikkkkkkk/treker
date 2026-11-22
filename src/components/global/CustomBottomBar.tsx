@@ -1,10 +1,11 @@
-import { View, Text, Pressable, StyleSheet } from "react-native";
+import { StyleSheet, Text, View, Pressable } from "react-native";
 import { COLORS } from "@/styles";
 
 interface Action {
    title: string;
    onPress: () => void;
 }
+
 interface CustomBottomBarProps {
    secondary: Action;
    primary: Action;
@@ -24,15 +25,10 @@ export default function CustomBottomBar({ secondary, primary }: CustomBottomBarP
 }
 
 const styles = StyleSheet.create({
-   bar: { flexDirection: "row", gap: 12 },
-   button: { height: 56, borderRadius: 28, alignItems: "center", justifyContent: "center" },
-   secondary: {
-      flex: 1,
-      backgroundColor: COLORS.surfaceMuted,
-      borderWidth: 1,
-      borderColor: COLORS.border,
-   },
-   primary: { flex: 1.6, backgroundColor: "#0A7F83" }, // подставь свой бирюзовый из палитры
-   secondaryText: { fontSize: 16, fontWeight: "600", color: COLORS.textPrimary },
-   primaryText: { fontSize: 16, fontWeight: "600", color: "#fff" },
+   bar: { flexDirection: "row", gap: 8, paddingVertical: 10 },
+   button: { height: 48, borderRadius: 16, alignItems: "center", justifyContent: "center" },
+   secondary: { flex: 1, backgroundColor: COLORS.surfaceMuted, borderWidth: 1, borderColor: COLORS.border },
+   primary: { flex: 1.6, backgroundColor: COLORS.accent },
+   secondaryText: { fontSize: 15, fontWeight: "600", color: COLORS.textPrimary },
+   primaryText: { fontSize: 15, fontWeight: "700", color: COLORS.textOnAccent },
 });

@@ -9,7 +9,10 @@ type CustomCreateButtonProps = {
 export default function CustomCreateButton({ title, onPress }: CustomCreateButtonProps) {
    return (
       <View style={styles.container}>
-         <Pressable style={MODAL_STYLES.createButton} onPress={onPress}>
+         <Pressable
+            style={({ pressed }) => [MODAL_STYLES.createButton, pressed && styles.pressed]}
+            onPress={onPress}
+         >
             <Text style={MODAL_STYLES.createButtonText}>{title}</Text>
          </Pressable>
       </View>
@@ -17,9 +20,6 @@ export default function CustomCreateButton({ title, onPress }: CustomCreateButto
 }
 
 const styles = StyleSheet.create({
-   container: {
-      paddingTop: 24,
-      paddingBottom: 24,
-      marginTop: 8,
-   },
+   container: { paddingVertical: 10 },
+   pressed: { opacity: 0.82 },
 });
