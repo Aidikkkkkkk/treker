@@ -23,10 +23,10 @@ function formatWorkoutDate(iso: string) {
 }
 
 export default function ListWorkouts({ workouts, deleteWorkout }: Props) {
-   function renderWorkout({ item }: { item: IWorkoutResult; index: number }) {
+   function renderWorkout({ item, index }: { item: IWorkoutResult; index: number }) {
       return (
          <View style={LIST_ITEM_STYLES.row}>
-            <Text style={LIST_ITEM_STYLES.title}>Тренировка №{item.id}</Text>
+            <Text style={LIST_ITEM_STYLES.title}>Тренировка №{index + 1}</Text>
             <Text style={LIST_ITEM_STYLES.secondary}>{formatWorkoutDate(item.dateWorkout)}</Text>
          </View>
       );

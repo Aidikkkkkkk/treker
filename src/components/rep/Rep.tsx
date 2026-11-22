@@ -1,14 +1,9 @@
 import { View, Text } from "react-native";
-<<<<<<< HEAD
-import Listrep from "./ListRep";
-import RepModal from "./RepModal";
-=======
->>>>>>> rep-form
 import { useRep } from "@/hooks/useRep";
-import CustomCreateButton from "../global/CustomCreateButton";
 import CustomBackButton from "../global/CustomBackButton";
 import { SCREEN_STYLES } from "@/styles";
 import ListRep from "./ListRep";
+
 interface repProps {
    exercise_id: number;
 }

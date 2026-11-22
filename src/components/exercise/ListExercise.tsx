@@ -11,10 +11,12 @@ type ListExerciseProps = {
 };
 
 export default function ListExercise({ exercises, deleteExercise }: ListExerciseProps) {
-   function renderExercise({ item }: { item: IExerciseResult }) {
+   function renderExercise({ item, index }: { item: IExerciseResult; index: number }) {
       return (
          <View style={LIST_ITEM_STYLES.row}>
-            <Text style={LIST_ITEM_STYLES.title}>{item.nameExercise}</Text>
+            <Text style={LIST_ITEM_STYLES.title}>
+               {index + 1} {item.nameExercise}
+            </Text>
          </View>
       );
    }

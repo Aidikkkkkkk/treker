@@ -11,11 +11,11 @@ interface ListWeeksProps {
 }
 
 export default function ListWeeks({ weeks, deleteWeek }: ListWeeksProps) {
-   function renderWeek({ item }: { item: IWeekResult; index: number }) {
+   function renderWeek({ item, index }: { item: IWeekResult; index: number }) {
       const isHeavy = item.intensity === "heavy";
       return (
          <View style={styles.header}>
-            <Text style={LIST_ITEM_STYLES.title}>Неделя {item.id}</Text>
+            <Text style={LIST_ITEM_STYLES.title}>Неделя {index + 1}</Text>
             <View style={[LIST_ITEM_STYLES.badge, isHeavy ? LIST_ITEM_STYLES.heavyBadge : LIST_ITEM_STYLES.lightBadge]}>
                <Text
                   style={[

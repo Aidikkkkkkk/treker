@@ -10,10 +10,10 @@ interface ListSetProps {
 }
 
 export default function ListRep({ reps, deleteRep }: ListSetProps) {
-   function renderRep({ item }: { item: IRepResult }) {
+   function renderRep({ item, index }: { item: IRepResult; index: number }) {
       return (
          <View style={LIST_ITEM_STYLES.row}>
-            <Text style={LIST_ITEM_STYLES.title}>Подход {item.id}</Text>
+            <Text style={LIST_ITEM_STYLES.title}>Подход {index + 1} </Text>
             <Text style={LIST_ITEM_STYLES.secondary}>
                {item.weight} кг на {item.reps} повторений
             </Text>
