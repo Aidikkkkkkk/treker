@@ -1,20 +1,15 @@
-import { View, Text, Alert } from "react-native";
+import { View, Text } from "react-native";
 import { LIST_ITEM_STYLES } from "@/styles";
 import List from "../global/CustomList";
 import { IExerciseCatalogResult } from "@/types";
+import ConfirmDelete from "../global/ConfirmDelete";
 
 type ListExerciseCatalogProps = {
    exerciseCatalog: IExerciseCatalogResult[];
-   deleteExerciseCatalog: (id: number) => void;
+   deleteFromExerciseCatalog: (id: number) => void;
 };
 
-export default function ListExerciseCatalog({ exerciseCatalog, deleteExerciseCatalog }: ListExerciseCatalogProps) {
-   function confirmDelete(item: IExerciseCatalogResult) {
-      Alert.alert("Удалить из каталога?", `«${item.nameExercise}» будет удалено без возможности восстановления.`, [
-         { text: "Отмена", style: "cancel" },
-         { text: "Удалить", style: "destructive", onPress: () => deleteExerciseCatalog(item.id) },
-      ]);
-   }
+export default function ListExerciseCatalog({ exerciseCatalog, deleteFromExerciseCatalog }: ListExerciseCatalogProps) {
    function renderExerciseCatalog({ item }: { item: IExerciseCatalogResult }) {
       return (
          <View style={LIST_ITEM_STYLES.row}>
@@ -27,7 +22,7 @@ export default function ListExerciseCatalog({ exerciseCatalog, deleteExerciseCat
          data={exerciseCatalog}
          keyExtractor={(item) => item.id.toString()}
          renderItem={renderExerciseCatalog}
-         onDelete={confirmDelete}
+         onDelete={(item) => ConfirmDelete(item, "упражнение из каталога", deleteFromExerciseCatalog)}
          onPress={() => {}}
       />
    );

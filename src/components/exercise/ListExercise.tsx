@@ -1,8 +1,9 @@
-import { View, Text, Alert } from "react-native";
+import { View, Text } from "react-native";
 import { router } from "expo-router";
 import { LIST_ITEM_STYLES } from "@/styles";
 import List from "../global/CustomList";
 import { IExerciseResult } from "@/types";
+import ConfirmDelete from "../global/ConfirmDelete";
 
 type ListExerciseProps = {
    exercises: IExerciseResult[];
@@ -10,12 +11,6 @@ type ListExerciseProps = {
 };
 
 export default function ListExercise({ exercises, deleteExercise }: ListExerciseProps) {
-   function confirmDelete(item: IExerciseResult) {
-      Alert.alert("Удалить упражнение?", `«${item.nameExercise}» будет удалено без возможности восстановления.`, [
-         { text: "Отмена", style: "cancel" },
-         { text: "Удалить", style: "destructive", onPress: () => deleteExercise(item.id) },
-      ]);
-   }
    function renderExercise({ item }: { item: IExerciseResult }) {
       return (
          <View style={LIST_ITEM_STYLES.row}>
@@ -28,7 +23,7 @@ export default function ListExercise({ exercises, deleteExercise }: ListExercise
          data={exercises}
          keyExtractor={(item) => item.id.toString()}
          renderItem={renderExercise}
-         onDelete={confirmDelete}
+         onDelete={(item) => ConfirmDelete(item, "упражнение", deleteExercise)}
          onPress={(item) => router.push({ pathname: "./fourth", params: { exercise_id: item.id } })}
       />
    );

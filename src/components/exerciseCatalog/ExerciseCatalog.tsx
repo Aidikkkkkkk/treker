@@ -7,7 +7,7 @@ import CustomBackButton from "../global/CustomBackButton";
 import { SCREEN_STYLES } from "@/styles";
 
 export default function ExerciseCatalog() {
-   const { showCreate, setShowCreate, createExerciseCatalog, exerciseCatalog, deleteExerciseCatalog } =
+   const { showCreate, setShowCreate, createExerciseCatalog, exerciseCatalog, deleteFromExerciseCatalog } =
       useExerciseCatalog();
    return (
       <View style={SCREEN_STYLES.content}>
@@ -15,7 +15,7 @@ export default function ExerciseCatalog() {
             <CustomBackButton />
             <Text style={SCREEN_STYLES.title}>Каталог упражнений</Text>
          </View>
-         <ListExerciseCatalog exerciseCatalog={exerciseCatalog} deleteExerciseCatalog={deleteExerciseCatalog} />
+         <ListExerciseCatalog exerciseCatalog={exerciseCatalog} deleteFromExerciseCatalog={deleteFromExerciseCatalog} />
          <CustomCreateButton title="Добавить" onPress={() => setShowCreate(true)} />
          <ExerciseCatalogModal
             visible={showCreate}

@@ -7,10 +7,10 @@ export function useExerciseCatalog() {
    const [exerciseCatalog, setExerciseCatalog] = useState<IExerciseCatalogResult[]>([]);
    const [showCreate, setShowCreate] = useState(false);
 
-   async function deleteExerciseCatalog(id: number) {
+   async function deleteFromExerciseCatalog(id: number) {
       if (!treker) return;
       try {
-         await treker.deleteExerciseCatalog(id);
+         await treker.deleteFromExerciseCatalog(id);
          setExerciseCatalog((prev) => prev.filter((item) => item.id !== id));
       } catch (error) {
          console.error("Ошибка удаления из каталога:", error);
@@ -40,7 +40,7 @@ export function useExerciseCatalog() {
 
    return {
       exerciseCatalog,
-      deleteExerciseCatalog,
+      deleteFromExerciseCatalog,
       createExerciseCatalog,
       setShowCreate,
       showCreate,

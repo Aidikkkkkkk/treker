@@ -1,8 +1,9 @@
-import { View, Text, Alert } from "react-native";
+import { View, Text } from "react-native";
 import { router } from "expo-router";
 import { LIST_ITEM_STYLES } from "@/styles";
 import { IWorkoutResult } from "@/types";
 import List from "../global/CustomList";
+import ConfirmDelete from "../global/ConfirmDelete";
 
 type Props = {
    workouts: IWorkoutResult[];
@@ -22,12 +23,6 @@ function formatWorkoutDate(iso: string) {
 }
 
 export default function ListWorkouts({ workouts, deleteWorkout }: Props) {
-   function confirmDelete(item: IWorkoutResult) {
-      Alert.alert("Удалить тренировку?", `Тренировка ${item.id} будет удалена без возможности восстановления.`, [
-         { text: "Отмена", style: "cancel" },
-         { text: "Удалить", style: "destructive", onPress: () => deleteWorkout(item.id) },
-      ]);
-   }
    function renderWorkout({ item }: { item: IWorkoutResult; index: number }) {
       return (
          <View style={LIST_ITEM_STYLES.row}>
@@ -41,7 +36,7 @@ export default function ListWorkouts({ workouts, deleteWorkout }: Props) {
          data={workouts}
          keyExtractor={(item) => item.id.toString()}
          renderItem={renderWorkout}
-         onDelete={confirmDelete}
+         onDelete={(item) => ConfirmDelete(item, "тренировку", deleteWorkout)}
          onPress={(item) => router.push({ pathname: "./third", params: { workout_id: item.id } })}
       />
    );

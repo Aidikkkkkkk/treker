@@ -83,7 +83,7 @@ export class TrekerRepository {
    async deleteRep(id: number) {
       return await this.db.runAsync("DELETE FROM rep WHERE id = ?", [id]);
    }
-   async deleteExerciseCatalog(id: number) {
+   async deleteFromExerciseCatalog(id: number) {
       return await this.db.runAsync("DELETE FROM exercise_catalog WHERE id = ?", [id]);
    }
 }

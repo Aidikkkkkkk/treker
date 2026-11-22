@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Text, Pressable, ScrollView } from "react-native";
+import { Text, Pressable, ScrollView, Alert } from "react-native";
 import { COLORS, MODAL_STYLES } from "@/styles";
 import { IDtoExercise, IDtoExerciseCatalog, IExerciseCatalogResult } from "@/types";
 import CustomModal from "../global/CustomModal";
@@ -15,21 +15,19 @@ interface ExerciseModalProps {
 
 export default function ExerciseModal({ visible, onClose, onCreate, workout_id, catalog }: ExerciseModalProps) {
    const [selected, setSelected] = useState<string | null>(null);
-   const [text, setText] = useState("");
-
-   function reset() {
-      setSelected(null);
-      setText("");
-   }
 
    function handleCreate() {
-      onCreate({ workout_id: workout_id, nameExercise: text });
-      reset();
+      if (!selected) {
+         Alert.alert("Не выбрано упражнение");
+         return;
+      }
+      onCreate({ workout_id: workout_id, nameExercise: selected });
+      setSelected(null);
       onClose();
    }
 
    function handleClose() {
-      reset();
+      setSelected(null);
       onClose();
    }
 
@@ -49,7 +47,6 @@ export default function ExerciseModal({ visible, onClose, onCreate, workout_id, 
                         key={item.id}
                         style={[styles.chip, isSelected && styles.chipSelected]}
                         onPress={() => {
-                           setText("");
                            setSelected(isSelected ? null : item.nameExercise);
                         }}
                      >

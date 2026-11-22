@@ -1,14 +1,12 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-
 import { initdb } from "@/service/model";
 import { TrekerRepository } from "@/service/repository";
 import { TrekerService } from "@/service/service";
 
-const TrekerContext = createContext<TrekerService | null | undefined>(undefined);
+const TrekerContext = createContext<TrekerService | null>(null);
 
 export function TrekerProvider({ children }: { children: React.ReactNode }) {
    const [service, setService] = useState<TrekerService | null>(null);
-
    useEffect(() => {
       async function initialize() {
          try {
@@ -30,10 +28,8 @@ export function TrekerProvider({ children }: { children: React.ReactNode }) {
 
 export function useTreker() {
    const context = useContext(TrekerContext);
-
    if (context === undefined) {
       throw new Error("useTreker должен использоваться внутри TrekerProvider");
    }
-
    return context;
 }

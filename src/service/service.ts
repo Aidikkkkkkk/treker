@@ -134,8 +134,8 @@ export class TrekerService {
       const validatedId = this.validateNumber(id);
       return this.trekerRepository.deleteRep(validatedId);
    }
-   async deleteExerciseCatalog(id: number) {
+   async deleteFromExerciseCatalog(id: number) {
       const validatedId = this.validateNumber(id);
-      return this.trekerRepository.deleteExerciseCatalog(validatedId);
+      return this.trekerRepository.deleteFromExerciseCatalog(validatedId);
    }
 }

@@ -1,8 +1,9 @@
-import { View, Text, StyleSheet, Alert } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { router } from "expo-router";
 import List from "../global/CustomList";
 import { IWeekResult } from "@/types";
 import { LIST_ITEM_STYLES } from "@/styles";
+import ConfirmDelete from "../global/ConfirmDelete";
 
 interface ListWeeksProps {
    weeks: IWeekResult[];
@@ -10,12 +11,6 @@ interface ListWeeksProps {
 }
 
 export default function ListWeeks({ weeks, deleteWeek }: ListWeeksProps) {
-   function confirmDelete(item: IWeekResult) {
-      Alert.alert("Удалить неделю?", `Неделя ${item.id} будет удалена без возможности восстановления.`, [
-         { text: "Отмена", style: "cancel" },
-         { text: "Удалить", style: "destructive", onPress: () => deleteWeek(item.id) },
-      ]);
-   }
    function renderWeek({ item }: { item: IWeekResult; index: number }) {
       const isHeavy = item.intensity === "heavy";
       return (
@@ -39,7 +34,7 @@ export default function ListWeeks({ weeks, deleteWeek }: ListWeeksProps) {
          data={weeks}
          keyExtractor={(item) => item.id.toString()}
          renderItem={renderWeek}
-         onDelete={confirmDelete}
+         onDelete={(item) => ConfirmDelete(item, "Неделю", deleteWeek)}
          onPress={(item) => router.push({ pathname: "/second", params: { week_id: item.id } })}
       />
    );
