@@ -7,17 +7,18 @@ interface BaseModalProps {
    onClose: () => void;
    children: React.ReactNode;
 }
+
 export default function CustomModal({ visible, title, onClose, children }: BaseModalProps) {
    return (
       <Modal visible={visible} transparent animationType="slide" statusBarTranslucent onRequestClose={onClose}>
-         <View style={styles.overlay}>
+         <View style={MODAL_STYLES.overlay}>
             <Pressable style={StyleSheet.absoluteFill} onPress={onClose} />
-            <View style={styles.modal}>
-               <View style={styles.indicatorContainer}>
-                  <View style={styles.indicator} />
+            <View style={MODAL_STYLES.modal}>
+               <View style={MODAL_STYLES.indicatorContainer}>
+                  <View style={MODAL_STYLES.indicator} />
                </View>
                <View style={styles.header}>
-                  <Text style={styles.title}>{title}</Text>
+                  <Text style={MODAL_STYLES.title}>{title}</Text>
                   <Pressable
                      onPress={onClose}
                      hitSlop={12}
@@ -34,26 +35,8 @@ export default function CustomModal({ visible, title, onClose, children }: BaseM
 }
 
 const styles = StyleSheet.create({
-   ...MODAL_STYLES,
-   header: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: "center",
-      marginBottom: 16,
-   },
-   closeButton: {
-      width: 32,
-      height: 32,
-      borderRadius: 16,
-      backgroundColor: COLORS.surfaceMuted,
-      justifyContent: "center",
-      alignItems: "center",
-   },
+   header: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 12 },
+   closeButton: { width: 30, height: 30, borderRadius: 15, backgroundColor: COLORS.surfaceMuted, justifyContent: "center", alignItems: "center" },
    closeButtonPressed: { opacity: 0.6 },
-   closeText: {
-      color: COLORS.textSecondary,
-      fontSize: 25,
-      lineHeight: 28,
-      fontWeight: "400",
-   },
+   closeText: { color: COLORS.textSecondary, fontSize: 23, lineHeight: 26, fontWeight: "400" },
 });
