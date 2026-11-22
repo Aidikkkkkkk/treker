@@ -14,8 +14,8 @@ export interface IExerciseResult {
 export interface IRepResult {
    id: number;
    exercise_id: number;
-   replace: number;
-   count: number;
+   reps: number;
+   weight: number;
 }
 export interface IExerciseCatalogResult {
    id: number;
