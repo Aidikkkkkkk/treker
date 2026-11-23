@@ -1,11 +1,32 @@
+import { useStyles } from "@/context/ThemeContext";
 import { useRouter, usePathname } from "expo-router";
 import { Pressable, Text, StyleSheet } from "react-native";
-import { COLORS } from "@/styles";
+import { useMemo } from "react";
 
 export default function CustomBackButton() {
    const router = useRouter();
    const pathname = usePathname();
    if (pathname === "/") return null;
+   const { COLORS } = useStyles();
+
+   const styles = useMemo(
+      () =>
+         StyleSheet.create({
+            button: {
+               width: 42,
+               height: 42,
+               borderRadius: 21,
+               backgroundColor: COLORS.surface,
+               borderWidth: 1,
+               borderColor: COLORS.border,
+               alignItems: "center",
+               justifyContent: "center",
+            },
+            pressed: { opacity: 0.65 },
+            text: { color: COLORS.textPrimary, fontSize: 23, fontWeight: "600" },
+         }),
+      [COLORS],
+   );
 
    return (
       <Pressable
@@ -18,18 +39,3 @@ export default function CustomBackButton() {
       </Pressable>
    );
 }
-
-const styles = StyleSheet.create({
-   button: {
-      width: 42,
-      height: 42,
-      borderRadius: 21,
-      backgroundColor: COLORS.surface,
-      borderWidth: 1,
-      borderColor: COLORS.border,
-      alignItems: "center",
-      justifyContent: "center",
-   },
-   pressed: { opacity: 0.65 },
-   text: { color: COLORS.textPrimary, fontSize: 23, fontWeight: "600" },
-});

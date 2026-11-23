@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useTreker } from "@/TrekerContext";
+import { useTreker } from "@/context/TrekerContext";
 import { IDtoExerciseCatalog, IExerciseCatalogResult } from "@/types";
 
 export function useExerciseCatalog() {

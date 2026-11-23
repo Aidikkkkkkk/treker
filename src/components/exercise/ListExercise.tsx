@@ -1,9 +1,9 @@
 import { View, Text } from "react-native";
 import { router } from "expo-router";
-import { LIST_ITEM_STYLES } from "@/styles";
 import List from "../global/CustomList";
 import { IExerciseResult } from "@/types";
 import ConfirmDelete from "../global/ConfirmDelete";
+import { useStyles } from "@/context/ThemeContext";
 
 type ListExerciseProps = {
    exercises: IExerciseResult[];
@@ -11,6 +11,7 @@ type ListExerciseProps = {
 };
 
 export default function ListExercise({ exercises, deleteExercise }: ListExerciseProps) {
+   const { LIST_ITEM_STYLES } = useStyles();
    function renderExercise({ item, index }: { item: IExerciseResult; index: number }) {
       return (
          <View style={LIST_ITEM_STYLES.row}>

@@ -1,8 +1,8 @@
 import { View, Text } from "react-native";
-import { LIST_ITEM_STYLES } from "@/styles";
 import List from "../global/CustomList";
 import { IExerciseCatalogResult } from "@/types";
 import ConfirmDelete from "../global/ConfirmDelete";
+import { useStyles } from "@/context/ThemeContext";
 
 type ListExerciseCatalogProps = {
    exerciseCatalog: IExerciseCatalogResult[];
@@ -10,6 +10,7 @@ type ListExerciseCatalogProps = {
 };
 
 export default function ListExerciseCatalog({ exerciseCatalog, deleteFromExerciseCatalog }: ListExerciseCatalogProps) {
+   const { LIST_ITEM_STYLES } = useStyles();
    function renderExerciseCatalog({ item }: { item: IExerciseCatalogResult }) {
       return (
          <View style={LIST_ITEM_STYLES.row}>

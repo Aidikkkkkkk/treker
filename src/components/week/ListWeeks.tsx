@@ -1,9 +1,9 @@
 import { View, Text, StyleSheet } from "react-native";
 import { router } from "expo-router";
-import List from "../global/CustomList";
 import { IWeekResult } from "@/types";
-import { LIST_ITEM_STYLES } from "@/styles";
 import ConfirmDelete from "../global/ConfirmDelete";
+import List from "../global/CustomList";
+import { useStyles } from "@/context/ThemeContext";
 
 interface ListWeeksProps {
    weeks: IWeekResult[];
@@ -11,6 +11,7 @@ interface ListWeeksProps {
 }
 
 export default function ListWeeks({ weeks, deleteWeek }: ListWeeksProps) {
+   const { LIST_ITEM_STYLES } = useStyles();
    function renderWeek({ item, index }: { item: IWeekResult; index: number }) {
       const isHeavy = item.intensity === "heavy";
       return (

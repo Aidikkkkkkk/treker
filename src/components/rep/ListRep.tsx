@@ -1,15 +1,15 @@
 import { View, Text } from "react-native";
-import { LIST_ITEM_STYLES } from "@/styles";
 import List from "../global/CustomList";
 import { IRepResult } from "@/types";
 import ConfirmDelete from "../global/ConfirmDelete";
-
+import { useStyles } from "@/context/ThemeContext";
 interface ListSetProps {
    reps: IRepResult[];
    deleteRep: (id: number) => void;
 }
 
 export default function ListRep({ reps, deleteRep }: ListSetProps) {
+   const { LIST_ITEM_STYLES } = useStyles();
    function renderRep({ item, index }: { item: IRepResult; index: number }) {
       return (
          <View style={LIST_ITEM_STYLES.row}>

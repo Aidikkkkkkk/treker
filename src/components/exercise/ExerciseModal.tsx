@@ -1,8 +1,8 @@
-import { useState } from "react";
-import { Text, Pressable, ScrollView, Alert } from "react-native";
-import { COLORS, MODAL_STYLES } from "@/styles";
+import { useState, useMemo } from "react";
+import { Text, Pressable, ScrollView, Alert, StyleSheet } from "react-native";
 import { IDtoExercise, IDtoExerciseCatalog, IExerciseCatalogResult } from "@/types";
 import CustomModal from "../global/CustomModal";
+import { useStyles } from "@/context/ThemeContext";
 
 interface ExerciseModalProps {
    visible: boolean;
@@ -14,7 +14,29 @@ interface ExerciseModalProps {
 }
 
 export default function ExerciseModal({ visible, onClose, onCreate, workout_id, catalog }: ExerciseModalProps) {
+   const { COLORS, MODAL_STYLES } = useStyles();
    const [selected, setSelected] = useState<string | null>(null);
+
+   const styles = useMemo(
+      () =>
+         StyleSheet.create({
+            ...MODAL_STYLES,
+            chipsScroll: { maxHeight: 240, marginBottom: 14 },
+            chips: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
+            chip: {
+               paddingHorizontal: 14,
+               paddingVertical: 9,
+               borderRadius: 14,
+               backgroundColor: COLORS.surfaceMuted,
+               borderWidth: 1,
+               borderColor: COLORS.border,
+            },
+            chipSelected: { borderColor: COLORS.textPrimary },
+            chipText: { fontSize: 14, color: COLORS.textSecondary },
+            chipTextSelected: { color: COLORS.textPrimary },
+         }),
+      [COLORS, MODAL_STYLES],
+   );
 
    function handleCreate() {
       if (!selected) {
@@ -30,7 +52,6 @@ export default function ExerciseModal({ visible, onClose, onCreate, workout_id, 
       setSelected(null);
       onClose();
    }
-
    return (
       <CustomModal visible={visible} title="Выбрать упражнение" onClose={handleClose}>
          {catalog.length > 0 && (
@@ -65,20 +86,3 @@ export default function ExerciseModal({ visible, onClose, onCreate, workout_id, 
       </CustomModal>
    );
 }
-
-const styles = {
-   ...MODAL_STYLES,
-   chipsScroll: { maxHeight: 240, marginBottom: 14 },
-   chips: { flexDirection: "row" as const, flexWrap: "wrap" as const, gap: 8 },
-   chip: {
-      paddingHorizontal: 14,
-      paddingVertical: 9,
-      borderRadius: 14,
-      backgroundColor: COLORS.surfaceMuted,
-      borderWidth: 1,
-      borderColor: COLORS.border,
-   },
-   chipSelected: { borderColor: COLORS.textPrimary },
-   chipText: { fontSize: 14, color: COLORS.textSecondary },
-   chipTextSelected: { color: COLORS.textPrimary },
-};

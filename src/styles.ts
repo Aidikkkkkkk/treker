@@ -1,55 +1,5 @@
 import { StyleSheet } from "react-native";
 
-/** Shared semantic color palette for the app. */
-// export const COLORS = {
-//    background: "#F7F7FA",
-//    surface: "#FFFFFF",
-//    surfaceMuted: "#F4F2F8",
-//    border: "#E9E6EE",
-//    textPrimary: "#241F2B",
-//    textSecondary: "#77727F",
-//    textOnAccent: "#FFFFFF",
-//    accent: "#087F83",
-//    accentPressed: "#06666A",
-//    accentSoft: "#E5F5F3",
-//    purple: "#6D28D9",
-//    purpleSoft: "#F0E9FF",
-//    heavy: "#FFFFFF",
-//    heavySoft: "#6D28D9",
-//    light: "#6D28D9",
-//    lightSoft: "#F0E9FF",
-//    danger: "#C94352",
-//    dangerSoft: "#FCEBED",
-//    iconMuted: "#9A94A3",
-//    handle: "#D8D3DF",
-//    overlay: "rgba(36, 31, 43, 0.48)",
-// } as const;
-// white theme
-
-export const LIGHT_COLORS = {
-   background: "#F4F7F6",
-   surface: "#FFFFFF",
-   surfaceMuted: "#EDF3F1",
-   border: "#DCE7E3",
-   textPrimary: "#172522",
-   textSecondary: "#687A76",
-   textOnAccent: "#FFFFFF",
-   accent: "#168D82",
-   accentPressed: "#10766D",
-   accentSoft: "#DEF1ED",
-   purple: "#6750A4",
-   purpleSoft: "#EEEAFE",
-   heavy: "#FFFFFF",
-   heavySoft: "#6750A4",
-   light: "#6750A4",
-   lightSoft: "#EEEAFE",
-   danger: "#C84D5B",
-   dangerSoft: "#FBEAEC",
-   iconMuted: "#98A9A5",
-   handle: "#C7D4D0",
-   overlay: "rgba(23, 37, 34, 0.46)",
-} as const;
-
 export const DARK_COLORS = {
    background: "#111816",
    surface: "#19221F",
@@ -72,114 +22,146 @@ export const DARK_COLORS = {
    iconMuted: "#7F9690",
    handle: "#40534E",
    overlay: "rgba(0, 0, 0, 0.66)",
-} as const;
+};
+const COLORS = DARK_COLORS;
+export type Palette = typeof COLORS;
+export type Token = keyof typeof COLORS;
 
-/** Active palette. Switch between DARK_COLORS and LIGHT_COLORS. */
-export const COLORS = LIGHT_COLORS;
+export const LABELS: Record<Token, string> = {
+   background: "Фон экрана",
+   surface: "Карточки",
+   surfaceMuted: "Поля ввода",
+   border: "Рамки",
+   textPrimary: "Основной текст",
+   textSecondary: "Подписи",
+   textOnAccent: "Текст на кнопке",
+   accent: "Кнопки",
+   accentPressed: "Кнопки при нажатии",
+   accentSoft: "Мягкий фон акцента",
+   purple: "Второй цвет",
+   purpleSoft: "Фон второго цвета",
+   heavy: "Текст тяжёлой недели",
+   heavySoft: "Фон тяжёлой недели",
+   light: "Текст лёгкой недели",
+   lightSoft: "Фон лёгкой недели",
+   danger: "Удаление",
+   dangerSoft: "Фон удаления",
+   iconMuted: "Неактивные иконки",
+   handle: "Полоска окна",
+   overlay: "Затемнение",
+};
+export function makeStyles(colors: Palette) {
+   const SCREEN_STYLES = StyleSheet.create({
+      content: {
+         flex: 1,
+         width: "100%",
+         maxWidth: 560,
+         alignSelf: "center",
+         backgroundColor: colors.background,
+         paddingHorizontal: 18,
+         paddingTop: 18,
+      },
+      keyboardView: { flex: 1, backgroundColor: colors.background },
+      header: {
+         minHeight: 44,
+         flexDirection: "row",
+         alignItems: "center",
+         gap: 10,
+         marginBottom: 6,
+      },
+      title: {
+         color: colors.textPrimary,
+         fontSize: 30,
+         fontWeight: "800",
+      },
+   });
 
-export const SCREEN_STYLES = StyleSheet.create({
-   content: {
-      flex: 1,
-      width: "100%",
-      maxWidth: 560,
-      alignSelf: "center",
-      backgroundColor: COLORS.background,
-      paddingHorizontal: 18,
-      paddingTop: 18,
-   },
-   keyboardView: { flex: 1, backgroundColor: COLORS.background },
-   header: {
-      minHeight: 44,
-      flexDirection: "row",
-      alignItems: "center",
-      gap: 10,
-      marginBottom: 6,
-   },
-   title: {
-      color: COLORS.textPrimary,
-      fontSize: 30,
-      fontWeight: "800",
-   },
-});
+   const LIST_ITEM_STYLES = StyleSheet.create({
+      row: {
+         flexDirection: "column",
+         alignItems: "flex-start",
+         gap: 3,
+         paddingRight: 36,
+      },
+      title: { color: colors.textPrimary, fontSize: 17, fontWeight: "700" },
+      secondary: { color: colors.textSecondary, fontSize: 13, fontWeight: "500" },
+      badge: { paddingHorizontal: 11, paddingVertical: 5, borderRadius: 24 },
+      heavyBadge: { backgroundColor: colors.heavySoft },
+      lightBadge: { backgroundColor: colors.lightSoft },
+      badgeText: { fontSize: 12, fontWeight: "700" },
+      heavyText: { color: colors.heavy },
+      lightText: { color: colors.light },
+   });
 
-export const LIST_ITEM_STYLES = StyleSheet.create({
-   row: {
-      flexDirection: "column",
-      alignItems: "flex-start",
-      gap: 3,
-      paddingRight: 36,
-   },
-   title: { color: COLORS.textPrimary, fontSize: 17, fontWeight: "700" },
-   secondary: { color: COLORS.textSecondary, fontSize: 13, fontWeight: "500" },
-   badge: { paddingHorizontal: 11, paddingVertical: 5, borderRadius: 24 },
-   heavyBadge: { backgroundColor: COLORS.heavySoft },
-   lightBadge: { backgroundColor: COLORS.lightSoft },
-   badgeText: { fontSize: 12, fontWeight: "700" },
-   heavyText: { color: COLORS.heavy },
-   lightText: { color: COLORS.light },
-});
+   const MODAL_STYLES = StyleSheet.create({
+      overlay: { flex: 1, justifyContent: "flex-end", backgroundColor: colors.overlay },
+      modal: {
+         width: "100%",
+         maxWidth: 560,
+         alignSelf: "center",
+         backgroundColor: colors.surface,
+         borderWidth: 1,
+         borderColor: colors.border,
+         borderTopLeftRadius: 28,
+         borderTopRightRadius: 28,
+         paddingHorizontal: 18,
+         paddingTop: 10,
+         paddingBottom: 18,
+      },
+      indicatorContainer: { alignItems: "center", marginBottom: 12 },
+      indicator: { width: 44, height: 5, borderRadius: 10, backgroundColor: colors.handle },
+      title: { color: colors.textPrimary, fontSize: 20, fontWeight: "700", marginBottom: 12 },
+      createButton: {
+         height: 48,
+         width: "100%",
+         borderRadius: 16,
+         backgroundColor: colors.accent,
+         justifyContent: "center",
+         alignItems: "center",
+      },
+      createButtonDisabled: { opacity: 0.5 },
+      createButtonText: { color: colors.textOnAccent, fontSize: 16, fontWeight: "700" },
+   });
 
-export const MODAL_STYLES = StyleSheet.create({
-   overlay: { flex: 1, justifyContent: "flex-end", backgroundColor: COLORS.overlay },
-   modal: {
-      width: "100%",
-      maxWidth: 560,
-      alignSelf: "center",
-      backgroundColor: COLORS.surface,
-      borderWidth: 1,
-      borderColor: COLORS.border,
-      borderTopLeftRadius: 28,
-      borderTopRightRadius: 28,
-      paddingHorizontal: 18,
-      paddingTop: 10,
-      paddingBottom: 18,
-   },
-   indicatorContainer: { alignItems: "center", marginBottom: 12 },
-   indicator: { width: 44, height: 5, borderRadius: 10, backgroundColor: COLORS.handle },
-   title: { color: COLORS.textPrimary, fontSize: 20, fontWeight: "700", marginBottom: 12 },
-   createButton: {
-      height: 48,
-      width: "100%",
-      borderRadius: 16,
-      backgroundColor: COLORS.accent,
-      justifyContent: "center",
-      alignItems: "center",
-   },
-   createButtonDisabled: { opacity: 0.5 },
-   createButtonText: { color: COLORS.textOnAccent, fontSize: 16, fontWeight: "700" },
-});
-
-export const FORM_STYLES = StyleSheet.create({
-   field: {
-      height: 52,
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "center",
-      gap: 4,
-      borderRadius: 14,
-      borderWidth: 1,
-      borderColor: COLORS.border,
-      backgroundColor: COLORS.surfaceMuted,
-   },
-   row: { flexDirection: "row", alignItems: "center", gap: 8 },
-   flex: { flex: 1 },
-   input: { minWidth: 36, color: COLORS.textPrimary, fontSize: 20, fontWeight: "700", textAlign: "center" },
-   secondaryText: { color: COLORS.textSecondary, fontSize: 13, fontWeight: "700" },
-   primaryButton: {
-      height: 48,
-      borderRadius: 14,
-      backgroundColor: COLORS.accent,
-      alignItems: "center",
-      justifyContent: "center",
-   },
-   secondaryButton: {
-      height: 48,
-      paddingHorizontal: 16,
-      borderRadius: 14,
-      alignItems: "center",
-      justifyContent: "center",
-   },
-   primaryButtonText: { color: COLORS.textOnAccent, fontSize: 16, fontWeight: "700" },
-   secondaryButtonText: { color: COLORS.textSecondary, fontSize: 15, fontWeight: "600" },
-   disabled: { opacity: 0.42 },
-});
+   const FORM_STYLES = StyleSheet.create({
+      field: {
+         height: 52,
+         flexDirection: "row",
+         alignItems: "center",
+         justifyContent: "center",
+         gap: 4,
+         borderRadius: 14,
+         borderWidth: 1,
+         borderColor: colors.border,
+         backgroundColor: colors.surfaceMuted,
+      },
+      row: { flexDirection: "row", alignItems: "center", gap: 8 },
+      flex: { flex: 1 },
+      input: { minWidth: 36, color: colors.textPrimary, fontSize: 20, fontWeight: "700", textAlign: "center" },
+      secondaryText: { color: colors.textSecondary, fontSize: 13, fontWeight: "700" },
+      primaryButton: {
+         height: 48,
+         borderRadius: 14,
+         backgroundColor: colors.accent,
+         alignItems: "center",
+         justifyContent: "center",
+      },
+      secondaryButton: {
+         height: 48,
+         paddingHorizontal: 16,
+         borderRadius: 14,
+         alignItems: "center",
+         justifyContent: "center",
+      },
+      primaryButtonText: { color: colors.textOnAccent, fontSize: 16, fontWeight: "700" },
+      secondaryButtonText: { color: colors.textSecondary, fontSize: 15, fontWeight: "600" },
+      disabled: { opacity: 0.42 },
+   });
+   return {
+      SCREEN_STYLES,
+      MODAL_STYLES,
+      FORM_STYLES,
+      LIST_ITEM_STYLES,
+      COLORS: colors,
+   };
+}

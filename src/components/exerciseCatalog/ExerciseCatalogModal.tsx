@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { View, Text, Pressable, Modal, TextInput } from "react-native";
-import { COLORS, MODAL_STYLES } from "@/styles";
+import { useMemo, useState } from "react";
+import { View, Text, Pressable, Modal, TextInput, StyleSheet } from "react-native";
 import { IDtoExerciseCatalog } from "@/types";
+import { useStyles } from "@/context/ThemeContext";
 
 interface ExerciseCatalogModalProps {
    visible: boolean;
@@ -11,13 +11,33 @@ interface ExerciseCatalogModalProps {
 
 export default function ExerciseCatalogModal({ visible, onClose, onCreate }: ExerciseCatalogModalProps) {
    const [text, setText] = useState("");
+   const { MODAL_STYLES, COLORS } = useStyles();
+
+   const styles = useMemo(
+      () =>
+         StyleSheet.create({
+            ...MODAL_STYLES,
+            input: {
+               minHeight: 110,
+               padding: 16,
+               borderRadius: 17,
+               backgroundColor: COLORS.surfaceMuted,
+               borderWidth: 1,
+               borderColor: COLORS.border,
+               color: COLORS.textPrimary,
+               fontSize: 16,
+               textAlignVertical: "top",
+               marginBottom: 18,
+            },
+         }),
+      [MODAL_STYLES, COLORS],
+   );
    function handleCreate() {
       if (!text.trim()) return;
       onCreate({ nameExercise: text.trim() });
       setText("");
       onClose();
    }
-
    function handleClose() {
       setText("");
       onClose();
@@ -54,19 +74,3 @@ export default function ExerciseCatalogModal({ visible, onClose, onCreate }: Exe
       </Modal>
    );
 }
-
-const styles = {
-   ...MODAL_STYLES,
-   input: {
-      minHeight: 110,
-      padding: 16,
-      borderRadius: 17,
-      backgroundColor: COLORS.surfaceMuted,
-      borderWidth: 1,
-      borderColor: COLORS.border,
-      color: COLORS.textPrimary,
-      fontSize: 16,
-      textAlignVertical: "top" as const,
-      marginBottom: 18,
-   },
-};

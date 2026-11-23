@@ -1,9 +1,9 @@
 import { KeyboardAvoidingView, Platform, Text, View } from "react-native";
 import { useRep } from "@/hooks/useRep";
-import RepForm from "./RepForm";
-import { SCREEN_STYLES } from "@/styles";
 import CustomBackButton from "../global/CustomBackButton";
+import RepForm from "./RepForm";
 import ListRep from "./ListRep";
+import { useStyles } from "@/context/ThemeContext";
 
 interface RepProps {
    exercise_id: number;
@@ -11,7 +11,7 @@ interface RepProps {
 
 export default function Rep({ exercise_id }: RepProps) {
    const { createRep, reps, deleteRep } = useRep(exercise_id);
-
+   const { SCREEN_STYLES } = useStyles();
    return (
       <KeyboardAvoidingView style={SCREEN_STYLES.keyboardView} behavior={Platform.OS === "ios" ? "padding" : undefined}>
          <View style={SCREEN_STYLES.content}>

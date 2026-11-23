@@ -1,9 +1,9 @@
 import { View, Text } from "react-native";
 import { router } from "expo-router";
-import { LIST_ITEM_STYLES } from "@/styles";
 import { IWorkoutResult } from "@/types";
 import List from "../global/CustomList";
 import ConfirmDelete from "../global/ConfirmDelete";
+import { useStyles } from "@/context/ThemeContext";
 
 type Props = {
    workouts: IWorkoutResult[];
@@ -23,6 +23,7 @@ function formatWorkoutDate(iso: string) {
 }
 
 export default function ListWorkouts({ workouts, deleteWorkout }: Props) {
+   const { LIST_ITEM_STYLES } = useStyles();
    function renderWorkout({ item, index }: { item: IWorkoutResult; index: number }) {
       return (
          <View style={LIST_ITEM_STYLES.row}>

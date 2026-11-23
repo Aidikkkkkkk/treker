@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useTreker } from "@/TrekerContext";
+import { useTreker } from "@/context/TrekerContext";
 import { IDtoRep, IRepResult } from "@/types";
 
 export function useRep(exercise_id: number) {

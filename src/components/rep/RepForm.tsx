@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Pressable, Text, TextInput, View } from "react-native";
-import { COLORS, FORM_STYLES } from "@/styles";
 import { IDtoRep, IRepResult } from "@/types";
+import { useStyles } from "@/context/ThemeContext";
 
 interface RepFormProps {
    exercise_id: number;
@@ -13,7 +13,7 @@ export default function RepForm({ exercise_id, lastRep, onCreate }: RepFormProps
    const [open, setOpen] = useState(false);
    const [weight, setWeight] = useState("");
    const [reps, setReps] = useState("");
-
+   const { FORM_STYLES, COLORS } = useStyles();
    function openForm() {
       setWeight(lastRep ? String(lastRep.weight) : "");
       setReps(lastRep ? String(lastRep.reps) : "");
@@ -65,7 +65,7 @@ export default function RepForm({ exercise_id, lastRep, onCreate }: RepFormProps
             </View>
          </View>
 
-         <View style={[FORM_STYLES.row, { marginTop: 8 }] }>
+         <View style={[FORM_STYLES.row, { marginTop: 8 }]}>
             <Pressable style={FORM_STYLES.secondaryButton} onPress={() => setOpen(false)}>
                <Text style={FORM_STYLES.secondaryButtonText}>Отмена</Text>
             </Pressable>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useTreker } from "@/TrekerContext";
+import { useTreker } from "@/context/TrekerContext";
 import { IWorkoutResult, IDtoWorkout } from "@/types";
 
 export function useWorkouts(week_id: number) {

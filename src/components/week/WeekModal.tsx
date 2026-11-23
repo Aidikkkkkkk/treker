@@ -1,8 +1,8 @@
 import { View, Text, Pressable } from "react-native";
 import { useState } from "react";
 import CustomModal from "../global/CustomModal";
-import { COLORS, MODAL_STYLES } from "@/styles";
 import { IDtoWeek } from "@/types";
+import { useStyles } from "@/context/ThemeContext";
 
 interface WeekModalProps {
    visible: boolean;
@@ -12,6 +12,31 @@ interface WeekModalProps {
 
 export default function WeekModal({ visible, onClose, onCreate }: WeekModalProps) {
    const [intensity, setIntensity] = useState<"light" | "heavy">("light");
+   const { COLORS, MODAL_STYLES } = useStyles();
+   const styles = {
+      ...MODAL_STYLES,
+      segment: {
+         flexDirection: "row" as const,
+         backgroundColor: COLORS.surfaceMuted,
+         borderRadius: 22,
+         padding: 6,
+         marginBottom: 18,
+      },
+      option: {
+         flex: 1,
+         alignItems: "center" as const,
+         justifyContent: "center" as const,
+         paddingVertical: 15,
+         borderRadius: 17,
+      },
+      heavyActive: { backgroundColor: COLORS.heavySoft },
+      lightActive: { backgroundColor: COLORS.lightSoft },
+      optionText: { fontSize: 16, fontWeight: "700" as const },
+      inactiveText: { color: COLORS.textSecondary },
+      heavyText: { color: COLORS.heavy },
+      lightText: { color: COLORS.light },
+   };
+
    function handleCreate() {
       onCreate({ intensity: intensity });
       onClose();
@@ -42,15 +67,3 @@ export default function WeekModal({ visible, onClose, onCreate }: WeekModalProps
       </CustomModal>
    );
 }
-
-const styles = {
-   ...MODAL_STYLES,
-   segment: { flexDirection: "row" as const, backgroundColor: COLORS.surfaceMuted, borderRadius: 22, padding: 6, marginBottom: 18 },
-   option: { flex: 1, alignItems: "center" as const, justifyContent: "center" as const, paddingVertical: 15, borderRadius: 17 },
-   heavyActive: { backgroundColor: COLORS.heavySoft },
-   lightActive: { backgroundColor: COLORS.lightSoft },
-   optionText: { fontSize: 16, fontWeight: "700" as const },
-   inactiveText: { color: COLORS.textSecondary },
-   heavyText: { color: COLORS.heavy },
-   lightText: { color: COLORS.light },
-};

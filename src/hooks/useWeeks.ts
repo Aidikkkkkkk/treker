@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useTreker } from "@/TrekerContext";
+import { useTreker } from "@/context/TrekerContext";
 import { IWeekResult, IDtoWeek } from "@/types";
 
 export function useWeeks() {

@@ -1,18 +1,19 @@
 import { View, Text } from "react-native";
+import { router } from "expo-router";
 import { useExercise } from "@/hooks/useExercise";
 import { useExerciseCatalog } from "@/hooks/useExerciseCatalog";
+import CustomBackButton from "../global/CustomBackButton";
+import CustomBottomBar from "../global/CustomBottomBar";
 import ListExercise from "./ListExercise";
 import ExerciseModal from "./ExerciseModal";
-import CustomBackButton from "../global/CustomBackButton";
-import { SCREEN_STYLES } from "@/styles";
-import CustomBottomBar from "../global/CustomBottomBar";
-import { router } from "expo-router";
+import { useStyles } from "@/context/ThemeContext";
 
 interface ExerciseProps {
    workout_id: number;
 }
 
 export default function Exercise({ workout_id }: ExerciseProps) {
+   const { SCREEN_STYLES } = useStyles();
    const { showCreate, setShowCreate, createExercise, exercises, deleteExercise } = useExercise(workout_id);
    const { exerciseCatalog, loadExerciseCatalog, createExerciseCatalog } = useExerciseCatalog();
 

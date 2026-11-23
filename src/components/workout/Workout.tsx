@@ -4,13 +4,14 @@ import ListWorkouts from "./ListWorkouts";
 import { useWorkouts } from "@/hooks/useWorkout";
 import WorkoutModal from "./WorkoutModal";
 import CustomBackButton from "../global/CustomBackButton";
-import { SCREEN_STYLES } from "@/styles";
+import { useStyles } from "@/context/ThemeContext";
 
 interface WorkoutProps {
    week_id: number;
 }
 
 export default function Workout({ week_id }: WorkoutProps) {
+   const { SCREEN_STYLES } = useStyles();
    const { showCreate, setShowCreate, createWorkout, workouts, deleteWorkout } = useWorkouts(week_id);
    return (
       <View style={SCREEN_STYLES.content}>
