@@ -1,6 +1,5 @@
 import { View, Text, Pressable, Modal, StyleSheet } from "react-native";
 import { useStyles } from "@/context/ThemeContext";
-import { useMemo } from "react";
 interface BaseModalProps {
    visible: boolean;
    title: string;
@@ -10,23 +9,19 @@ interface BaseModalProps {
 
 export default function CustomModal({ visible, title, onClose, children }: BaseModalProps) {
    const { COLORS, MODAL_STYLES } = useStyles();
-   const styles = useMemo(
-      () =>
-         StyleSheet.create({
-            header: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 12 },
-            closeButton: {
-               width: 30,
-               height: 30,
-               borderRadius: 15,
-               backgroundColor: COLORS.surfaceMuted,
-               justifyContent: "center",
-               alignItems: "center",
-            },
-            closeButtonPressed: { opacity: 0.6 },
-            closeText: { color: COLORS.textSecondary, fontSize: 23, lineHeight: 26, fontWeight: "400" },
-         }),
-      [COLORS, MODAL_STYLES],
-   );
+   const styles = StyleSheet.create({
+      header: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 12 },
+      closeButton: {
+         width: 30,
+         height: 30,
+         borderRadius: 15,
+         backgroundColor: COLORS.surfaceMuted,
+         justifyContent: "center",
+         alignItems: "center",
+      },
+      closeButtonPressed: { opacity: 0.6 },
+      closeText: { color: COLORS.textSecondary, fontSize: 23, lineHeight: 26, fontWeight: "400" },
+   });
 
    return (
       <Modal visible={visible} transparent animationType="slide" statusBarTranslucent onRequestClose={onClose}>

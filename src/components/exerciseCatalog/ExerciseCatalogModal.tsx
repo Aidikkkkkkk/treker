@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { View, Text, Pressable, Modal, TextInput, StyleSheet } from "react-native";
 import { IDtoExerciseCatalog } from "@/types";
 import { useStyles } from "@/context/ThemeContext";
@@ -13,25 +13,21 @@ export default function ExerciseCatalogModal({ visible, onClose, onCreate }: Exe
    const [text, setText] = useState("");
    const { MODAL_STYLES, COLORS } = useStyles();
 
-   const styles = useMemo(
-      () =>
-         StyleSheet.create({
-            ...MODAL_STYLES,
-            input: {
-               minHeight: 110,
-               padding: 16,
-               borderRadius: 17,
-               backgroundColor: COLORS.surfaceMuted,
-               borderWidth: 1,
-               borderColor: COLORS.border,
-               color: COLORS.textPrimary,
-               fontSize: 16,
-               textAlignVertical: "top",
-               marginBottom: 18,
-            },
-         }),
-      [MODAL_STYLES, COLORS],
-   );
+   const styles = StyleSheet.create({
+      ...MODAL_STYLES,
+      input: {
+         minHeight: 110,
+         padding: 16,
+         borderRadius: 17,
+         backgroundColor: COLORS.surfaceMuted,
+         borderWidth: 1,
+         borderColor: COLORS.border,
+         color: COLORS.textPrimary,
+         fontSize: 16,
+         textAlignVertical: "top",
+         marginBottom: 18,
+      },
+   });
    function handleCreate() {
       if (!text.trim()) return;
       onCreate({ nameExercise: text.trim() });

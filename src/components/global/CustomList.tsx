@@ -1,6 +1,5 @@
 import { FlatList, Pressable, StyleSheet, View, ListRenderItem } from "react-native";
 import { useStyles } from "@/context/ThemeContext";
-import { useMemo } from "react";
 type ListProps<T> = {
    data: T[];
    renderItem: ListRenderItem<T>;
@@ -36,46 +35,42 @@ export default function CustomList<T>({
    contentContainerStyle,
 }: ListProps<T>) {
    const { COLORS } = useStyles();
-   const styles = useMemo(
-      () =>
-         StyleSheet.create({
-            list: {
-               flexGrow: 1,
-               justifyContent: "flex-start",
-               paddingTop: 12,
-               paddingBottom: 12,
-            },
-            card: {
-               width: "100%",
-               maxWidth: 560,
-               alignSelf: "center",
-               backgroundColor: COLORS.surface,
-               borderColor: COLORS.border,
-               borderWidth: 1,
-               borderLeftWidth: 3,
-               borderLeftColor: COLORS.accent,
-               paddingHorizontal: 16,
-               paddingVertical: 12,
-               borderRadius: 18,
-               marginBottom: 8,
-            },
-            cardPressed: { opacity: 0.82 },
-            content: { flex: 1, minHeight: 38 },
-            deleteBtn: {
-               position: "absolute",
-               right: 10,
-               bottom: 9,
-               width: 28,
-               height: 28,
-               borderRadius: 14,
-               backgroundColor: COLORS.surfaceMuted,
-               alignItems: "center",
-               justifyContent: "center",
-            },
-            deleteBtnPressed: { backgroundColor: COLORS.dangerSoft },
-         }),
-      [COLORS],
-   );
+   const styles = StyleSheet.create({
+      list: {
+         flexGrow: 1,
+         justifyContent: "flex-start",
+         paddingTop: 12,
+         paddingBottom: 12,
+      },
+      card: {
+         width: "100%",
+         maxWidth: 560,
+         alignSelf: "center",
+         backgroundColor: COLORS.surface,
+         borderColor: COLORS.border,
+         borderWidth: 1,
+         borderLeftWidth: 3,
+         borderLeftColor: COLORS.accent,
+         paddingHorizontal: 16,
+         paddingVertical: 12,
+         borderRadius: 18,
+         marginBottom: 8,
+      },
+      cardPressed: { opacity: 0.82 },
+      content: { flex: 1, minHeight: 38 },
+      deleteBtn: {
+         position: "absolute",
+         right: 10,
+         bottom: 9,
+         width: 28,
+         height: 28,
+         borderRadius: 14,
+         backgroundColor: COLORS.surfaceMuted,
+         alignItems: "center",
+         justifyContent: "center",
+      },
+      deleteBtnPressed: { backgroundColor: COLORS.dangerSoft },
+   });
 
    return (
       <FlatList<T>
