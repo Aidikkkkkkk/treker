@@ -1,5 +1,16 @@
 import { TrekerRepository } from "./repository";
-import { IDtoWorkout, IDtoExercise, IDtoWeek, IDtoExerciseCatalog, IDtoRep } from "@/types";
+import {
+   IDtoWorkout,
+   IDtoExercise,
+   IDtoWeek,
+   IDtoExerciseCatalog,
+   IDtoRep,
+   IDtoExerciseCatalogChange,
+   IDtoExerciseChange,
+   IDtoRepChange,
+   IDtoWeekChange,
+   IDtoWorkoutChange,
+} from "@/types";
 
 export class TrekerService {
    private trekerRepository: TrekerRepository;
@@ -137,5 +148,89 @@ export class TrekerService {
    async deleteFromExerciseCatalog(id: number) {
       const validatedId = this.validateNumber(id);
       return this.trekerRepository.deleteFromExerciseCatalog(validatedId);
+   }
+   async changeWeek(dto: IDtoWeekChange) {
+      const validatedIntensity = (dto.intensity === "light" ? "light" : "heavy") as "light" | "heavy";
+
+      const validatedDto: IDtoWeekChange = {
+         id: this.validateNumber(dto.id),
+         intensity: validatedIntensity,
+      };
+
+      try {
+         return await this.trekerRepository.changeDataWeek(validatedDto);
+      } catch (error) {
+         console.error("Не удалось изменить неделю", error);
+         throw new Error("Не удалось изменить неделю");
+      }
+   }
+
+   async changeWorkout(dto: IDtoWorkoutChange) {
+      const validatedDto: IDtoWorkoutChange = {
+         id: this.validateNumber(dto.id),
+         dateWorkout: this.validateDate(dto.dateWorkout),
+      };
+
+      try {
+         return await this.trekerRepository.changeDataWorkout(validatedDto);
+      } catch (error) {
+         console.error("Не удалось изменить тренировку", error);
+         throw new Error("Не удалось изменить тренировку");
+      }
+   }
+
+   async changeExercise(dto: IDtoExerciseChange) {
+      const validateNameExercise = String(dto.nameExercise).trim();
+
+      if (!validateNameExercise) {
+         throw new Error("Название упражнения не может быть пустым");
+      }
+
+      const validatedDto: IDtoExerciseChange = {
+         id: this.validateNumber(dto.id),
+         nameExercise: validateNameExercise,
+      };
+
+      try {
+         return await this.trekerRepository.changeDataExercise(validatedDto);
+      } catch (error) {
+         console.error("Не удалось изменить упражнение", error);
+         throw new Error("Не удалось изменить упражнение");
+      }
+   }
+
+   async changeRep(dto: IDtoRepChange) {
+      const validatedDto: IDtoRepChange = {
+         id: this.validateNumber(dto.id),
+         reps: this.validateNumber(dto.reps),
+         weight: this.validateNumber(dto.weight),
+      };
+
+      try {
+         return await this.trekerRepository.changeDataRep(validatedDto);
+      } catch (error) {
+         console.error("Не удалось изменить подход", error);
+         throw new Error("Не удалось изменить подход");
+      }
+   }
+
+   async changeExerciseCatalog(dto: IDtoExerciseCatalogChange) {
+      const validateNameExercise = String(dto.nameExercise).trim();
+
+      if (!validateNameExercise) {
+         throw new Error("Название упражнения не может быть пустым");
+      }
+
+      const validatedDto: IDtoExerciseCatalogChange = {
+         id: this.validateNumber(dto.id),
+         nameExercise: validateNameExercise,
+      };
+
+      try {
+         return await this.trekerRepository.changeDataExerciseCatalog(validatedDto);
+      } catch (error) {
+         console.error("Не удалось изменить упражнение в каталоге", error);
+         throw new Error("Не удалось изменить упражнение в каталоге");
+      }
    }
 }

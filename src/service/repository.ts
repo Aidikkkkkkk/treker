@@ -10,6 +10,11 @@ import {
    IDtoWeek,
    IWeekResult,
    IExerciseCatalogResult,
+   IDtoExerciseCatalogChange,
+   IDtoExerciseChange,
+   IDtoRepChange,
+   IDtoWeekChange,
+   IDtoWorkoutChange,
 } from "@/types";
 export class TrekerRepository {
    private db: SQLite.SQLiteDatabase;
@@ -85,5 +90,23 @@ export class TrekerRepository {
    }
    async deleteFromExerciseCatalog(id: number) {
       return await this.db.runAsync("DELETE FROM exercise_catalog WHERE id = ?", [id]);
+   }
+   async changeDataWeek(dto: IDtoWeekChange) {
+      return await this.db.runAsync("UPDATE week SET intensity = ? WHERE id = ?", [dto.intensity, dto.id]);
+   }
+   async changeDataWorkout(dto: IDtoWorkoutChange) {
+      return await this.db.runAsync("UPDATE workout SET dateWorkout = ? WHERE id = ?", [dto.dateWorkout, dto.id]);
+   }
+   async changeDataExercise(dto: IDtoExerciseChange) {
+      return await this.db.runAsync("UPDATE exercise SET nameExercise = ? WHERE id = ?", [dto.nameExercise, dto.id]);
+   }
+   async changeDataExerciseCatalog(dto: IDtoExerciseCatalogChange) {
+      return await this.db.runAsync("UPDATE exercise_catalog SET nameExercise = ? WHERE id = ?", [
+         dto.nameExercise,
+         dto.id,
+      ]);
+   }
+   async changeDataRep(dto: IDtoRepChange) {
+      return await this.db.runAsync("UPDATE rep SET reps = ?, weight = ? WHERE id = ?", [dto.reps, dto.weight, dto.id]);
    }
 }

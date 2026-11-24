@@ -34,6 +34,7 @@ export async function initdb() {
       weight REAL,
       FOREIGN KEY (exercise_id) REFERENCES exercise(id) ON DELETE CASCADE
       );
+
       CREATE TABLE IF NOT EXISTS exercise_catalog (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       nameExercise TEXT NOT NULL UNIQUE COLLATE NOCASE
