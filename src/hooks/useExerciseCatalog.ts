@@ -1,49 +1,30 @@
-import { useState, useEffect } from "react";
 import { useTreker } from "@/context/TrekerContext";
+import { useCrud } from "@/hooks/global/useCrud";
 import { IDtoExerciseCatalog, IExerciseCatalogResult } from "@/types";
 
 export function useExerciseCatalog() {
    const treker = useTreker();
-   const [exerciseCatalog, setExerciseCatalog] = useState<IExerciseCatalogResult[]>([]);
-   const [showCreate, setShowCreate] = useState(false);
 
-   async function deleteFromExerciseCatalog(id: number) {
-      if (!treker) return;
-      try {
-         await treker.deleteFromExerciseCatalog(id);
-         setExerciseCatalog((prev) => prev.filter((item) => item.id !== id));
-      } catch (error) {
-         console.error("Ошибка удаления из каталога:", error);
-      }
-   }
-   async function loadExerciseCatalog() {
-      if (!treker) return;
-      try {
-         setExerciseCatalog(await treker.getAllExerciseCatalog());
-      } catch (error) {
-         console.error("Ошибка загрузки каталога:", error);
-      }
-   }
-   async function createExerciseCatalog(dto: IDtoExerciseCatalog) {
-      setShowCreate(false);
-      try {
-         await treker?.createExerciseCatalog(dto);
-         await loadExerciseCatalog();
-      } catch (e) {
-         console.error("Ошибка при добавлении в каталог:", e);
-      }
-   }
-   useEffect(() => {
-      if (!treker) return;
-      loadExerciseCatalog();
-   }, [treker]);
+   const {
+      items: exerciseCatalog,
+      deleteItem: deleteFromExerciseCatalog,
+      createItem: createExerciseCatalog,
+      showCreate,
+      setShowCreate,
+      loadItems: loadExerciseCatalog,
+   } = useCrud<IExerciseCatalogResult, IDtoExerciseCatalog>({
+      getAll: () => treker!.getAllExerciseCatalog(),
+      create: (dto) => treker!.createExerciseCatalog(dto),
+      remove: (id) => treker!.deleteFromExerciseCatalog(id),
+      entityName: "каталога",
+   });
 
    return {
       exerciseCatalog,
       deleteFromExerciseCatalog,
       createExerciseCatalog,
-      setShowCreate,
       showCreate,
+      setShowCreate,
       loadExerciseCatalog,
    };
 }

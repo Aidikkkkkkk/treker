@@ -1,45 +1,23 @@
-import { useState, useEffect } from "react";
 import { useTreker } from "@/context/TrekerContext";
+import { useCrud } from "@/hooks/global/useCrud";
 import { IWeekResult, IDtoWeek } from "@/types";
 
 export function useWeeks() {
    const treker = useTreker();
-   const [weeks, setWeeks] = useState<IWeekResult[]>([]);
-   const [showCreate, setShowCreate] = useState(false);
 
-   async function deleteWeek(id: number) {
-      if (!treker) return;
-      try {
-         await treker.deleteWeek(id);
-         setWeeks((prev) => prev.filter((item) => item.id !== id));
-      } catch (error) {
-         console.error("Ошибка удаления тренировки:", error);
-      }
-   }
-   async function loadWeeks() {
-      if (!treker) return;
-      try {
-         setWeeks(await treker.getAllWeeks());
-      } catch (error) {
-         console.error("Ошибка загрузки тренировок:", error);
-      }
-   }
-   async function createWeek(dto: IDtoWeek) {
-      if (!treker) return;
-      try {
-         await treker.createWeek(dto);
-         await loadWeeks();
-         setShowCreate(false);
-      } catch (e) {
-         console.error("createWeek упал:", e);
-      }
-   }
-
-   useEffect(() => {
-      if (treker) {
-         loadWeeks();
-      }
-   }, [treker]);
+   const {
+      items: weeks,
+      deleteItem: deleteWeek,
+      createItem: createWeek,
+      showCreate,
+      setShowCreate,
+      loadItems: loadWeeks,
+   } = useCrud<IWeekResult, IDtoWeek>({
+      getAll: () => treker!.getAllWeeks(),
+      create: (dto) => treker!.createWeek(dto),
+      remove: (id) => treker!.deleteWeek(id),
+      entityName: "недели",
+   });
 
    return {
       weeks,
@@ -47,5 +25,6 @@ export function useWeeks() {
       createWeek,
       showCreate,
       setShowCreate,
+      loadWeeks,
    };
 }

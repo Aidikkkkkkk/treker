@@ -1,48 +1,31 @@
-import { useState, useEffect } from "react";
 import { useTreker } from "@/context/TrekerContext";
+import { useCrud } from "@/hooks/global/useCrud";
 import { IDtoExercise, IExerciseResult } from "@/types";
 
 export function useExercise(workout_id: number) {
    const treker = useTreker();
-   const [exercises, setExercises] = useState<IExerciseResult[]>([]);
-   const [showCreate, setShowCreate] = useState(false);
-   async function deleteExercise(id: number) {
-      if (!treker) return;
-      try {
-         await treker.deleteExercise(id);
-         setExercises((prev) => prev.filter((item) => item.id !== id));
-      } catch (error) {
-         console.error("Ошибка удаления упражнения:", error);
-      }
-   }
-   async function loadExercises(id: number) {
-      if (!treker) return;
-      try {
-         setExercises(await treker.getAllExercises(id));
-      } catch (error) {
-         console.error("Ошибка загрузки упражнения:", error);
-      }
-   }
-   async function createExercise(dto: IDtoExercise) {
-      try {
-         await treker?.createExercise(dto);
-         await loadExercises(workout_id);
-         setShowCreate(false);
-      } catch (e) {
-         console.error("Ошибка при создании упражнения:", e);
-      }
-   }
-   useEffect(() => {
-      if (!treker) return;
-      loadExercises(workout_id);
-   }, [treker, workout_id]);
+
+   const {
+      items: exercises,
+      deleteItem: deleteExercise,
+      createItem: createExercise,
+      showCreate,
+      setShowCreate,
+      loadItems: loadExercises,
+   } = useCrud<IExerciseResult, IDtoExercise>({
+      getAll: (id) => treker!.getAllExercises(id!),
+      create: (dto) => treker!.createExercise(dto),
+      remove: (id) => treker!.deleteExercise(id),
+      parentId: workout_id,
+      entityName: "упражнения",
+   });
 
    return {
       exercises,
       deleteExercise,
       createExercise,
-      setShowCreate,
       showCreate,
+      setShowCreate,
       loadExercises,
    };
 }
