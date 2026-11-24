@@ -1,67 +1,152 @@
-import React, { createContext, useContext, useEffect, useState, useMemo, useRef } from "react";
+import React, { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { makeStyles } from "@/styles";
-import { Palette, DARK_COLORS, Token } from "@/styles";
+import { makeStyles, Palette, DARK_COLORS } from "@/styles";
+import { Scheme, ThemeMode } from "@/components/theme/color";
 
-interface ThemeValue {
+export interface SavedTheme {
+   id: string;
+   name: string;
    colors: Palette;
-   setColors: (c: Palette) => void;
-   setToken: (t: Token, value: string) => void;
-   setTokens: (patch: Partial<Palette>) => void;
-   resetToken: (t: Token) => void;
+   mode: ThemeMode;
+   scheme: Scheme;
 }
 
+interface ThemeState {
+   colors: Palette;
+   mode: ThemeMode;
+   scheme: Scheme;
+}
+
+interface ThemePatch {
+   colors?: Partial<Palette>;
+   mode?: ThemeMode;
+   scheme?: Scheme;
+}
+
+interface SavedThemesValue {
+   savedThemes: SavedTheme[];
+   saveTheme: (name: string) => void;
+   loadTheme: (id: string) => void;
+   deleteTheme: (id: string) => void;
+}
+
+type ThemeValue = ReturnType<typeof makeStyles> &
+   ThemeState & {
+      applyTheme: (patch: ThemePatch) => void;
+   };
+
+const THEME_KEY = "theme:v2";
+const SAVED_KEY = "savedThemes";
+const SAVE_DELAY = 400;
+
+const INITIAL: ThemeState = { colors: DARK_COLORS, mode: "dark", scheme: "mono" };
+
 const ThemeContext = createContext<ThemeValue | undefined>(undefined);
+const SavedThemesContext = createContext<SavedThemesValue | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-   const [colors, setState] = useState<Palette>(DARK_COLORS);
-   const colorsRef = useRef<Palette>(DARK_COLORS);
+   const [state, setState] = useState<ThemeState>(INITIAL);
+   const [savedThemes, setSavedThemes] = useState<SavedTheme[]>([]);
+
+   const hydrated = useRef(false);
+   const stateRef = useRef(state);
+   const savedRef = useRef(savedThemes);
+   stateRef.current = state;
+   savedRef.current = savedThemes;
 
    useEffect(() => {
       async function readStorage() {
          try {
-            const raw = await AsyncStorage.getItem("theme");
+            const [raw, saved] = await Promise.all([AsyncStorage.getItem(THEME_KEY), AsyncStorage.getItem(SAVED_KEY)]);
+
             if (raw) {
-               const loaded = { ...DARK_COLORS, ...JSON.parse(raw) };
-               colorsRef.current = loaded;
-               setState(loaded);
+               const parsed = JSON.parse(raw);
+               setState({
+                  colors: { ...DARK_COLORS, ...parsed.colors },
+                  mode: parsed.mode ?? "dark",
+                  scheme: parsed.scheme ?? "mono",
+               });
             }
-         } catch {
-            colorsRef.current = DARK_COLORS;
-            setState(DARK_COLORS);
+            if (saved) setSavedThemes(JSON.parse(saved));
+         } catch (error) {
+            console.warn("Не удалось загрузить тему", error);
+         } finally {
+            hydrated.current = true;
          }
       }
       readStorage();
    }, []);
 
-   async function setColors(c: Palette) {
-      colorsRef.current = c;
-      setState(c);
-      await AsyncStorage.setItem("theme", JSON.stringify(c));
-   }
-   function setTokens(patch: Partial<Palette>) {
-      setColors({ ...colorsRef.current, ...patch });
-   }
-   function setToken(t: Token, value: string) {
-      setTokens({ [t]: value });
-   }
-   function resetToken(t: Token) {
-      setTokens({ [t]: DARK_COLORS[t] });
-   }
+   useEffect(() => {
+      if (!hydrated.current) return;
+      const timer = setTimeout(() => {
+         AsyncStorage.setItem(THEME_KEY, JSON.stringify(state)).catch((error) =>
+            console.warn("Не удалось сохранить тему", error),
+         );
+      }, SAVE_DELAY);
+      return () => clearTimeout(timer);
+   }, [state]);
 
+   useEffect(() => {
+      if (!hydrated.current) return;
+      AsyncStorage.setItem(SAVED_KEY, JSON.stringify(savedThemes)).catch((error) =>
+         console.warn("Не удалось сохранить библиотеку тем", error),
+      );
+   }, [savedThemes]);
+
+   const applyTheme = useMemo(
+      () => (patch: ThemePatch) =>
+         setState((prev) => ({
+            colors: patch.colors ? { ...prev.colors, ...patch.colors } : prev.colors,
+            mode: patch.mode ?? prev.mode,
+            scheme: patch.scheme ?? prev.scheme,
+         })),
+      [],
+   );
+
+   const savedActions = useMemo(
+      () => ({
+         saveTheme: (name: string) => {
+            const normalized = name.trim();
+            if (!normalized) return;
+            const { colors, mode, scheme } = stateRef.current;
+            const theme: SavedTheme = {
+               id: `${Date.now()}`,
+               name: normalized,
+               colors: { ...colors },
+               mode,
+               scheme,
+            };
+            setSavedThemes((prev) => [...prev, theme]);
+         },
+         loadTheme: (id: string) => {
+            const theme = savedRef.current.find((item) => item.id === id);
+            if (!theme) return;
+            applyTheme({ colors: theme.colors, mode: theme.mode, scheme: theme.scheme });
+         },
+         deleteTheme: (id: string) => setSavedThemes((prev) => prev.filter((item) => item.id !== id)),
+      }),
+      [applyTheme],
+   );
+
+   const styles = useMemo(() => makeStyles(state.colors), [state.colors]);
+   const themeValue = useMemo<ThemeValue>(() => ({ ...styles, ...state, applyTheme }), [styles, state, applyTheme]);
+   const savedValue = useMemo<SavedThemesValue>(() => ({ savedThemes, ...savedActions }), [savedThemes, savedActions]);
    return (
-      <ThemeContext.Provider value={{ colors, setColors, setToken, setTokens, resetToken }}>
-         {children}
+      <ThemeContext.Provider value={themeValue}>
+         <SavedThemesContext.Provider value={savedValue}>{children}</SavedThemesContext.Provider>
       </ThemeContext.Provider>
    );
 }
 
-function useTheme() {
+export function useStyles() {
    const ctx = useContext(ThemeContext);
-   if (!ctx) throw new Error("useTheme должен использоваться внутри ThemeProvider");
+   if (!ctx) throw new Error("useStyles должен использоваться внутри ThemeProvider");
    return ctx;
 }
-export function useStyles() {
-   const { colors, setToken, setTokens, resetToken } = useTheme();
-   return useMemo(() => ({ ...makeStyles(colors), setToken, setTokens, resetToken }), [colors]);
+
+export function useSavedThemes() {
+   const ctx = useContext(SavedThemesContext);
+   if (!ctx) throw new Error("useSavedThemes должен использоваться внутри ThemeProvider");
+   return ctx;
 }
