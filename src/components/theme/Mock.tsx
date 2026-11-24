@@ -2,14 +2,14 @@ import { View, Text, Pressable, ScrollView, StyleSheet } from "react-native";
 import { useStyles } from "@/context/ThemeContext";
 import { useThemeActions } from "@/hooks/useThemeActions";
 import SavedThemes from "./SavedThemes";
+import { Ionicons } from "@expo/vector-icons";
+import CustomBackButton from "../global/CustomBackButton";
 
 function Card() {
-   const { COLORS, LIST_ITEM_STYLES } = useStyles();
+   const { COLORS, LIST_ITEM_STYLES, SCREEN_STYLES } = useStyles();
 
    return (
       <View style={[styles.card, { borderColor: COLORS.border, backgroundColor: COLORS.surface }]}>
-         <Text style={LIST_ITEM_STYLES.title}>Пример</Text>
-
          <View style={styles.badges}>
             <View style={[LIST_ITEM_STYLES.badge, LIST_ITEM_STYLES.heavyBadge]}>
                <Text style={[LIST_ITEM_STYLES.badgeText, LIST_ITEM_STYLES.heavyText]}>Тяжёлая</Text>
@@ -67,17 +67,18 @@ function DangerBadge() {
 }
 
 function ThemeActions() {
-   const { FORM_STYLES, mode } = useStyles();
+   const { COLORS, FORM_STYLES, mode } = useStyles();
    const { randomize, toggleMode } = useThemeActions();
 
    return (
       <View style={styles.actions}>
-         <Pressable onPress={randomize} style={[FORM_STYLES.primaryButton, styles.button, { flex: 1 }]}>
+         <Pressable onPress={randomize} style={[FORM_STYLES.primaryButton, styles.button, styles.randomButton]}>
+            <Ionicons name="shuffle" size={22} color={COLORS.textOnAccent} />
             <Text style={FORM_STYLES.primaryButtonText}>Случайная тема</Text>
          </Pressable>
 
          <Pressable onPress={toggleMode} style={[FORM_STYLES.secondaryButton, styles.button]}>
-            <Text style={FORM_STYLES.secondaryButtonText}>{mode === "dark" ? "☀️" : "🌙"}</Text>
+            <Ionicons name={mode === "dark" ? "sunny" : "moon"} size={22} color={COLORS.textPrimary} />
          </Pressable>
       </View>
    );
@@ -89,7 +90,10 @@ export default function Mock() {
    return (
       <View style={[SCREEN_STYLES.content, styles.screen]}>
          <ScrollView style={styles.preview} showsVerticalScrollIndicator={false} contentContainerStyle={styles.scroll}>
-            <Text style={SCREEN_STYLES.title}>Пример</Text>
+            <View style={SCREEN_STYLES.header}>
+               <CustomBackButton />
+               <Text style={SCREEN_STYLES.title}>Пример</Text>
+            </View>
             <Card />
             <View style={[styles.form, { borderColor: COLORS.border, backgroundColor: COLORS.surface }]}>
                <Fields />
@@ -106,7 +110,7 @@ const styles = StyleSheet.create({
    screen: { paddingHorizontal: 16, paddingBottom: 12, gap: 12 },
    scroll: { gap: 20, paddingVertical: 12 },
    form: { gap: 16, padding: 12, borderRadius: 16, borderWidth: 1 },
-
+   randomButton: { flex: 1, flexDirection: "row", gap: 8 },
    card: {
       flexDirection: "row",
       alignItems: "center",
