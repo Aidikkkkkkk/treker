@@ -1,77 +1,35 @@
-import { useMemo } from "react";
 import { View, Text, ScrollView, StyleSheet } from "react-native";
 import { useStyles } from "@/context/ThemeContext";
-import { Token, LABELS } from "@/styles";
-
-/* Стили без цветов: от темы не зависят, считаются один раз */
-const staticStyles = StyleSheet.create({
-   screen: { paddingHorizontal: 24 },
-   scroll: { gap: 12, paddingVertical: 10 },
-   badges: { flexDirection: "row", gap: 8 },
-   field: { height: 56 },
-   button: { height: 52, borderRadius: 16 },
-   tagRow: { flexDirection: "row", flexWrap: "wrap", columnGap: 14, rowGap: 4 },
-   tag: { flexDirection: "row", alignItems: "center", gap: 6 },
-   times: { fontSize: 18 },
-   dangerBadge: { alignSelf: "flex-start", paddingHorizontal: 12, paddingVertical: 6, borderRadius: 24 },
-});
-
-function Tag({ tokens }: { tokens: Token[] }) {
-   const { COLORS } = useStyles();
-
-   /* Стили с цветами: пересчитываются при смене палитры */
-   const themed = useMemo(
-      () =>
-         StyleSheet.create({
-            swatch: { width: 14, height: 14, borderRadius: 4, borderWidth: 1, borderColor: COLORS.border },
-            tagText: { color: COLORS.textSecondary, fontSize: 12 },
-         }),
-      [COLORS],
-   );
-
-   return (
-      <View style={staticStyles.tagRow}>
-         {tokens.map((t) => (
-            <View key={t} style={staticStyles.tag}>
-               <View style={[themed.swatch, { backgroundColor: COLORS[t] }]} />
-               <Text style={themed.tagText}>{LABELS[t]}</Text>
-            </View>
-         ))}
-      </View>
-   );
-}
+import Tag from "./Tag";
+import EditForm from "./EditFrom";
 
 export default function Mock() {
    const { COLORS, SCREEN_STYLES, LIST_ITEM_STYLES, FORM_STYLES } = useStyles();
 
-   const themed = useMemo(
-      () =>
-         StyleSheet.create({
-            card: {
-               flexDirection: "row",
-               alignItems: "center",
-               justifyContent: "space-between",
-               paddingVertical: 14,
-               paddingHorizontal: 18,
-               borderRadius: 16,
-               borderWidth: 1,
-               borderColor: COLORS.border,
-               backgroundColor: COLORS.surface,
-            },
-            form: {
-               gap: 12,
-               padding: 16,
-               borderRadius: 16,
-               borderWidth: 1,
-               borderColor: COLORS.border,
-               backgroundColor: COLORS.surface,
-            },
-            times: { color: COLORS.textSecondary },
-            dangerBadge: { backgroundColor: COLORS.dangerSoft },
-            dangerText: { color: COLORS.danger, fontSize: 13, fontWeight: "700" },
-         }),
-      [COLORS],
-   );
+   const themed = StyleSheet.create({
+      card: {
+         flexDirection: "row",
+         alignItems: "center",
+         justifyContent: "space-between",
+         paddingVertical: 14,
+         paddingHorizontal: 18,
+         borderRadius: 16,
+         borderWidth: 1,
+         borderColor: COLORS.border,
+         backgroundColor: COLORS.surface,
+      },
+      form: {
+         gap: 12,
+         padding: 16,
+         borderRadius: 16,
+         borderWidth: 1,
+         borderColor: COLORS.border,
+         backgroundColor: COLORS.surface,
+      },
+      times: { color: COLORS.textSecondary },
+      dangerBadge: { backgroundColor: COLORS.dangerSoft },
+      dangerText: { color: COLORS.danger, fontSize: 13, fontWeight: "700" },
+   });
 
    return (
       <View style={[SCREEN_STYLES.content, staticStyles.screen]}>
@@ -93,16 +51,18 @@ export default function Mock() {
             <Tag tokens={["surface", "border", "heavySoft", "heavy", "lightSoft", "light"]} />
 
             <View style={themed.form}>
-               <View style={FORM_STYLES.row}>
-                  <View style={[FORM_STYLES.field, FORM_STYLES.flex, staticStyles.field]}>
-                     <Text style={FORM_STYLES.input}>60</Text>
-                     <Text style={FORM_STYLES.secondaryText}>кг</Text>
+               <EditForm>
+                  <View style={FORM_STYLES.row}>
+                     <View style={[FORM_STYLES.field, FORM_STYLES.flex, staticStyles.field]}>
+                        <Text style={FORM_STYLES.input}>60</Text>
+                        <Text style={FORM_STYLES.secondaryText}>кг</Text>
+                     </View>
+                     <Text style={[staticStyles.times, themed.times]}>×</Text>
+                     <View style={[FORM_STYLES.field, FORM_STYLES.flex, staticStyles.field]}>
+                        <Text style={FORM_STYLES.input}>10</Text>
+                     </View>
                   </View>
-                  <Text style={[staticStyles.times, themed.times]}>×</Text>
-                  <View style={[FORM_STYLES.field, FORM_STYLES.flex, staticStyles.field]}>
-                     <Text style={FORM_STYLES.input}>10</Text>
-                  </View>
-               </View>
+               </EditForm>
                <Tag tokens={["surfaceMuted", "textSecondary"]} />
 
                <View style={FORM_STYLES.row}>
@@ -124,3 +84,12 @@ export default function Mock() {
       </View>
    );
 }
+const staticStyles = StyleSheet.create({
+   screen: { paddingHorizontal: 24 },
+   scroll: { gap: 12, paddingVertical: 10 },
+   badges: { flexDirection: "row", gap: 8 },
+   field: { height: 56 },
+   button: { height: 52, borderRadius: 16 },
+   times: { fontSize: 18 },
+   dangerBadge: { alignSelf: "flex-start", paddingHorizontal: 12, paddingVertical: 6, borderRadius: 24 },
+});
