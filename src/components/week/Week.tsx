@@ -18,7 +18,7 @@ export default function Week() {
          <Text style={SCREEN_STYLES.title}>Недели</Text>
          <ListWeeks items={weeks} onDelete={deleteWeek} onEdit={modal.openEdit} />
          <CustomCreateButton title="Новая неделя" onPress={modal.openCreate} />
-         <CustomCreateButton title="Темы" onPress={() => router.push("./maket")} />
+         <CustomCreateButton title="Темы" onPress={() => router.push("./Theme")} />
 
          {modal.editing ? (
             <WeekModal

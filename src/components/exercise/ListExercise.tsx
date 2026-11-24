@@ -23,7 +23,7 @@ export default function ListExercise({ items, onDelete, onEdit }: BaseListProps<
          renderItem={renderExercise}
          onEdit={onEdit}
          onDelete={(item) => ConfirmDelete(item, "упражнение", onDelete)}
-         onPress={(item) => router.push({ pathname: "./fourth", params: { exercise_id: item.id } })}
+         onPress={(item) => router.push({ pathname: "./RepScreen", params: { exercise_id: item.id } })}
       />
    );
 }

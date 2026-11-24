@@ -34,7 +34,7 @@ export default function ListWeeks({ items, onDelete, onEdit }: BaseListProps<IWe
          renderItem={renderWeek}
          onEdit={onEdit}
          onDelete={(item) => ConfirmDelete(item, "неделю", onDelete)}
-         onPress={(item) => router.push({ pathname: "/second", params: { week_id: item.id } })}
+         onPress={(item) => router.push({ pathname: "./WorkoutScreen", params: { week_id: item.id } })}
       />
    );
 }

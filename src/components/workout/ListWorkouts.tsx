@@ -34,7 +34,7 @@ export default function ListWorkouts({ items, onDelete, onEdit }: BaseListProps<
          renderItem={renderWorkout}
          onEdit={onEdit}
          onDelete={(item) => ConfirmDelete(item, "тренировку", onDelete)}
-         onPress={(item) => router.push({ pathname: "./third", params: { workout_id: item.id } })}
+         onPress={(item) => router.push({ pathname: "./ExerciseScreen", params: { workout_id: item.id } })}
       />
    );
 }
