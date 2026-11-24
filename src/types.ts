@@ -75,3 +75,24 @@ export interface IDtoExerciseCatalogChange {
    id: number;
    nameExercise: string;
 }
+export interface BaseModalProps {
+   visible: boolean;
+   onClose: () => void;
+}
+export type CreateModalProps<TCreate> = BaseModalProps & {
+   mode: "create";
+   onCreate: (dto: TCreate) => void;
+};
+export type EditModalProps<TEdit> = BaseModalProps & {
+   mode: "edit";
+   initialData: TEdit;
+   onChange: (dto: TEdit) => void;
+};
+export type EntityModalProps<TCreate, TEdit> = CreateModalProps<TCreate> | EditModalProps<TEdit>;
+
+// ---- Списки ----
+export interface BaseListProps<T extends { id: number }> {
+   items: T[];
+   onDelete: (id: number) => void;
+   onEdit?: (item: T) => void;
+}

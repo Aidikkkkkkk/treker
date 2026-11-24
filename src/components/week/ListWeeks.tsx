@@ -1,21 +1,17 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text } from "react-native";
 import { router } from "expo-router";
-import { IWeekResult } from "@/types";
+import { BaseListProps, IWeekResult } from "@/types";
 import ConfirmDelete from "../global/ConfirmDelete";
 import List from "../global/CustomList";
 import { useStyles } from "@/context/ThemeContext";
 
-interface ListWeeksProps {
-   weeks: IWeekResult[];
-   deleteWeek: (id: number) => void;
-}
-
-export default function ListWeeks({ weeks, deleteWeek }: ListWeeksProps) {
+export default function ListWeeks({ items, onDelete, onEdit }: BaseListProps<IWeekResult>) {
    const { LIST_ITEM_STYLES } = useStyles();
+
    function renderWeek({ item, index }: { item: IWeekResult; index: number }) {
       const isHeavy = item.intensity === "heavy";
       return (
-         <View style={styles.header}>
+         <View style={LIST_ITEM_STYLES.row}>
             <Text style={LIST_ITEM_STYLES.title}>Неделя {index + 1}</Text>
             <View style={[LIST_ITEM_STYLES.badge, isHeavy ? LIST_ITEM_STYLES.heavyBadge : LIST_ITEM_STYLES.lightBadge]}>
                <Text
@@ -30,17 +26,15 @@ export default function ListWeeks({ weeks, deleteWeek }: ListWeeksProps) {
          </View>
       );
    }
+
    return (
       <List<IWeekResult>
-         data={weeks}
+         data={items}
          keyExtractor={(item) => item.id.toString()}
          renderItem={renderWeek}
-         onDelete={(item) => ConfirmDelete(item, "Неделю", deleteWeek)}
+         onEdit={onEdit}
+         onDelete={(item) => ConfirmDelete(item, "неделю", onDelete)}
          onPress={(item) => router.push({ pathname: "/second", params: { week_id: item.id } })}
       />
    );
 }
-
-const styles = StyleSheet.create({
-   header: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingRight: 38 },
-});

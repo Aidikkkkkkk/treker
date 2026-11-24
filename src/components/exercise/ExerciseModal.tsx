@@ -1,24 +1,23 @@
-import { useState } from "react";
-import { Text, Pressable, ScrollView, Alert, StyleSheet } from "react-native";
-import { IDtoExercise, IDtoExerciseCatalog, IExerciseCatalogResult } from "@/types";
+import { useEffect, useState } from "react";
+import { Text, Pressable, ScrollView, StyleSheet } from "react-native";
+import { EntityModalProps, IDtoExercise, IDtoExerciseChange, IExerciseCatalogResult } from "@/types";
 import CustomModal from "../global/CustomModal";
 import { useStyles } from "@/context/ThemeContext";
 
-interface ExerciseModalProps {
-   visible: boolean;
-   onClose: () => void;
-   onCreate: (dto: IDtoExercise) => void;
-   onCreateCatalog: (dto: IDtoExerciseCatalog) => void;
-   workout_id: number;
+type ExerciseModalProps = EntityModalProps<Omit<IDtoExercise, "workout_id">, IDtoExerciseChange> & {
    catalog: IExerciseCatalogResult[];
-}
+};
 
-export default function ExerciseModal({ visible, onClose, onCreate, workout_id, catalog }: ExerciseModalProps) {
-   const { COLORS, MODAL_STYLES } = useStyles();
-   const [selected, setSelected] = useState<string | null>(null);
+export default function ExerciseModal(props: ExerciseModalProps) {
+   const { COLORS } = useStyles();
+   const initial = props.mode === "edit" ? props.initialData.nameExercise : null;
+   const [selected, setSelected] = useState<string | null>(initial);
+
+   useEffect(() => {
+      if (props.visible) setSelected(initial);
+   }, [props.visible, initial]);
 
    const styles = StyleSheet.create({
-      ...MODAL_STYLES,
       chipsScroll: { maxHeight: 240, marginBottom: 14 },
       chips: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
       chip: {
@@ -34,38 +33,36 @@ export default function ExerciseModal({ visible, onClose, onCreate, workout_id, 
       chipTextSelected: { color: COLORS.textPrimary },
    });
 
-   function handleCreate() {
-      if (!selected) {
-         Alert.alert("Не выбрано упражнение");
-         return;
-      }
-      onCreate({ workout_id: workout_id, nameExercise: selected });
-      setSelected(null);
-      onClose();
+   function handleSubmit() {
+      if (!selected) return;
+      if (props.mode === "edit") props.onChange({ id: props.initialData.id, nameExercise: selected });
+      else props.onCreate({ nameExercise: selected });
+      props.onClose();
    }
 
-   function handleClose() {
-      setSelected(null);
-      onClose();
-   }
+   const isEditing = props.mode === "edit";
+
    return (
-      <CustomModal visible={visible} title="Выбрать упражнение" onClose={handleClose}>
-         {catalog.length > 0 && (
+      <CustomModal
+         visible={props.visible}
+         title={isEditing ? "Изменить упражнение" : "Выбрать упражнение"}
+         onClose={props.onClose}
+         submit={{ title: isEditing ? "Сохранить" : "Выбрать", onPress: handleSubmit, disabled: !selected }}
+      >
+         {props.catalog.length > 0 && (
             <ScrollView
                style={styles.chipsScroll}
                contentContainerStyle={styles.chips}
                showsVerticalScrollIndicator={false}
                keyboardShouldPersistTaps="handled"
             >
-               {catalog.map((item) => {
+               {props.catalog.map((item) => {
                   const isSelected = selected === item.nameExercise;
                   return (
                      <Pressable
                         key={item.id}
                         style={[styles.chip, isSelected && styles.chipSelected]}
-                        onPress={() => {
-                           setSelected(isSelected ? null : item.nameExercise);
-                        }}
+                        onPress={() => setSelected(isSelected ? null : item.nameExercise)}
                      >
                         <Text style={[styles.chipText, isSelected && styles.chipTextSelected]}>
                            {item.nameExercise}
@@ -75,10 +72,6 @@ export default function ExerciseModal({ visible, onClose, onCreate, workout_id, 
                })}
             </ScrollView>
          )}
-
-         <Pressable style={[styles.createButton]} onPress={handleCreate}>
-            <Text style={styles.createButtonText}>Выбрать</Text>
-         </Pressable>
       </CustomModal>
    );
 }

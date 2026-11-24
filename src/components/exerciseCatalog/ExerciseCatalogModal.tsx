@@ -1,20 +1,21 @@
-import { useState } from "react";
-import { View, Text, Pressable, Modal, TextInput, StyleSheet } from "react-native";
-import { IDtoExerciseCatalog } from "@/types";
+import { useEffect, useState } from "react";
+import { TextInput, StyleSheet } from "react-native";
+import { EntityModalProps, IDtoExerciseCatalog, IDtoExerciseCatalogChange } from "@/types";
+import CustomModal from "../global/CustomModal";
 import { useStyles } from "@/context/ThemeContext";
 
-interface ExerciseCatalogModalProps {
-   visible: boolean;
-   onClose: () => void;
-   onCreate: (dto: IDtoExerciseCatalog) => void;
-}
+type Props = EntityModalProps<IDtoExerciseCatalog, IDtoExerciseCatalogChange>;
 
-export default function ExerciseCatalogModal({ visible, onClose, onCreate }: ExerciseCatalogModalProps) {
-   const [text, setText] = useState("");
-   const { MODAL_STYLES, COLORS } = useStyles();
+export default function ExerciseCatalogModal(props: Props) {
+   const { COLORS } = useStyles();
+   const initial = props.mode === "edit" ? props.initialData.nameExercise : "";
+   const [text, setText] = useState(initial);
+
+   useEffect(() => {
+      if (props.visible) setText(initial);
+   }, [props.visible, initial]);
 
    const styles = StyleSheet.create({
-      ...MODAL_STYLES,
       input: {
          minHeight: 110,
          padding: 16,
@@ -28,45 +29,36 @@ export default function ExerciseCatalogModal({ visible, onClose, onCreate }: Exe
          marginBottom: 18,
       },
    });
-   function handleCreate() {
-      if (!text.trim()) return;
-      onCreate({ nameExercise: text.trim() });
-      setText("");
-      onClose();
+
+   function handleSubmit() {
+      const nameExercise = text.trim();
+      if (!nameExercise) return;
+      if (props.mode === "edit") props.onChange({ id: props.initialData.id, nameExercise });
+      else props.onCreate({ nameExercise });
+      props.onClose();
    }
-   function handleClose() {
-      setText("");
-      onClose();
-   }
+
+   const isEditing = props.mode === "edit";
 
    return (
-      <Modal visible={visible} transparent animationType="slide" onRequestClose={handleClose}>
-         <View style={styles.overlay}>
-            <View style={styles.modal}>
-               <View style={styles.indicatorContainer}>
-                  <View style={styles.indicator} />
-               </View>
-
-               <Text style={styles.title}>Добавить упражнение</Text>
-
-               <TextInput
-                  style={styles.input}
-                  placeholder="Например, жим лёжа"
-                  placeholderTextColor={COLORS.textSecondary}
-                  value={text}
-                  onChangeText={setText}
-                  multiline
-               />
-
-               <Pressable
-                  style={[styles.createButton, !text.trim() && styles.createButtonDisabled]}
-                  onPress={handleCreate}
-                  disabled={!text.trim()}
-               >
-                  <Text style={styles.createButtonText}>Добавить в каталог</Text>
-               </Pressable>
-            </View>
-         </View>
-      </Modal>
+      <CustomModal
+         visible={props.visible}
+         title={isEditing ? "Изменить упражнение" : "Добавить упражнение"}
+         onClose={props.onClose}
+         submit={{
+            title: isEditing ? "Сохранить" : "Добавить в каталог",
+            onPress: handleSubmit,
+            disabled: !text.trim(),
+         }}
+      >
+         <TextInput
+            style={styles.input}
+            placeholder="Например, жим лёжа"
+            placeholderTextColor={COLORS.textSecondary}
+            value={text}
+            onChangeText={setText}
+            multiline
+         />
+      </CustomModal>
    );
 }

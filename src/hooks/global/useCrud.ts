@@ -55,6 +55,7 @@ export function useCrud<T extends { id: number }, D, C>({
       if (!treker) return;
       try {
          await change(dto);
+         await loadItems(parentId);
          setShowCreate(false);
       } catch (error) {
          console.error(`Не удалось изменить ${entityName}: ${error}`);

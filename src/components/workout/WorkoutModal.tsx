@@ -1,21 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Text, Pressable, Platform, View } from "react-native";
 import DateTimePicker, { DateTimePickerChangeEvent } from "@react-native-community/datetimepicker";
-import { IDtoWorkout } from "@/types";
+import { EntityModalProps, IDtoWorkout, IDtoWorkoutChange } from "@/types";
 import CustomModal from "../global/CustomModal";
 import { useStyles } from "@/context/ThemeContext";
 
-interface WorkoutModalProps {
-   visible: boolean;
-   onClose: () => void;
-   onCreate: (dto: IDtoWorkout) => void;
-   week_id: number;
-}
+type WorkoutModalProps = EntityModalProps<Omit<IDtoWorkout, "week_id">, IDtoWorkoutChange>;
 
-export default function WorkoutModal({ visible, onClose, onCreate, week_id }: WorkoutModalProps) {
+export default function WorkoutModal(props: WorkoutModalProps) {
+   const { COLORS, MODAL_STYLES } = useStyles();
+   const initialIso = props.mode === "edit" ? props.initialData.dateWorkout : null;
    const [date, setDate] = useState(new Date());
    const [pickerMode, setPickerMode] = useState<"date" | "time" | null>(null);
-   const { COLORS, MODAL_STYLES } = useStyles();
+
+   useEffect(() => {
+      if (!props.visible) return;
+      setDate(initialIso ? new Date(initialIso) : new Date());
+      setPickerMode(null);
+   }, [props.visible, initialIso]);
+
    const styles = {
       ...MODAL_STYLES,
       dateTimeRow: { flexDirection: "row" as const, gap: 12, marginBottom: 18 },
@@ -36,21 +39,30 @@ export default function WorkoutModal({ visible, onClose, onCreate, week_id }: Wo
 
    function handleValueChange(_event: DateTimePickerChangeEvent, selected: Date) {
       setDate(selected > new Date() ? new Date() : selected);
-      if (Platform.OS === "android") {
-         setPickerMode(null);
-      }
+      if (Platform.OS === "android") setPickerMode(null);
    }
-   function handleCreate() {
-      onCreate({ week_id: week_id, dateWorkout: String(date) });
-      setPickerMode(null);
-      onClose();
+
+   function handleSubmit() {
+      const dateWorkout = String(date);
+      if (props.mode === "edit") props.onChange({ id: props.initialData.id, dateWorkout });
+      else props.onCreate({ dateWorkout });
+      handleClose();
    }
+
    function handleClose() {
       setPickerMode(null);
-      onClose();
+      props.onClose();
    }
+
+   const isEditing = props.mode === "edit";
+
    return (
-      <CustomModal visible={visible} onClose={handleClose} title="Дата и время">
+      <CustomModal
+         visible={props.visible}
+         onClose={handleClose}
+         title="Дата и время"
+         submit={{ title: isEditing ? "Сохранить" : "Создать тренировку", onPress: handleSubmit }}
+      >
          <View style={styles.dateTimeRow}>
             <Pressable
                style={[styles.dateTimeCell, pickerMode === "date" && styles.dateTimeCellActive]}
@@ -65,10 +77,7 @@ export default function WorkoutModal({ visible, onClose, onCreate, week_id }: Wo
             >
                <Text style={styles.cellLabel}>Время</Text>
                <Text style={styles.dateRowText}>
-                  {date.toLocaleTimeString("ru-RU", {
-                     hour: "2-digit",
-                     minute: "2-digit",
-                  })}
+                  {date.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" })}
                </Text>
             </Pressable>
          </View>
@@ -84,9 +93,6 @@ export default function WorkoutModal({ visible, onClose, onCreate, week_id }: Wo
                onDismiss={() => setPickerMode(null)}
             />
          )}
-         <Pressable style={styles.createButton} onPress={handleCreate}>
-            <Text style={styles.createButtonText}>Создать тренировку</Text>
-         </Pressable>
       </CustomModal>
    );
 }

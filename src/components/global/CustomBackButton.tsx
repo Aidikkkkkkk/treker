@@ -5,8 +5,8 @@ import { Pressable, Text, StyleSheet } from "react-native";
 export default function CustomBackButton() {
    const router = useRouter();
    const pathname = usePathname();
-   if (pathname === "/") return null;
    const { COLORS } = useStyles();
+   if (pathname === "/") return null;
 
    const styles = StyleSheet.create({
       button: {

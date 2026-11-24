@@ -1,14 +1,10 @@
 import { View, Text } from "react-native";
 import List from "../global/CustomList";
-import { IRepResult } from "@/types";
+import { IRepResult, BaseListProps } from "@/types";
 import ConfirmDelete from "../global/ConfirmDelete";
 import { useStyles } from "@/context/ThemeContext";
-interface ListSetProps {
-   reps: IRepResult[];
-   deleteRep: (id: number) => void;
-}
 
-export default function ListRep({ reps, deleteRep }: ListSetProps) {
+export default function ListRep({ items, onDelete, onEdit }: BaseListProps<IRepResult>) {
    const { LIST_ITEM_STYLES } = useStyles();
    function renderRep({ item, index }: { item: IRepResult; index: number }) {
       return (
@@ -22,11 +18,11 @@ export default function ListRep({ reps, deleteRep }: ListSetProps) {
    }
    return (
       <List<IRepResult>
-         data={reps}
+         data={items}
          keyExtractor={(item) => item.id.toString()}
          renderItem={renderRep}
-         onDelete={(item) => ConfirmDelete(item, "подход", deleteRep)}
-         onPress={(item) => {}}
+         onEdit={onEdit}
+         onDelete={(item) => ConfirmDelete(item, "подход", onDelete)}
       />
    );
 }

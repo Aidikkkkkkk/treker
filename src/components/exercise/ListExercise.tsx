@@ -1,16 +1,11 @@
 import { View, Text } from "react-native";
 import { router } from "expo-router";
 import List from "../global/CustomList";
-import { IExerciseResult } from "@/types";
+import { BaseListProps, IExerciseResult } from "@/types";
 import ConfirmDelete from "../global/ConfirmDelete";
 import { useStyles } from "@/context/ThemeContext";
 
-type ListExerciseProps = {
-   exercises: IExerciseResult[];
-   deleteExercise: (id: number) => void;
-};
-
-export default function ListExercise({ exercises, deleteExercise }: ListExerciseProps) {
+export default function ListExercise({ items, onDelete, onEdit }: BaseListProps<IExerciseResult>) {
    const { LIST_ITEM_STYLES } = useStyles();
    function renderExercise({ item, index }: { item: IExerciseResult; index: number }) {
       return (
@@ -23,10 +18,11 @@ export default function ListExercise({ exercises, deleteExercise }: ListExercise
    }
    return (
       <List<IExerciseResult>
-         data={exercises}
+         data={items}
          keyExtractor={(item) => item.id.toString()}
          renderItem={renderExercise}
-         onDelete={(item) => ConfirmDelete(item, "упражнение", deleteExercise)}
+         onEdit={onEdit}
+         onDelete={(item) => ConfirmDelete(item, "упражнение", onDelete)}
          onPress={(item) => router.push({ pathname: "./fourth", params: { exercise_id: item.id } })}
       />
    );

@@ -1,18 +1,20 @@
+import { useEffect, useState } from "react";
 import { View, Text, Pressable } from "react-native";
-import { useState } from "react";
 import CustomModal from "../global/CustomModal";
-import { IDtoWeek } from "@/types";
+import { EntityModalProps, IDtoWeek, IDtoWeekChange } from "@/types";
 import { useStyles } from "@/context/ThemeContext";
 
-interface WeekModalProps {
-   visible: boolean;
-   onClose: () => void;
-   onCreate: (dto: IDtoWeek) => void;
-}
+type WeekModalProps = EntityModalProps<IDtoWeek, IDtoWeekChange>;
 
-export default function WeekModal({ visible, onClose, onCreate }: WeekModalProps) {
-   const [intensity, setIntensity] = useState<"light" | "heavy">("light");
+export default function WeekModal(props: WeekModalProps) {
    const { COLORS, MODAL_STYLES } = useStyles();
+   const initial = props.mode === "edit" ? props.initialData.intensity : "light";
+   const [intensity, setIntensity] = useState<"light" | "heavy">(initial);
+
+   useEffect(() => {
+      if (props.visible) setIntensity(initial);
+   }, [props.visible, initial]);
+
    const styles = {
       ...MODAL_STYLES,
       segment: {
@@ -37,12 +39,21 @@ export default function WeekModal({ visible, onClose, onCreate }: WeekModalProps
       lightText: { color: COLORS.light },
    };
 
-   function handleCreate() {
-      onCreate({ intensity: intensity });
-      onClose();
+   function handleSubmit() {
+      if (props.mode === "edit") props.onChange({ id: props.initialData.id, intensity });
+      else props.onCreate({ intensity });
+      props.onClose();
    }
+
+   const isEditing = props.mode === "edit";
+
    return (
-      <CustomModal visible={visible} title="Новая неделя" onClose={onClose}>
+      <CustomModal
+         visible={props.visible}
+         title={isEditing ? "Изменить неделю" : "Новая неделя"}
+         onClose={props.onClose}
+         submit={{ title: isEditing ? "Сохранить" : "Создать", onPress: handleSubmit }}
+      >
          <View style={styles.segment}>
             <Pressable
                onPress={() => setIntensity("light")}
@@ -61,9 +72,6 @@ export default function WeekModal({ visible, onClose, onCreate }: WeekModalProps
                </Text>
             </Pressable>
          </View>
-         <Pressable style={styles.createButton} onPress={handleCreate}>
-            <Text style={styles.createButtonText}>Создать</Text>
-         </Pressable>
       </CustomModal>
    );
 }

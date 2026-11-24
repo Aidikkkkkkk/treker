@@ -1,14 +1,15 @@
-import { FlatList, Pressable, StyleSheet, View, ListRenderItem } from "react-native";
+import { FlatList, Pressable, StyleSheet, View, ListRenderItem, Text } from "react-native";
 import { useStyles } from "@/context/ThemeContext";
+
 type ListProps<T> = {
    data: T[];
    renderItem: ListRenderItem<T>;
    keyExtractor: (item: T) => string;
-   onDelete: (item: T) => void;
-   onPress: (item: T) => void;
+   onDelete?: (item: T) => void;
+   onEdit?: (item: T) => void;
+   onPress?: (item: T) => void;
    contentContainerStyle?: object;
 };
-
 function TrashIcon({ active }: { active: boolean }) {
    const { COLORS } = useStyles();
    const color = active ? COLORS.danger : COLORS.iconMuted;
@@ -31,17 +32,15 @@ export default function CustomList<T>({
    renderItem,
    keyExtractor,
    onDelete,
+   onEdit,
    onPress,
    contentContainerStyle,
 }: ListProps<T>) {
    const { COLORS } = useStyles();
+   const buttonsCount = (onDelete ? 1 : 0) + (onEdit ? 1 : 0);
+
    const styles = StyleSheet.create({
-      list: {
-         flexGrow: 1,
-         justifyContent: "flex-start",
-         paddingTop: 12,
-         paddingBottom: 12,
-      },
+      list: { flexGrow: 1, justifyContent: "flex-start", paddingTop: 12, paddingBottom: 12 },
       card: {
          width: "100%",
          maxWidth: 560,
@@ -57,10 +56,9 @@ export default function CustomList<T>({
          marginBottom: 8,
       },
       cardPressed: { opacity: 0.82 },
-      content: { flex: 1, minHeight: 38 },
-      deleteBtn: {
+      content: { flex: 1, minHeight: 38, paddingRight: buttonsCount * 38 },
+      actionBtn: {
          position: "absolute",
-         right: 10,
          bottom: 9,
          width: 28,
          height: 28,
@@ -69,7 +67,11 @@ export default function CustomList<T>({
          alignItems: "center",
          justifyContent: "center",
       },
+      deleteBtn: { right: 10 },
+      editBtn: { right: onDelete ? 46 : 10 },
       deleteBtnPressed: { backgroundColor: COLORS.dangerSoft },
+      editBtnPressed: { backgroundColor: COLORS.border },
+      editText: { color: COLORS.iconMuted, fontSize: 14 },
    });
 
    return (
@@ -80,17 +82,29 @@ export default function CustomList<T>({
          showsVerticalScrollIndicator={false}
          renderItem={(info) => (
             <Pressable
-               onPress={() => onPress(info.item)}
-               style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
+               disabled={!onPress}
+               onPress={() => onPress?.(info.item)}
+               style={({ pressed }) => [styles.card, pressed && onPress && styles.cardPressed]}
             >
                <View style={styles.content}>{renderItem(info)}</View>
-               <Pressable
-                  onPress={() => onDelete(info.item)}
-                  hitSlop={10}
-                  style={({ pressed }) => [styles.deleteBtn, pressed && styles.deleteBtnPressed]}
-               >
-                  {({ pressed }) => <TrashIcon active={pressed} />}
-               </Pressable>
+               {onEdit && (
+                  <Pressable
+                     onPress={() => onEdit(info.item)}
+                     hitSlop={10}
+                     style={({ pressed }) => [styles.actionBtn, styles.editBtn, pressed && styles.editBtnPressed]}
+                  >
+                     <Text style={styles.editText}>✎</Text>
+                  </Pressable>
+               )}
+               {onDelete && (
+                  <Pressable
+                     onPress={() => onDelete(info.item)}
+                     hitSlop={10}
+                     style={({ pressed }) => [styles.actionBtn, styles.deleteBtn, pressed && styles.deleteBtnPressed]}
+                  >
+                     {({ pressed }) => <TrashIcon active={pressed} />}
+                  </Pressable>
+               )}
             </Pressable>
          )}
       />

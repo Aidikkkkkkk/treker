@@ -1,14 +1,9 @@
 import { View, Text } from "react-native";
 import { router } from "expo-router";
-import { IWorkoutResult } from "@/types";
 import List from "../global/CustomList";
 import ConfirmDelete from "../global/ConfirmDelete";
 import { useStyles } from "@/context/ThemeContext";
-
-type Props = {
-   workouts: IWorkoutResult[];
-   deleteWorkout: (id: number) => void;
-};
+import { BaseListProps, IWorkoutResult } from "@/types";
 
 function formatWorkoutDate(iso: string) {
    const d = new Date(iso);
@@ -22,7 +17,7 @@ function formatWorkoutDate(iso: string) {
    return `${date}, ${time}`;
 }
 
-export default function ListWorkouts({ workouts, deleteWorkout }: Props) {
+export default function ListWorkouts({ items, onDelete, onEdit }: BaseListProps<IWorkoutResult>) {
    const { LIST_ITEM_STYLES } = useStyles();
    function renderWorkout({ item, index }: { item: IWorkoutResult; index: number }) {
       return (
@@ -34,10 +29,11 @@ export default function ListWorkouts({ workouts, deleteWorkout }: Props) {
    }
    return (
       <List<IWorkoutResult>
-         data={workouts}
+         data={items}
          keyExtractor={(item) => item.id.toString()}
          renderItem={renderWorkout}
-         onDelete={(item) => ConfirmDelete(item, "тренировку", deleteWorkout)}
+         onEdit={onEdit}
+         onDelete={(item) => ConfirmDelete(item, "тренировку", onDelete)}
          onPress={(item) => router.push({ pathname: "./third", params: { workout_id: item.id } })}
       />
    );

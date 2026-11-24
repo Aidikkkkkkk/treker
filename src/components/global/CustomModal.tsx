@@ -1,13 +1,15 @@
 import { View, Text, Pressable, Modal, StyleSheet } from "react-native";
 import { useStyles } from "@/context/ThemeContext";
-interface BaseModalProps {
+
+interface CustomModalProps {
    visible: boolean;
    title: string;
    onClose: () => void;
    children: React.ReactNode;
+   submit?: { title: string; onPress: () => void; disabled?: boolean };
 }
 
-export default function CustomModal({ visible, title, onClose, children }: BaseModalProps) {
+export default function CustomModal({ visible, title, onClose, children, submit }: CustomModalProps) {
    const { COLORS, MODAL_STYLES } = useStyles();
    const styles = StyleSheet.create({
       header: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 12 },
@@ -42,6 +44,15 @@ export default function CustomModal({ visible, title, onClose, children }: BaseM
                   </Pressable>
                </View>
                {children}
+               {submit && (
+                  <Pressable
+                     style={[MODAL_STYLES.createButton, submit.disabled && MODAL_STYLES.createButtonDisabled]}
+                     onPress={submit.onPress}
+                     disabled={submit.disabled}
+                  >
+                     <Text style={MODAL_STYLES.createButtonText}>{submit.title}</Text>
+                  </Pressable>
+               )}
             </View>
          </View>
       </Modal>

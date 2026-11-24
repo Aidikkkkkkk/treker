@@ -5,3 +5,4 @@ web-build/
 expo-env.d.ts
 .metro-health-check*
 /android
+*.txt
