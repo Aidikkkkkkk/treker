@@ -39,6 +39,7 @@ export async function initdb() {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       nameExercise TEXT NOT NULL UNIQUE COLLATE NOCASE
       );
+
       `);
 
    return db;

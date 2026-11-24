@@ -88,25 +88,20 @@ export default function Mock() {
 
    return (
       <View style={[SCREEN_STYLES.content, styles.screen]}>
-         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scroll}>
+         <ScrollView style={styles.preview} showsVerticalScrollIndicator={false} contentContainerStyle={styles.scroll}>
             <Text style={SCREEN_STYLES.title}>Пример</Text>
-
             <Card />
-
             <View style={[styles.form, { borderColor: COLORS.border, backgroundColor: COLORS.surface }]}>
                <Fields />
                <Buttons />
                <DangerBadge />
             </View>
-
-            <SavedThemes />
          </ScrollView>
-
+         <SavedThemes />
          <ThemeActions />
       </View>
    );
 }
-
 const styles = StyleSheet.create({
    screen: { paddingHorizontal: 16, paddingBottom: 12, gap: 12 },
    scroll: { gap: 20, paddingVertical: 12 },
@@ -131,4 +126,5 @@ const styles = StyleSheet.create({
 
    dangerBadge: { alignSelf: "flex-start", paddingHorizontal: 12, paddingVertical: 6, borderRadius: 24 },
    dangerText: { fontSize: 13, fontWeight: "700" },
+   preview: { flex: 1 },
 });

@@ -26,6 +26,7 @@ interface ThemePatch {
 interface SavedThemesValue {
    savedThemes: SavedTheme[];
    saveTheme: (name: string) => void;
+   renameTheme: (id: string, name: string) => void;
    loadTheme: (id: string) => void;
    deleteTheme: (id: string) => void;
 }
@@ -118,6 +119,11 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
                scheme,
             };
             setSavedThemes((prev) => [...prev, theme]);
+         },
+         renameTheme: (id: string, name: string) => {
+            const normalized = name.trim();
+            if (!normalized) return;
+            setSavedThemes((prev) => prev.map((item) => (item.id === id ? { ...item, name: normalized } : item)));
          },
          loadTheme: (id: string) => {
             const theme = savedRef.current.find((item) => item.id === id);
