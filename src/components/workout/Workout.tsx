@@ -24,7 +24,7 @@ export default function Workout({ week_id }: WorkoutProps) {
             <Text style={SCREEN_STYLES.title}>Тренировки</Text>
          </View>
          <ListWorkouts items={workouts} onDelete={deleteWorkout} onEdit={modal.openEdit} />
-         <CustomCreateButton title="Новая тренировка" onPress={modal.openCreate} />
+         <CustomCreateButton title="+ Новая тренировка" onPress={modal.openCreate} />
 
          {modal.editing ? (
             <WorkoutModal

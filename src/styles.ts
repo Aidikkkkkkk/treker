@@ -58,8 +58,8 @@ export function makeStyles(colors: Palette) {
          maxWidth: 560,
          alignSelf: "center",
          backgroundColor: colors.background,
-         paddingHorizontal: 18,
-         paddingTop: 18,
+         paddingHorizontal: 12,
+         paddingTop: 32,
       },
       keyboardView: { flex: 1, backgroundColor: colors.background },
       header: {
