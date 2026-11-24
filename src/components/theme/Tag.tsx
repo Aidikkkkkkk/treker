@@ -1,9 +1,13 @@
 import { useStyles } from "@/context/ThemeContext";
-import { StyleSheet } from "react-native";
 import { Token, LABELS } from "@/styles";
-import { View, Text } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 
-export default function Tag({ tokens }: { tokens: Token[] }) {
+interface TagProps {
+   tokens: Token[];
+   onSelect?: (token: Token) => void;
+}
+
+export default function Tag({ tokens, onSelect }: TagProps) {
    const { COLORS } = useStyles();
    const themed = StyleSheet.create({
       swatch: { width: 14, height: 14, borderRadius: 4, borderWidth: 1, borderColor: COLORS.border },
@@ -23,5 +27,14 @@ export default function Tag({ tokens }: { tokens: Token[] }) {
 }
 const staticStyles = StyleSheet.create({
    tagRow: { flexDirection: "row", flexWrap: "wrap", columnGap: 14, rowGap: 4 },
-   tag: { flexDirection: "row", alignItems: "center", gap: 6 },
+   tag: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 6,
+      paddingHorizontal: 8,
+      paddingVertical: 4,
+      borderRadius: 8,
+      borderWidth: 1,
+      borderColor: "#fff",
+   },
 });
