@@ -6,9 +6,9 @@
       "orientation": "portrait",
       "scheme": "treker",
       "userInterfaceStyle": "dark",
-      "icon": "./assets/icon.jpg",
+      "icon": "./assets/icon.png",
       "splash": {
-         "image": "./assets/background.jpg",
+         "image": "./assets/background.png",
          "resizeMode": "contain"
       },
       "plugins": [
