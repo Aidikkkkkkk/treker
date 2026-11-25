@@ -11,6 +11,7 @@
          "typedRoutes": true,
          "reactCompiler": true
       },
+      "icon": "./assets/icon.png",
       "plugins": [
          [
             "expo-sqlite",
