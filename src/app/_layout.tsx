@@ -1,5 +1,6 @@
+import { View } from "react-native";
 import { Stack } from "expo-router";
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import { SafeAreaProvider, useSafeAreaInsets } from "react-native-safe-area-context";
 import { TrekerProvider } from "@/context/TrekerContext";
 import { ThemeProvider, useStyles } from "@/context/ThemeContext";
 import { useEffect } from "react";
@@ -8,13 +9,20 @@ import { StatusBar } from "expo-status-bar";
 
 function ThemedStack() {
    const { COLORS } = useStyles();
+   const insets = useSafeAreaInsets();
 
    useEffect(() => {
       SystemUI.setBackgroundColorAsync(COLORS.background);
    }, [COLORS.background]);
 
    return (
-      <>
+      <View
+         style={{
+            flex: 1,
+            backgroundColor: COLORS.background,
+            paddingBottom: insets.bottom,
+         }}
+      >
          <StatusBar style="light" />
          <Stack
             screenOptions={{
@@ -22,7 +30,7 @@ function ThemedStack() {
                contentStyle: { backgroundColor: COLORS.background },
             }}
          />
-      </>
+      </View>
    );
 }
 
