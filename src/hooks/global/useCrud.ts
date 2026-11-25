@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { useTreker } from "@/context/TrekerContext";
+import { GlobalError } from "@/components/global/GlobalError";
+import { ServiceError } from "@/service/service";
 
 interface IUseCrud<T, D, C> {
    getAll: (id?: number) => Promise<T[]>;
@@ -22,13 +24,27 @@ export function useCrud<T extends { id: number }, D, C>({
    const [items, setItems] = useState<T[]>([]);
    const [showCreate, setShowCreate] = useState(false);
 
+   function handleError(error: unknown) {
+      if (error instanceof ServiceError) {
+         GlobalError.show({
+            message: error.message,
+            error: error.error,
+         });
+      } else {
+         GlobalError.show({
+            message: `Не удалось выполнить операцию: ${entityName}`,
+            error: "Произошла непредвиденная ошибка",
+         });
+      }
+   }
+
    async function deleteItem(id: number) {
       if (!treker) return;
       try {
          await remove(id);
          setItems((prev) => prev.filter((item) => item.id !== id));
       } catch (error) {
-         console.error(`Ошибка удаления ${entityName}:`, error);
+         handleError(error);
       }
    }
 
@@ -37,10 +53,9 @@ export function useCrud<T extends { id: number }, D, C>({
       try {
          setItems(await getAll(id));
       } catch (error) {
-         console.error(`Ошибка загрузки ${entityName}:`, error);
+         handleError(error);
       }
    }
-
    async function createItem(dto: D) {
       if (!treker) return;
       try {
@@ -48,7 +63,7 @@ export function useCrud<T extends { id: number }, D, C>({
          await loadItems(parentId);
          setShowCreate(false);
       } catch (error) {
-         console.error(`Ошибка создания ${entityName}:`, error);
+         handleError(error);
       }
    }
    async function changeItem(dto: C) {
@@ -58,10 +73,9 @@ export function useCrud<T extends { id: number }, D, C>({
          await loadItems(parentId);
          setShowCreate(false);
       } catch (error) {
-         console.error(`Не удалось изменить ${entityName}: ${error}`);
+         handleError(error);
       }
    }
-
    useEffect(() => {
       if (!treker) return;
       if (parentId === 0) return;

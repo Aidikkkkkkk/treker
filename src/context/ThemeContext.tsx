@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useMemo, useRef, useState 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { makeStyles, Palette, DARK_COLORS } from "@/styles";
 import { Scheme, ThemeMode } from "@/components/theme/color";
+import { GlobalError } from "@/components/global/GlobalError";
 
 export interface SavedTheme {
    id: string;
@@ -39,7 +40,17 @@ type ThemeValue = ReturnType<typeof makeStyles> &
 const THEME_KEY = "theme:v2";
 const SAVED_KEY = "savedThemes";
 const SAVE_DELAY = 400;
+let reported = false;
 
+function reportError(message: string, error: unknown) {
+   console.warn(message, error); // в dev-режиме по-прежнему видно в консоли
+   if (reported) return;
+   reported = true;
+   GlobalError.show({
+      message,
+      error: error instanceof Error ? error.message : String(error),
+   });
+}
 const INITIAL: ThemeState = { colors: DARK_COLORS, mode: "dark", scheme: "mono" };
 
 const ThemeContext = createContext<ThemeValue | undefined>(undefined);
@@ -70,7 +81,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
             }
             if (saved) setSavedThemes(JSON.parse(saved));
          } catch (error) {
-            console.warn("Не удалось загрузить тему", error);
+            reportError("Не удалось загрузить тему", error);
          } finally {
             hydrated.current = true;
          }
@@ -82,7 +93,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       if (!hydrated.current) return;
       const timer = setTimeout(() => {
          AsyncStorage.setItem(THEME_KEY, JSON.stringify(state)).catch((error) =>
-            console.warn("Не удалось сохранить тему", error),
+            reportError("Не удалось сохранить тему", error),
          );
       }, SAVE_DELAY);
       return () => clearTimeout(timer);
@@ -91,7 +102,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
    useEffect(() => {
       if (!hydrated.current) return;
       AsyncStorage.setItem(SAVED_KEY, JSON.stringify(savedThemes)).catch((error) =>
-         console.warn("Не удалось сохранить библиотеку тем", error),
+         reportError("Не удалось сохранить библиотеку тем", error),
       );
    }, [savedThemes]);
 

@@ -90,9 +90,12 @@ export type EditModalProps<TEdit> = BaseModalProps & {
 };
 export type EntityModalProps<TCreate, TEdit> = CreateModalProps<TCreate> | EditModalProps<TEdit>;
 
-// ---- Списки ----
 export interface BaseListProps<T extends { id: number }> {
    items: T[];
    onDelete: (id: number) => void;
    onEdit?: (item: T) => void;
+}
+export interface IServiceError {
+   message: string;
+   error: string;
 }
