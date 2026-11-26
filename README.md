@@ -2,14 +2,7 @@
 
 ---
 
-<div align="center">
-
-<video src="./assets/github/demo.mp4" controls width="800">
-  Ваш браузер не поддерживает воспроизведение видео.
-</video>
-
-</div>
-
+https://github.com/user-attachments/assets/ec893398-5713-442d-8509-9d7d260f9605
 ---
 
 #### Приложение будет дорабатываться.
