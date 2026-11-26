@@ -7,12 +7,10 @@ import { useStyles } from "@/context/ThemeContext";
 
 export default function ListExercise({ items, onDelete, onEdit }: BaseListProps<IExerciseResult>) {
    const { LIST_ITEM_STYLES } = useStyles();
-   function renderExercise({ item, index }: { item: IExerciseResult; index: number }) {
+   function renderExercise({ item }: { item: IExerciseResult }) {
       return (
          <View style={LIST_ITEM_STYLES.row}>
-            <Text style={LIST_ITEM_STYLES.title}>
-               {index + 1} {item.nameExercise}
-            </Text>
+            <Text style={LIST_ITEM_STYLES.title}>{item.nameExercise}</Text>
          </View>
       );
    }
