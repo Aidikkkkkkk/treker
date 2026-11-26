@@ -19,6 +19,7 @@ export interface IRepResult {
    exercise_id: number;
    reps: number;
    weight: number;
+   time: string;
 }
 
 export interface IExerciseCatalogResult {
@@ -44,6 +45,7 @@ export interface IDtoRep {
    exercise_id: number;
    reps: number;
    weight: number;
+   time: string;
 }
 
 export interface IDtoExerciseCatalog {

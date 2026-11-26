@@ -1,7 +1,7 @@
 import * as SQLite from "expo-sqlite";
 
 export async function initdb() {
-   const db = await SQLite.openDatabaseAsync("test7");
+   const db = await SQLite.openDatabaseAsync("test8");
    await db.execAsync(`
       PRAGMA foreign_keys = ON;
       PRAGMA journal_mode = WAL;
@@ -32,6 +32,7 @@ export async function initdb() {
       exercise_id INTEGER NOT NULL,
       reps INTEGER,
       weight REAL,
+      time TEXT NOT NULL,
       FOREIGN KEY (exercise_id) REFERENCES exercise(id) ON DELETE CASCADE
       );
 

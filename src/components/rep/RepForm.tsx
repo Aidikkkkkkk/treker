@@ -40,7 +40,7 @@ export default function RepForm({ lastRep, editing, onCreate, onChange, onCancel
       if (repsNum <= 0) return;
       const weightNum = Number(weight.replace(",", ".")) || 0;
       if (editing) await onChange({ id: editing.id, weight: weightNum, reps: repsNum });
-      else await onCreate({ weight: weightNum, reps: repsNum });
+      else await onCreate({ weight: weightNum, reps: repsNum, time: new Date().toISOString() });
       closeForm();
    }
 

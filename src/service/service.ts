@@ -102,6 +102,7 @@ export class TrekerService {
          exercise_id: this.validateNumber(dto.exercise_id),
          reps: this.validateNumber(dto.reps),
          weight: this.validateNumber(dto.weight),
+         time: this.validateDate(dto.time),
       };
       try {
          return await this.trekerRepository.insertToRep(validatedDto);
@@ -117,14 +118,11 @@ export class TrekerService {
       const validatedDto = {
          nameExercise: validateNameExercise,
       };
-      let existing;
       try {
-         existing = await this.trekerRepository.getRowExerciseCatalogByName(validatedDto.nameExercise);
+         const isName = await this.trekerRepository.getRowExerciseCatalogByName(validatedDto.nameExercise);
+         if (isName) throw new ServiceError("Упражнение с таким названием уже есть в каталоге");
       } catch (error) {
          this.handleError("Не удалось проверить каталог упражнений", error);
-      }
-      if (existing) {
-         throw new ServiceError("Упражнение с таким названием уже есть в каталоге");
       }
       try {
          return await this.trekerRepository.insertToExerciseCatalog(validatedDto);

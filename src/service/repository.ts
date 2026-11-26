@@ -41,10 +41,11 @@ export class TrekerRepository {
       return result.lastInsertRowId;
    }
    async insertToRep(dto: IDtoRep) {
-      const result = await this.db.runAsync(`INSERT INTO rep (exercise_id, reps, weight) VALUES (?, ?, ?)`, [
+      const result = await this.db.runAsync(`INSERT INTO rep (exercise_id, reps, weight,time) VALUES (?, ?, ?,?)`, [
          dto.exercise_id,
          dto.reps,
          dto.weight,
+         dto.time,
       ]);
       return result.lastInsertRowId;
    }
