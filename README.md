@@ -4,7 +4,7 @@
 
 <div align="center">
 
-<video src="assets/github/demo.mp4" controls width="800">
+<video src="./assets/github/demo.mp4" controls width="800">
   Ваш браузер не поддерживает воспроизведение видео.
 </video>
 
